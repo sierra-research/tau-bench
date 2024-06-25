@@ -177,7 +177,7 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4-turbo",
+        default="gpt-4o",
         choices=[
             # openai api models
             "gpt-4-turbo",
@@ -192,6 +192,7 @@ def main():
             "claude-3-opus-20240229",
             "claude-3-sonnet-20240229",
             "claude-3-haiku-20240307",
+            "claude-3-5-sonnet-20240620",
             # google api models
             "gemini-1.5-pro-latest",
             "gemini-1.5-flash-latest",

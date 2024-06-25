@@ -11,7 +11,7 @@ client = Anthropic()
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(10))
 def chat_completion_request(messages, model, system, tools=None, temperature=0.0):
     try:
-        response = client.beta.tools.messages.create(
+        response = client.messages.create(
             model=model,
             max_tokens=1024,
             tools=tools,
