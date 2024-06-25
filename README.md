@@ -1,5 +1,7 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
+Paper: https://arxiv.org/abs/2406.12045
+
 ## Setup
 
 1. Clone this repository:
