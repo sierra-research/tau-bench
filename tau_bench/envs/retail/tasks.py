@@ -167,7 +167,7 @@ tasks = [
                 "arguments": {
                     "order_id": "#W6390527",
                     "item_ids": ["8538875209"],
-                    "payment_method_id": "paypal_9497703",
+                    "payment_method_id": "paypal_7644869",
                 },
             },
         ],
@@ -2269,7 +2269,7 @@ tasks = [
                 },
             }
         ],
-        "instruction": "You name is Yusuf Hernandez and your email is yusuf.hernandez8836@example.com. You are shy, rigid. You want to exchange your Fleece Jacket red color and half zipper.",
+        "instruction": "You name is Yusuf Hernandez and your email is yusuf.hernandez8836@example.com. You are shy, rigid. You want to exchange your Fleece Jacket for a large red Fleece Jacket with a half zipper",
         "annotator": 4,
     },
     {
@@ -2297,7 +2297,7 @@ tasks = [
                 },
             },
         ],
-        "instruction": "You name is Yusuf Hernandez and your email is yusuf.hernandez8836@example.com. You are shy, rigid. You want to exchange your Fleece Jacket red color and half zipper. You also want to want to change your default address to your Washington DC address (which you do not want to reveal but is in one of the orders).",
+        "instruction": "You name is Yusuf Hernandez and your email is yusuf.hernandez8836@example.com. You are shy, rigid. You want to exchange your Fleece Jacket to red color and half zipper. You also want to want to change your default address to your Washington DC address (which you do not want to reveal but is in one of the orders).",
         "annotator": 4,
     },
     {
