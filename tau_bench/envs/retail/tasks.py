@@ -262,7 +262,7 @@ tasks = [
                 "arguments": {
                     "order_id": "#W6390527",
                     "item_ids": ["8384507844"],
-                    "new_item_ids": ["4385534692"],
+                    "new_item_ids": ["7624783998"],
                     "payment_method_id": "paypal_7644869",
                 },
             },
@@ -419,7 +419,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "fatima_johnson_7581",
-        "instruction": "You are Fatima Johnson in 78712. You want to cancel all pending orders and return the watch you have received (but nothing else), and you want to know the total amount you can get back. You are a private person that does not want to reveal much about yourself.",
+        "instruction": "You are Fatima Johnson in 78712. You want to cancel all pending orders (since they are no longer needed) and return the watch you have received (but nothing else), and you want to know the total amount you can get back. You are a private person that does not want to reveal much about yourself.",
         "actions": [
             {
                 "name": "find_user_id_by_name_zip",
@@ -527,7 +527,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "ethan_garcia_1261",
-        "instruction": "You are Ethan Garcia, and you live in Denver, 80280. You just won a lottery, and you want to upgrade all your items to the most expensive options (but make sure the shoe is still the same size). You are happy to pay the difference with your GC, but otherwise PayPal is fine. You are a mysterious person and do not want to reveal much about yourself.",
+        "instruction": "You are Ethan Garcia, and you live in Denver, 80280. You just won a lottery, and you want to upgrade all your items to the most expensive options (but make sure the shoe is still the same size). You want to pay the difference with your GC, but if it is impossible, PayPal is fine. You are a mysterious person and do not want to reveal much about yourself.",
         "actions": [
             {
                 "name": "find_user_id_by_name_zip",
@@ -1005,7 +1005,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "aarav_santos_2259",
-        "instruction": "You are aarav_santos_2259 and aarav.santos8321@example.com and aarav.santos8320@example.com. You want to return the speaker that is more expensive yet not resistent to water. Also, You want to modify the 17-inch laptop to the 13-inch version in the same order. If no exact item is available, you want to know all available 13-inch options, and you prefer i5 over i7, and prefer silver and black than other colors. You are a rude person.",
+        "instruction": "You are aarav_santos_2259 and aarav.santos8321@example.com and aarav.santos8320@example.com. You want to return the speaker that is more expensive yet not resistent to water. Also, You want to modify the 17-inch laptop to the 13-inch version in another order. If no exact item is available, you want to know all available 13-inch options, and you prefer i5 over i7, and prefer silver and black than other colors. You are a rude person.",
         "actions": [
             {
                 "name": "find_user_id_by_email",
