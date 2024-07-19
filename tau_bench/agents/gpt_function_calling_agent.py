@@ -4,14 +4,13 @@ import json
 from typing import Dict, List
 
 from openai import OpenAI
-from tenacity import retry, stop_after_attempt, wait_random_exponential
-
 from tau_bench.agents.base import BaseAgent
 from tau_bench.agents.utils import (
     message_to_action,
     message_to_dict,
     pretty_print_conversation,
 )
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 client = None
 
@@ -44,6 +43,7 @@ def chat_completion_request(
 
 
 prompt_price_per_million = {
+    "gpt-4o-mini": 0.15,
     "gpt-4o": 5,
     "gpt-4-turbo": 10,
     "gpt-4-32k-0613": 60,
@@ -52,6 +52,7 @@ prompt_price_per_million = {
     "meta-llama/Meta-Llama-3-70B-Instruct": 1.0,
 }
 completion_price_per_million = {
+    "gpt-4o-mini": 0.60,
     "gpt-4o": 15,
     "gpt-4-turbo": 30,
     "gpt-4-32k-0613": 120,

@@ -1,10 +1,10 @@
 # Copyright Sierra
 
-import os
-import json
-import random
 import argparse
+import json
 import multiprocessing
+import os
+import random
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
@@ -188,7 +188,9 @@ def main():
             "gpt-3.5-turbo-1106",
             "gpt-3.5-turbo-0125",
             "gpt-4o",
+            "gpt-4o-mini",
             # anthropic api models
+            "claude-3-5-sonnet-20240620",
             "claude-3-opus-20240229",
             "claude-3-sonnet-20240229",
             "claude-3-haiku-20240307",
