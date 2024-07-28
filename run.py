@@ -1,12 +1,14 @@
 # Copyright Sierra
 
-import argparse
-import json
-import multiprocessing
 import os
+import json
 import random
-from concurrent.futures import ThreadPoolExecutor
+import argparse
+import multiprocessing
+from math import comb
+from typing import Any
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
 
 from tau_bench.agents.base import BaseAgent
 from tau_bench.envs import get_env
@@ -168,6 +170,29 @@ def agent_factory(tools_info, wiki, args: argparse.Namespace) -> BaseAgent:
         raise ValueError(f"Unknown agent strategy: {args.agent_strategy}")
 
 
+def display_metrics(results: dict[str, Any]) -> None:
+    num_trials = len(set([r["trial"] for r in results]))
+    rewards = [r["reward"] for r in results]
+    avg_reward = sum(rewards) / len(rewards)
+    # c from https://arxiv.org/pdf/2406.12045
+    c_per_task_id: dict[int, int] = {}
+    for r in results:
+        if r["task_id"] not in c_per_task_id:
+            c_per_task_id[r["task_id"]] = r["reward"]
+        else:
+            c_per_task_id[r["task_id"]] += r["reward"]
+    pass_hat_ks: dict[int, float] = {}
+    for k in range(1, num_trials + 1):
+        sum_task_pass_hat_k = 0
+        for c in c_per_task_id.values():
+            sum_task_pass_hat_k += comb(c, k) / comb(num_trials, k)
+        pass_hat_ks[k] = sum_task_pass_hat_k / len(c_per_task_id)
+    print(f"🏆 Average reward: {avg_reward}")
+    print("📈 Pass^k")
+    for k, pass_hat_k in pass_hat_ks.items():
+        print(f"  k={k}: {pass_hat_k}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_trials", type=int, default=1)
@@ -257,10 +282,10 @@ def main():
         ckpt_path=file_str,
     )
 
+    display_metrics(results)
+
     with open(file_str, "w") as f:
         json.dump(results, f, indent=2)
-        rewards = [r["reward"] for r in results]
-        print(f"🏆 Average reward: {sum(rewards) / len(rewards)}")
         print(f"\n📄 Results saved to {file_str}\n")
 
 
