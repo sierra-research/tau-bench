@@ -1,6 +1,18 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
-Paper: https://arxiv.org/abs/2406.12045
+https://arxiv.org/abs/2406.12045
+
+```bibtex
+@misc{yao2024tau,
+      title={$\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains}, 
+      author={Shunyu Yao and Noah Shinn and Pedram Razavi and Karthik Narasimhan},
+      year={2024},
+      eprint={2406.12045},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2406.12045}, 
+}
+```
 
 ## Setup
 
@@ -35,3 +47,11 @@ python run.py --env retail --model gpt-4o --max_concurrency 10
 ```
 
 Set max concurrency according to your API limit.
+
+## License
+
+MIT.
+
+## Contact
+
+Please submit issues or pull requests if you find problems with the benchmark.
