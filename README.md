@@ -40,6 +40,7 @@ ANYSCALE_API_KEY=...
 
 
 ## Run
+
 Run a function calling agent on the τ-retail environment:
 
 ```bash
@@ -47,6 +48,14 @@ python run.py --env retail --model gpt-4o --max_concurrency 10
 ```
 
 Set max concurrency according to your API limit.
+
+## User simulators
+
+By default, we use `gpt-4` as the user simulator. You can use other models by setting the `--user_model` flag. For example, run a function calling agent with a claude user simulator:
+
+```bash
+python run.py --env retail --model gpt-4o --max_concurrency 10 --user_model claude-3-5-sonnet-20240620
+```
 
 ## License
 
