@@ -91,6 +91,7 @@ class OpenAIChatFunc(object):
             messages=messages,
             model=self.model,
             temperature=temperature,
+            max_tokens=150,
         )
         content = response.choices[0].message.content
         cost = (
@@ -104,7 +105,7 @@ class OpenAIChatFunc(object):
         return content, cost
 
     def __call__(self, messages: list[dict[str, str]]) -> tuple[str, float]:
-        return self.chat_completion_request(messages, temperature=1.0, max_tokens=150)
+        return self.chat_completion_request(messages, temperature=1.0)
 
 
 class ClaudeChatFunc(object):

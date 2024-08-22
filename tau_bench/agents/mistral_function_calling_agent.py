@@ -3,8 +3,7 @@
 import os
 from typing import Any, Dict, List, Optional
 
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from mistralai import Mistral
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from tau_bench.agents.gpt_function_calling_agent import (
@@ -40,7 +39,7 @@ class MistralFunctionCallingAgent(GPTFunctionCallingAgent):
         api_key = os.getenv("MISTRAL_API_KEY")
         if api_key is None:
             raise ValueError("Please set the MISTRAL_API_KEY environment variable")
-        self.client = MistralClient(api_key=api_key)
+        self.client = Mistral(api_key=api_key)
 
     def reset(self):
         self.messages = [
@@ -59,8 +58,8 @@ class MistralFunctionCallingAgent(GPTFunctionCallingAgent):
         tools: Optional[List[Dict[str, Any]]] = None,
         tool_choice: Optional[str] = None,
         temperature: float = 0.0,
-    ) -> ChatMessage:
-        response = self.client.chat(
+    ):
+        response = self.client.chat.complete(
             messages=messages,
             model=self.model,
             tools=tools,

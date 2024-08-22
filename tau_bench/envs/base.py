@@ -1,7 +1,6 @@
 # Copyright Sierra
 
 import random
-from copy import deepcopy
 from hashlib import sha256
 from typing import Any, Callable, Dict, List, Tuple, TypedDict
 
@@ -33,7 +32,7 @@ def consistent_hash(value):
 class BaseEnv:
     def __init__(
         self,
-        data: Dict[str, Any],
+        data_load_func: Callable[[], Dict[str, Any]],
         tools: List[Callable],
         tasks: List[Dict[str, Any]],
         wiki: str,
@@ -42,7 +41,8 @@ class BaseEnv:
         user_model: str,
     ):
         super().__init__()
-        self.init_data = data
+        self.data_load_func = data_load_func
+        self.init_data = data_load_func()
         self.data = None
         self.tools = tools
         self.tools_dict = {tool.__name__: tool for tool in tools}
@@ -60,7 +60,7 @@ class BaseEnv:
         if index is None:
             index = random.randint(0, len(self.tasks))
         self.index = index
-        self.data = deepcopy(self.init_data)
+        self.data = self.data_load_func()
         self.task = self.tasks[index]
         self.actions = []  # store the actions from the agent
         observation = (
@@ -136,7 +136,7 @@ class BaseEnv:
         # check database change
         if "actions" in self.task:
             # TODO: cache gt_data_hash in tasks.py (low priority)
-            self.data = deepcopy(self.init_data)
+            self.data = self.data_load_func()
             for action in self.task["actions"]:
                 if action["name"] not in self.terminate_tools:
                     self.step(action)
