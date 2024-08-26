@@ -1,7 +1,8 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
-https://arxiv.org/abs/2406.12045
+**Paper**: https://arxiv.org/abs/2406.12045
 
+Citation:
 ```bibtex
 @misc{yao2024tau,
       title={$\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains}, 
