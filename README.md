@@ -3,6 +3,7 @@
 **Paper**: https://arxiv.org/abs/2406.12045
 
 Citation:
+
 ```bibtex
 @misc{yao2024tau,
       title={$\tau$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains}, 
@@ -14,6 +15,19 @@ Citation:
       url={https://arxiv.org/abs/2406.12045}, 
 }
 ```
+
+## Leaderboard
+
+| Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
+| -------------- | ------ | ------ | ------ | ------ |
+| [TC](https://platform.openai.com/docs/guides/function-calling) (gpt-4o)     | ??     | ??     | ??     | ??     |
+| [TC](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) (claude-3-5-sonnet-20240620)     | ??     | ??     | ??     | ??     |
+| [TC](https://docs.mistral.ai/capabilities/function_calling/) (mistral-large-2407)     | ??     | ??     | ??     | ??     |
+| [TC](https://platform.openai.com/docs/guides/function-calling) (gpt-4o-mini)     | ??     | ??     | ??     | ??     |
+| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
+| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
+
+*TC = `tool-calling` strategy (the function-calling strategy reported in the paper)
 
 ## Setup
 
@@ -29,7 +43,7 @@ git clone https://github.com/sierra-research/tau-bench && cd ./tau-bench
 pip install -e .
 ```
 
-3. Set up your OpenAI / Anthropic / Google / Mistral API keys as environment variables.
+3. Set up your OpenAI / Anthropic / Google / Mistral / AnyScale API keys as environment variables.
 
 ```bash
 OPENAI_API_KEY=...
@@ -38,28 +52,27 @@ GOOGLE_API_KEY=...
 MISTRAL_API_KEY=...
 ```
 
-
 ## Run
 
-Run a function calling agent on the τ-retail environment:
+Run a tool-calling agent on the τ-retail environment:
 
 ```bash
-python run.py --env retail --model gpt-4o --max_concurrency 10
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --provider openai --user-model gpt-4o --user-model-provider openai --max-concurrency 10
 ```
 
-Set max concurrency according to your API limit.
+Set max concurrency according to your API limit(s).
 
 ## User simulators
 
-By default, we use `gpt-4` as the user simulator. You can use other models by setting the `--user_model` flag. For example, run a function calling agent with a claude user simulator:
+By default, we use `gpt-4o` as the user simulator. You can use other models by setting the `--user-model` flag. For example, run a function calling agent with a claude user simulator:
 
 ```bash
-python run.py --env retail --model gpt-4o --max_concurrency 10 --user_model claude-3-5-sonnet-20240620
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic
 ```
 
 ## License
 
-MIT.
+See `./LICENSE`.
 
 ## Contact
 
