@@ -9,7 +9,7 @@ from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 
 
-class FunctionCallingAgent(Agent):
+class ToolCallingAgent(Agent):
     def __init__(
         self,
         tools_info: List[Dict[str, Any]],
