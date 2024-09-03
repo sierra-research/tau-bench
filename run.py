@@ -101,7 +101,7 @@ def run(
 def agent_factory(
     tools_info: List[Dict[str, Any]], wiki, args: argparse.Namespace
 ) -> Agent:
-    if args.agent_strategy == "function_calling":
+    if args.agent_strategy == "function-calling":
         # native function calling
         from tau_bench.agents.function_calling_agent import FunctionCallingAgent
 
@@ -198,8 +198,8 @@ def main():
     parser.add_argument(
         "--agent-strategy",
         type=str,
-        default="function_calling",
-        choices=["function_calling", "act", "react"],
+        default="function-calling",
+        choices=["function-calling", "act", "react"],
     )
     parser.add_argument(
         "--temperature",
