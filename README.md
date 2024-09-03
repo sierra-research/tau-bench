@@ -20,10 +20,10 @@ Citation:
 
 | Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
 | -------------- | ------ | ------ | ------ | ------ |
-| [TC](https://platform.openai.com/docs/guides/function-calling) (gpt-4o)     | ??     | ??     | ??     | ??     |
-| [TC](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) (claude-3-5-sonnet-20240620)     | ??     | ??     | ??     | ??     |
-| [TC](https://docs.mistral.ai/capabilities/function_calling/) (mistral-large-2407)     | ??     | ??     | ??     | ??     |
-| [TC](https://platform.openai.com/docs/guides/function-calling) (gpt-4o-mini)     | ??     | ??     | ??     | ??     |
+| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)     | ??     | ??     | ??     | ??     |
+| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)      | ??     | ??     | ??     | ??     |
+| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)     | ??     | ??     | ??     | ??     |
+| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)     | ??     | ??     | ??     | ??     |
 | [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
 | [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
 
