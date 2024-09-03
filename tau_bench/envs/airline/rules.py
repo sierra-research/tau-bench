@@ -1,3 +1,3 @@
 # Copyright Sierra
 
-rules = []
+RULES = []

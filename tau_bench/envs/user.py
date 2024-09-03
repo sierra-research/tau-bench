@@ -1,22 +1,26 @@
 # Copyright Sierra
 
-import os
 import abc
-from tenacity import retry, stop_after_attempt, wait_random_exponential
-from typing import Callable
+from tau_bench.types import Role
+from litellm import Message, completion
+
+from typing import Callable, Optional, Tuple, List
 
 
-class BaseUserSimulationEnv:
+class BaseUserSimulationEnv(abc.ABC):
     metadata = {}
 
-    def reset(self, instruction: str) -> str:
-        return ""
+    @abc.abstractmethod
+    def reset(self, instruction: Optional[str] = None) -> str:
+        raise NotImplementedError
 
+    @abc.abstractmethod
     def step(self, content: str) -> str:
-        return ""
+        raise NotImplementedError
 
+    @abc.abstractmethod
     def get_total_cost(self) -> float:
-        return 0
+        raise NotImplementedError
 
 
 class HumanUserSimulationEnv(BaseUserSimulationEnv):
@@ -26,11 +30,12 @@ class HumanUserSimulationEnv(BaseUserSimulationEnv):
     def step(self, content: str) -> str:
         return input(f"{content}\n")
 
+    def get_total_cost(self) -> float:
+        return 0
 
-SYSTEM_PROMPT = """You are an user interacting with an agent.
 
-Instruction: {instruction}
-
+def build_system_prompt(instruction: Optional[str]) -> str:
+    return f"""You are an user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
 Rules:
 - Just generate one line at a time to simulate the user's message.
 - Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
@@ -41,229 +46,54 @@ Rules:
 """
 
 
-class OpenAIChatFunc(object):
-    def __init__(self, model: str) -> None:
-        from openai import OpenAI
-
-        api_key = os.getenv("OPENAI_API_KEY")
-        if api_key is None:
-            raise ValueError("OPENAI_API_KEY is not set")
-
-        self.client = OpenAI(api_key=api_key)
-
-        self.prompt_price_per_million = {
-            "gpt-4o-2024-08-06": 2.5,
-            "gpt-4o-mini": 0.15,
-            "gpt-4o-mini-2024-07-18": 0.15,
-            "gpt-4o-2024-05-13": 5,
-            "gpt-4o": 5,
-            "gpt-4-turbo": 10,
-            "gpt-4": 30,
-            "gpt-4-32k-0613": 60,
-            "gpt-3.5-turbo": 0.5,
-        }
-        self.completion_price_per_million = {
-            "gpt-4o-2024-08-06": 10,
-            "gpt-4o-mini": 0.6,
-            "gpt-4o-mini-2024-07-18": 0.6,
-            "gpt-4o-2024-05-13": 15,
-            "gpt-4o": 15,
-            "gpt-4-turbo": 30,
-            "gpt-4": 60,
-            "gpt-4-32k-0613": 120,
-            "gpt-3.5-turbo": 1.5,
-        }
-
-        if (
-            model not in self.prompt_price_per_million
-            or model not in self.completion_price_per_million
-        ):
-            raise ValueError(f"Model {model} is not supported")
-        self.model = model
-
-    @retry(
-        wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(10)
-    )
-    def chat_completion_request(
-        self, messages: list[dict[str, str]], temperature: float = 1.0
-    ) -> tuple[str, float]:
-        response = self.client.chat.completions.create(
-            messages=messages,
-            model=self.model,
-            temperature=temperature,
-            max_tokens=150,
-        )
-        content = response.choices[0].message.content
-        cost = (
-            self.prompt_price_per_million[self.model]
-            * response.usage.prompt_tokens
-            / 1e6
-            + self.completion_price_per_million[self.model]
-            * response.usage.completion_tokens
-            / 1e6
-        )
-        return content, cost
-
-    def __call__(self, messages: list[dict[str, str]]) -> tuple[str, float]:
-        return self.chat_completion_request(messages, temperature=1.0)
-
-
-class ClaudeChatFunc(object):
-    def __init__(self, model: str) -> None:
-        from anthropic import Anthropic
-
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-        if api_key is None:
-            raise ValueError("ANTHROPIC_API_KEY is not set")
-
-        self.client = Anthropic(api_key=api_key, max_retries=5)
-
-        self.prompt_price_per_million = {
-            "claude-3-5-sonnet-20240620": 3,
-        }
-        self.completion_price_per_million = {
-            "claude-3-5-sonnet-20240620": 15,
-        }
-        if (
-            model not in self.prompt_price_per_million
-            or model not in self.completion_price_per_million
-        ):
-            raise ValueError(f"Model {model} is not supported")
-        self.model = model
-
-    def remap_msgs(self, messages: list[dict[str, str]]) -> list[dict[str, str]]:
-        msgs = [
-            {
-                "role": msg["role"] if msg["role"] != "system" else "user",
-                "content": msg["content"],
-            }
-            for msg in messages
-        ]
-        remapped = []
-        for msg in msgs:
-            if (
-                msg["role"] == "user"
-                and len(remapped) > 0
-                and remapped[-1]["role"] == "user"
-            ):
-                remapped[-1]["content"] += f"\n\n{msg['content']}"
-            else:
-                remapped.append(msg)
-        return remapped
-
-    def __call__(self, messages: list[dict[str, str]]) -> tuple[str, float]:
-        remapped_msgs = self.remap_msgs(messages)
-        response = self.client.messages.create(
-            messages=remapped_msgs,
-            model=self.model,
-            max_tokens=150,
-        )
-        content = response.content[0].text
-        cost = (
-            self.prompt_price_per_million[self.model]
-            * response.usage.input_tokens
-            / 1e6
-            + self.completion_price_per_million[self.model]
-            * response.usage.output_tokens
-            / 1e6
-        )
-        return content, cost
-
-
-class MistralChatFunc(object):
-    def __init__(self, model: str) -> None:
-        from mistralai import Mistral
-
-        api_key = os.getenv("MISTRAL_API_KEY")
-        if api_key is None:
-            raise ValueError("MISTRAL_API_KEY is not set")
-
-        self.client = Mistral(api_key=api_key)
-
-        self.prompt_price_per_million = {
-            "mistral-large-latest": 3,
-        }
-        self.completion_price_per_million = {
-            "mistral-large-latest": 9,
-        }
-        if (
-            model not in self.prompt_price_per_million
-            or model not in self.completion_price_per_million
-        ):
-            raise ValueError(f"Model {model} is not supported")
-        self.model = model
-
-    def __call__(self, messages: list[dict[str, str]]) -> tuple[str, float]:
-        response = self.client.chat.complete(
-            messages=messages,
-            model=self.model,
-            max_tokens=150,
-        )
-        content = response.choices[0].message.content
-        cost = (
-            self.prompt_price_per_million[self.model]
-            * response.usage.prompt_tokens
-            / 1e6
-            + self.completion_price_per_million[self.model]
-            * response.usage.completion_tokens
-            / 1e6
-        )
-        return content, cost
-
-
-def chat_func_factory(
-    model: str,
-) -> Callable[[list[dict[str, str]]], tuple[str, float]]:
-    if model.startswith("gpt-4") or model.startswith("gpt-3.5"):
-        return OpenAIChatFunc(model)
-    elif model.startswith("claude"):
-        return ClaudeChatFunc(model=model)
-    elif model.startswith("mistral"):
-        return MistralChatFunc(model=model)
-    else:
-        raise ValueError(f"Unknown model {model}")
-
-
 class LLMUserSimulationEnv(BaseUserSimulationEnv):
-    def __init__(
-        self, chat_func: Callable[[list[dict[str, str]]], tuple[str, float]]
-    ) -> None:
+    def __init__(self, model: str, provider: str) -> None:
         super().__init__()
-        self.messages = []
-        self.system_prompt = SYSTEM_PROMPT
-        self.chat_func = chat_func
-        self.total_cost = 0
+        self.messages: List[Message] = []
+        self.model = model
+        self.provider = provider
+        self.total_cost = 0.0
+        self.reset()
 
-    def reset(self, instruction=None) -> str:
-        self.total_cost = 0
+    def reset(self, instruction: Optional[str] = None) -> str:
         self.messages = [
-            {
-                "role": "system",
-                "content": self.system_prompt.format(instruction=instruction),
-            },
-            {"role": "user", "content": "Hi! How can I help you today?"},
+            Message(
+                role="system", content=build_system_prompt(instruction=instruction)
+            ),
+            Message(role="user", content="Hi! How can I help you today?"),
         ]
-        content, cost = self.chat_func(self.messages)
-        self.messages.append({"role": "assistant", "content": content})
-        self.total_cost += cost
-        return content
+        res = completion(
+            model=self.model, custom_llm_provider=self.provider, messages=self.messages
+        )
+        message = res.choices[0].message
+        self.messages.append(message)
+        self.total_cost = res._hidden_params["response_cost"]
+        return message.content
 
     def step(self, content: str) -> str:
-        self.messages.append({"role": "user", "content": content})
-        content, cost = self.chat_func(self.messages)
-        self.messages.append({"role": "assistant", "content": content})
-        self.total_cost += cost
-        return content
+        self.messages.append(Message(role="user", content=content))
+        res = completion(
+            model=self.model, custom_llm_provider=self.provider, messages=self.messages
+        )
+        message = res.choices[0].message
+        self.messages.append(message)
+        self.total_cost += res._hidden_params["response_cost"]
+        return message.content
 
-    def get_total_cost(self):
+    def get_total_cost(self) -> float:
         return self.total_cost
 
 
-def load_user(user_mode: str, model: str = "gpt-4") -> BaseUserSimulationEnv:
-    if user_mode == "human":
+def load_user(
+    user_strategy: str, model: Optional[str] = "gpt-4o", provider: Optional[str] = None
+) -> BaseUserSimulationEnv:
+    if user_strategy == "human":
         return HumanUserSimulationEnv()
-    elif user_mode == "naive":
-        chat_func = chat_func_factory(model)
-        return LLMUserSimulationEnv(chat_func=chat_func)
+    elif user_strategy == "llm":
+        if model is None:
+            raise ValueError("LLM user strategy requires a model")
+        if provider is None:
+            raise ValueError("LLM user strategy requires a model provider")
+        return LLMUserSimulationEnv(model=model, provider=provider)
     else:
-        raise ValueError(f"Unknown user mode {user_mode}")
+        raise ValueError(f"Unknown user strategy {user_strategy}")
