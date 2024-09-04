@@ -59,9 +59,9 @@ class ChatReActAgent(Agent):
         return message, action, res._hidden_params["response_cost"]
 
     def solve(
-        self, env: Env, index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
-        response = env.reset(index=index)
+        response = env.reset(task_index=task_index)
         reward = 0.0
         messages: List[Message] = [
             Message(role="system", content=self.prompt),

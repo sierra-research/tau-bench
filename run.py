@@ -53,13 +53,14 @@ def run(
                 user_model=args.user_model,
                 task_split=args.task_split,
                 user_provider=args.user_model_provider,
+                task_index=idx,
             )
 
             print(f"Running task {idx}")
             try:
                 res = agent.solve(
-                    isolated_env,
-                    idx,
+                    env=isolated_env,
+                    task_index=idx,
                 )
                 result = EnvRunResult(
                     task_id=idx,
@@ -71,7 +72,7 @@ def run(
             except Exception as e:
                 result = EnvRunResult(
                     task_id=idx,
-                    reward=0,
+                    reward=0.0,
                     info={"error": str(e), "traceback": traceback.format_exc()},
                     traj=[],
                     trial=i,

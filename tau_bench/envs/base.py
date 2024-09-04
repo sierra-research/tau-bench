@@ -52,7 +52,7 @@ class Env(object):
         user_strategy: str,
         user_model: str,
         user_provider: Optional[str] = None,
-        index: Optional[int] = None,
+        task_index: Optional[int] = None,
     ) -> None:
         super().__init__()
         self.data_load_func = data_load_func
@@ -63,11 +63,11 @@ class Env(object):
         self.tools_info = [tool.get_info() for tool in tools]
         self.terminate_tools = []
         self.tasks = tasks
-        if index is not None:
-            self.index = index
+        if task_index is not None:
+            self.task_index = task_index
         else:
-            self.index = random.randint(0, len(tasks))
-        self.task = tasks[self.index]
+            self.task_index = random.randint(0, len(tasks))
+        self.task = tasks[self.task_index]
         self.wiki = wiki
         self.rules = rules
         self.user = load_user(
@@ -75,12 +75,12 @@ class Env(object):
         )
         self.actions: List[Action] = []
 
-    def reset(self, index: Optional[int] = None) -> EnvResetResponse:
-        if index is None:
-            index = random.randint(0, len(self.tasks))
-        self.index = index
+    def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
+        if task_index is None:
+            task_index = random.randint(0, len(self.tasks))
+        self.task_index = task_index
         self.data = self.data_load_func()
-        self.task = self.tasks[index]
+        self.task = self.tasks[task_index]
         self.actions = []
         initial_observation = self.user.reset(instruction=self.task.instruction)
         return EnvResetResponse(
