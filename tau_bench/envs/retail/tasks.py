@@ -2898,7 +2898,7 @@ tasks = [
                 },
             }
         ],
-        "instruction": "You name is Yusuf Gonzalez and your zip code is 91455. You want to return everything but a tablet in a recently delivered order. You want to know how much you can get back.",
+        "instruction": "You name is Yusuf Gonzalez and your zip code is 91455. You want to return everything but a tablet in a recently delivered order. There is an E-Reader in the order that you want to return. You want to know how much you can get back.",
         "outputs": ["346.93"],
         "annotator": 4,
     },
