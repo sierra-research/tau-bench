@@ -70,6 +70,23 @@ By default, we use `gpt-4o` as the user simulator. You can use other models by s
 python run.py --agent-strategy tool-calling --env retail --model gpt-4o --provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic
 ```
 
+## Auto evaluation
+
+Often times, it is difficult and time consuming to manually identify fault locations in the results as the trajectories can be long and the constraints can be complex. We have provided an auto evaluation script that can do:
+
+1. Fault assignment: determine the entity that is responsible for the fault (user, agent, environment)
+2. Fault type classification: classify the type of fault (goal_partially_completed, used_wrong_tool, used_wrong_tool_argument, took_unintended_action)
+
+Both of the labels are accompanied with a description.
+
+To run the auto evaluation, run:
+
+```bash
+python auto_error_identification.py --env <airline/retail> --results-path <the path to your results file here> --max-concurrency 16 --output-path test-auto-eval -n 10
+```
+
+*Notice: If an error is raised due to the structure of your results file, you may have to rerun the benchmark to produce a new results file. We have recently [rewritten](https://github.com/sierra-research/tau-bench/commit/043b544371757ebb3762b3d02a6675dfe0c41798) the benchmark to be more type-safe and extensible.
+
 ## License
 
 See `./LICENSE`.
