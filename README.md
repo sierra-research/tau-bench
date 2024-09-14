@@ -72,7 +72,7 @@ python run.py --agent-strategy tool-calling --env retail --model gpt-4o --provid
 
 ## Auto error identification
 
-Often times, it is difficult and time consuming to manually identify fault locations in the results as the trajectories can be long and the constraints can be complex. We have provided an auto evaluation script that can do:
+Often times, it is difficult and time consuming to manually identify specific error locations in trajectories as they can be long and the constraints can be complex. We have provided an auto error identification tool that can do the following:
 
 1. Fault assignment: determine the entity that is responsible for the fault (user, agent, environment)
 2. Fault type classification: classify the type of fault (goal_partially_completed, used_wrong_tool, used_wrong_tool_argument, took_unintended_action)
