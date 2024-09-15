@@ -57,7 +57,7 @@ MISTRAL_API_KEY=...
 Run a tool-calling agent on the τ-retail environment:
 
 ```bash
-python run.py --agent-strategy tool-calling --env retail --model gpt-4o --provider openai --user-model gpt-4o --user-model-provider openai --max-concurrency 10
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --max-concurrency 10
 ```
 
 Set max concurrency according to your API limit(s).
@@ -67,7 +67,7 @@ Set max concurrency according to your API limit(s).
 By default, we use `gpt-4o` as the user simulator. You can use other models by setting the `--user-model` flag. For example, run a function calling agent with a claude user simulator:
 
 ```bash
-python run.py --agent-strategy tool-calling --env retail --model-provider gpt-4o --provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic
 ```
 
 ## Auto error identification
