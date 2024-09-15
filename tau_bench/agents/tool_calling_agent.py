@@ -1,7 +1,7 @@
 # Copyright Sierra
 
 import json
-from litellm import completion, Message
+from litellm import completion
 from typing import List, Optional, Dict, Any
 
 from tau_bench.agents.base import Agent
@@ -32,9 +32,9 @@ class ToolCallingAgent(Agent):
         obs = env_reset_res.observation
         info = env_reset_res.info.model_dump()
         reward = 0.0
-        messages: List[Message] = [
-            Message(role="system", content=self.wiki),
-            Message(role="user", content=obs),
+        messages: List[Dict[str, Any]] = [
+            {"role": "system", "content": self.wiki},
+            {"role": "user", "content": obs},
         ]
         for _ in range(max_num_steps):
             res = completion(
@@ -44,21 +44,21 @@ class ToolCallingAgent(Agent):
                 tools=self.tools_info,
                 temperature=self.temperature,
             )
-            next_message = res.choices[0].message
+            next_message = res.choices[0].message.model_dump()
             total_cost += res._hidden_params["response_cost"]
             action = message_to_action(next_message)
             env_response = env.step(action)
             reward = env_response.reward
             info = {**info, **env_response.info.model_dump()}
             if action.name != RESPOND_ACTION_NAME:
-                next_message.tool_calls = next_message.tool_calls[:1]
+                next_message["tool_calls"] = next_message["tool_calls"][:1]
                 messages.extend(
                     [
                         next_message,
                         {
                             "role": "tool",
-                            "tool_call_id": next_message.tool_calls[0].id,
-                            "name": next_message.tool_calls[0].function.name,
+                            "tool_call_id": next_message["tool_calls"][0]["id"],
+                            "name": next_message["tool_calls"][0]["function"]["name"],
                             "content": env_response.observation,
                         },
                     ]
@@ -67,7 +67,7 @@ class ToolCallingAgent(Agent):
                 messages.extend(
                     [
                         next_message,
-                        Message(role="user", content=env_response.observation),
+                        {"role": "user", "content": env_response.observation},
                     ]
                 )
             if env_response.done:
@@ -81,13 +81,13 @@ class ToolCallingAgent(Agent):
 
 
 def message_to_action(
-    message: Message,
+    message: Dict[str, Any],
 ) -> Action:
-    if hasattr(message, "tool_calls") and len(message.tool_calls) > 0:
-        tool_call = message.tool_calls[0]
+    if "tool_calls" in message and message["tool_calls"] is not None and len(message["tool_calls"]) > 0 and message["tool_calls"][0]["function"] is not None:
+        tool_call = message["tool_calls"][0]
         return Action(
-            name=tool_call.function.name,
-            kwargs=json.loads(tool_call.function.arguments),
+            name=tool_call["function"]["name"],
+            kwargs=json.loads(tool_call["function"]["arguments"]),
         )
     else:
-        return Action(name=RESPOND_ACTION_NAME, kwargs={"content": message.content})
+        return Action(name=RESPOND_ACTION_NAME, kwargs={"content": message["content"]})

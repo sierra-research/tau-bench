@@ -1,11 +1,7 @@
 # Copyright Sierra
 
-from litellm import Message
 from pydantic import BaseModel
-from typing import List, Dict, Any, Optional, Literal, Union
-
-
-Role = Literal["system", "user", "assistant", "tool"]
+from typing import List, Dict, Any, Optional, Literal, Union, TypedDict
 
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
@@ -41,7 +37,7 @@ class RewardResult(BaseModel):
 
 class SolveResult(BaseModel):
     reward: float
-    messages: List[Message]
+    messages: List[Dict[str, Any]]
     info: Dict[str, Any]
     total_cost: Optional[float] = None
 

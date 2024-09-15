@@ -66,7 +66,7 @@ def run(
                     task_id=idx,
                     reward=res.reward,
                     info=res.info,
-                    traj=[msg.model_dump() for msg in res.messages],
+                    traj=res.messages,
                     trial=i,
                 )
             except Exception as e:

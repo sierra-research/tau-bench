@@ -1,10 +1,9 @@
 # Copyright Sierra
 
 import abc
-from tau_bench.types import Role
-from litellm import Message, completion
+from litellm import completion
 
-from typing import Callable, Optional, Tuple, List
+from typing import Optional, List, Dict, Any
 
 
 class BaseUserSimulationEnv(abc.ABC):
@@ -49,7 +48,7 @@ Rules:
 class LLMUserSimulationEnv(BaseUserSimulationEnv):
     def __init__(self, model: str, provider: str) -> None:
         super().__init__()
-        self.messages: List[Message] = []
+        self.messages: List[Dict[str, Any]] = []
         self.model = model
         self.provider = provider
         self.total_cost = 0.0
@@ -57,10 +56,11 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
 
     def reset(self, instruction: Optional[str] = None) -> str:
         self.messages = [
-            Message(
-                role="system", content=build_system_prompt(instruction=instruction)
-            ),
-            Message(role="user", content="Hi! How can I help you today?"),
+            {
+                "role": "system",
+                "content": build_system_prompt(instruction=instruction),
+            },
+            {"role": "user", "content": "Hi! How can I help you today?"},
         ]
         res = completion(
             model=self.model, custom_llm_provider=self.provider, messages=self.messages
@@ -71,7 +71,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         return message.content
 
     def step(self, content: str) -> str:
-        self.messages.append(Message(role="user", content=content))
+        self.messages.append({"role": "user", "content": content})
         res = completion(
             model=self.model, custom_llm_provider=self.provider, messages=self.messages
         )

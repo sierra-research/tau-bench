@@ -1,7 +1,7 @@
 # Copyright Sierra
 
 import json
-from litellm import Message, completion
+from litellm import completion
 
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
@@ -35,8 +35,8 @@ class ChatReActAgent(Agent):
         self.tools_info = tools_info
 
     def generate_next_step(
-        self, messages: List[Message]
-    ) -> Tuple[Message, Action, float]:
+        self, messages: List[Dict[str, Any]]
+    ) -> Tuple[Dict[str, Any], Action, float]:
         res = completion(
             model=self.model,
             custom_llm_provider=self.provider,
@@ -56,16 +56,16 @@ class ChatReActAgent(Agent):
         assert "name" in action_parsed
         assert "arguments" in action_parsed
         action = Action(name=action_parsed["name"], kwargs=action_parsed["arguments"])
-        return message, action, res._hidden_params["response_cost"]
+        return message.model_dump(), action, res._hidden_params["response_cost"]
 
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
         response = env.reset(task_index=task_index)
         reward = 0.0
-        messages: List[Message] = [
-            Message(role="system", content=self.prompt),
-            Message(role="user", content=response.observation),
+        messages: List[Dict[str, Any]] = [
+            {"role": "system", "content": self.prompt},
+            {"role": "user", "content": response.observation},
         ]
         total_cost = 0.0
         info = {}
@@ -80,7 +80,7 @@ class ChatReActAgent(Agent):
             messages.extend(
                 [
                     message,
-                    Message(role="user", content=obs),
+                    {"role": "user", "content": obs},
                 ]
             )
             total_cost += cost
