@@ -85,6 +85,8 @@ To run the auto error identification, run:
 python auto_error_identification.py --env <airline/retail> --results-path <the path to your results file here> --max-concurrency 16 --output-path test-auto-error-identification -n 10
 ```
 
+Please note that this feature utilizes an LLM, which may lead to inaccurate error identifications.
+
 *Notice: If an error is raised due to the structure of your results file, you may have to rerun the benchmark to produce a new results file. We have recently [rewritten](https://github.com/sierra-research/tau-bench/commit/043b544371757ebb3762b3d02a6675dfe0c41798) the benchmark to be more type-safe and extensible.
 
 ## License
