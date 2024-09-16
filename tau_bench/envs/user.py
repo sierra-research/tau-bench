@@ -66,7 +66,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
             model=self.model, custom_llm_provider=self.provider, messages=self.messages
         )
         message = res.choices[0].message
-        self.messages.append(message)
+        self.messages.append(message.model_dump())
         self.total_cost = res._hidden_params["response_cost"]
         return message.content
 
@@ -76,7 +76,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
             model=self.model, custom_llm_provider=self.provider, messages=self.messages
         )
         message = res.choices[0].message
-        self.messages.append(message)
+        self.messages.append(message.model_dump())
         self.total_cost += res._hidden_params["response_cost"]
         return message.content
 
