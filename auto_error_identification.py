@@ -7,8 +7,6 @@ from pydantic import BaseModel
 from tau_bench.model_utils import default_api, API
 from tau_bench.envs.airline.tasks_test import TASKS as AIRLINE_TASKS
 from tau_bench.envs.retail.tasks_test import TASKS_TEST as RETAIL_TASKS
-from tau_bench.envs.airline.wiki import WIKI as AIRLINE_WIKI
-from tau_bench.envs.retail.wiki import WIKI as RETAIL_WIKI
 from tau_bench.types import Task, Action
 from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
@@ -28,7 +26,6 @@ class OriginalResult(BaseModel):
     traj: List[Dict[str, Any]]
     ground_truth_actions: List[Action]
     ground_truth_outputs: List[str]
-    env_rules: str
 
 class FaultAuthor(Enum):
     USER = "user"
@@ -69,20 +66,6 @@ class GradingStrategy(Enum):
     ACTIONS = "actions"
     OUTPUTS = "outputs"
 
-# def context_description(grading_strategy: GradingStrategy) -> str:
-#     if grading_strategy == GradingStrategy.ACTIONS:
-#         return """You will be given a policy document for an AI agent, a user instruction, the ground truth action sequence, and a trajectory.
-# - The policy document outlines the expected behavior of the agent.
-# - The user instruction is the instruction given to the simulated user.
-# - The ground truth action sequence is one example of a valid sequence of actions that lead to the goal state (the sequence of actions could be empty, meaning that no action should have been taken).
-# - The trajectory is the sequence of messages between the user and the agent.
-# - The trajectory has been determined to have a fault."""
-#     return """You will be given a policy document for an AI agent, a user instruction, the set of required agent response outputs, and a trajectory.
-# - The policy document outlines the expected behavior of the agent.
-# - The user instruction is the instruction given to the simulated user.
-# - The required agent response outputs are the set of outputs that the agent is expected to communicate to the user.
-# - The trajectory is the sequence of messages between the user and the agent.
-# - The trajectory has been determined to have a fault."""
 def context_description(grading_strategy: GradingStrategy) -> str:
     if grading_strategy == GradingStrategy.ACTIONS:
         return """You will be given a user instruction, the ground truth action sequence, and a trajectory.
@@ -105,12 +88,8 @@ def display_traj(traj: List[Dict[str, Any]]) -> str:
 def display_actions(actions: List[Action]) -> str:
     return json.dumps([action.model_dump() for action in actions], indent=4)
 
-def display_context(env_rules: str, user_instruction: str, ground_truth_actions: List[Action], ground_truth_outputs: List[str], trajectory: List[Dict[str, Any]]) -> str:
+def display_context(user_instruction: str, ground_truth_actions: List[Action], ground_truth_outputs: List[str], trajectory: List[Dict[str, Any]]) -> str:
     traj_display = display_traj(trajectory)
-#     context = f"""----- start policy document -----
-# {env_rules}
-# ----- end policy document -----
-
     context = f"""----- start user instruction -----
 {user_instruction}
 ----- end user instruction -----"""
@@ -132,7 +111,7 @@ def display_context(env_rules: str, user_instruction: str, ground_truth_actions:
 ----- end trajectory -----\n"""
     return context
 
-def fault_assignment_analysis(api: API, env_rules: str, results: List[OriginalResult], max_concurrency: int) -> List[FaultAssignmentResult]:
+def fault_assignment_analysis(api: API, results: List[OriginalResult], max_concurrency: int) -> List[FaultAssignmentResult]:
     def assign_fault(task_id: int, user_instruction: str, traj: List[Dict[str, Any]], ground_truth_actions: List[Action], ground_truth_outputs: List[str]) -> FaultAssignmentResult:
         idx_to_author = {
             0: FaultAuthor.USER,
@@ -141,7 +120,7 @@ def fault_assignment_analysis(api: API, env_rules: str, results: List[OriginalRe
         }
         grading_strategy = GradingStrategy.OUTPUTS if len(ground_truth_outputs) > 0 else GradingStrategy.ACTIONS
         ctx_desc = context_description(grading_strategy)
-        context = display_context(env_rules, user_instruction, ground_truth_actions, ground_truth_outputs, traj)
+        context = display_context(user_instruction, ground_truth_actions, ground_truth_outputs, traj)
         res = api.classify(
             instruction=f"{ctx_desc}\n\nDetermine the entity that is responsible for the fault. The user is responsible for the fault if they caused an action that was not grounded in the user instruction. The agent is responsible for the fault if they took an action that was not correct (or took the action with the wrong arguments). The environment is responsible for all other faults.",
             text=context,
@@ -163,7 +142,7 @@ def fault_assignment_analysis(api: API, env_rules: str, results: List[OriginalRe
     return results
 
 
-def fault_type_analysis(api: API, env_rules: str, results: List[OriginalResult], max_concurrency: int) -> List[FaultTypeResult]:
+def fault_type_analysis(api: API, results: List[OriginalResult], max_concurrency: int) -> List[FaultTypeResult]:
     def get_fault_type(task_id: int, user_instruction: str, traj: List[Dict[str, Any]], ground_truth_actions: List[Action], ground_truth_outputs: List[str]) -> FaultTypeResult:
         idx_to_fault_type = {
             0: FaultType.CALLED_WRONG_TOOL,
@@ -173,7 +152,7 @@ def fault_type_analysis(api: API, env_rules: str, results: List[OriginalResult],
         }
         grading_strategy = GradingStrategy.OUTPUTS if len(ground_truth_outputs) > 0 else GradingStrategy.ACTIONS
         ctx_desc = context_description(grading_strategy)
-        context = display_context(env_rules, user_instruction, ground_truth_actions, ground_truth_outputs, traj)
+        context = display_context(user_instruction, ground_truth_actions, ground_truth_outputs, traj)
         res = api.classify(
             instruction=f"{ctx_desc}\n\nDetermine the type of fault of the first instance of the fault.",
             text=context,
@@ -202,10 +181,8 @@ def main() -> None:
     print(f"Loaded {len(results)} results")
     env = args.env
     if env == "airline":
-        env_rules = AIRLINE_WIKI
         tasks: List[Task] = AIRLINE_TASKS
     elif env == "retail":
-        env_rules = RETAIL_WIKI
         tasks: List[Task] = RETAIL_TASKS
     else:
         raise ValueError(f"Invalid environment: {env}")
@@ -221,12 +198,13 @@ def main() -> None:
         user_instruction = task.instruction
         ground_truth_actions = task.actions
         ground_truth_outputs = task.outputs
-        original_result = OriginalResult(task_id=task_id, user_instruction=user_instruction, traj=result["traj"], ground_truth_actions=ground_truth_actions, ground_truth_outputs=ground_truth_outputs, env_rules=env_rules)
+        original_result = OriginalResult(task_id=task_id, user_instruction=user_instruction, traj=result["traj"], ground_truth_actions=ground_truth_actions, ground_truth_outputs=ground_truth_outputs)
         original_results.append(original_result)
     print(f"Performing fault assignment analysis on {len(original_results)} failed trajectories with a max concurrency of {args.max_concurrency}...")
-    fault_assignment_results = fault_assignment_analysis(api=api, env_rules=env_rules, results=original_results, max_concurrency=args.max_concurrency)
-    print(f"Performing fault type analysis on {len(original_results)} failed trajectories with a max concurrency of {args.max_concurrency}...")
-    fault_type_results = fault_type_analysis(api=api, env_rules=env_rules, results=original_results, max_concurrency=args.max_concurrency)
+    fault_assignment_results = fault_assignment_analysis(api=api, results=original_results, max_concurrency=args.max_concurrency)
+    failures_due_to_agent = [original_results[i] for i, r in enumerate(fault_assignment_results) if r.author == FaultAuthor.AGENT]
+    print(f"Performing fault type analysis on {len(failures_due_to_agent)} failures that have been marked as being caused by the agent with a max concurrency of {args.max_concurrency}...")
+    fault_type_results = fault_type_analysis(api=api, results=failures_due_to_agent, max_concurrency=args.max_concurrency)
     with open(args.output_path, "w") as f:
         json.dump({
             "fault_assignment_analysis": [r.model_dump() for r in fault_assignment_results],
