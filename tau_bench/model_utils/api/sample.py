@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from tau_bench.model_utils.api.exception import APIError, execute_and_filter_model_errors
 from tau_bench.model_utils.model.exception import ModelError
+from tau_bench.model_utils import func_tools
 
 T = TypeVar("T")
 
@@ -93,7 +94,7 @@ class MajoritySamplingStrategy(SamplingStrategy):
         if self.panic_on_first_model_error:
             if isinstance(invocable_or_invokables, Callable):
                 results = list(
-                    functools.map(
+                    func_tools.map(
                         lambda _: invocable_or_invokables(),
                         range(self.n),
                         max_concurrency=self.max_concurrency,
@@ -101,7 +102,7 @@ class MajoritySamplingStrategy(SamplingStrategy):
                 )
             else:
                 results = list(
-                    functools.map(
+                    func_tools.map(
                         lambda invocable: invocable(),
                         invocable_or_invokables,
                         max_concurrency=self.max_concurrency,
@@ -152,7 +153,7 @@ class EnsembleSamplingStrategy(SamplingStrategy):
             raise ValueError("Ensemble sampling requires at least 2 invocables")
         if self.panic_on_first_model_error:
             results = list(
-                functools.map(
+                func_tools.map(
                     lambda invocable: invocable(),
                     invocable_or_invokables,
                     max_concurrency=self.max_concurrency,
@@ -185,7 +186,7 @@ class UnanimousSamplingStrategy(SamplingStrategy):
         if self.panic_on_first_model_error:
             if isinstance(invocable_or_invokables, Callable):
                 results = list(
-                    functools.map(
+                    func_tools.map(
                         lambda _: invocable_or_invokables(),
                         range(self.n),
                         max_concurrency=self.max_concurrency,
@@ -193,7 +194,7 @@ class UnanimousSamplingStrategy(SamplingStrategy):
                 )
             else:
                 results = list(
-                    functools.map(
+                    func_tools.map(
                         lambda invocable: invocable(),
                         invocable_or_invokables,
                         max_concurrency=self.max_concurrency,
