@@ -4,15 +4,16 @@ import json
 import argparse
 from enum import Enum
 from pydantic import BaseModel
-from tau_bench.model_utils import default_api, API
+from tau_bench.model_utils import default_api_from_args, API
 from tau_bench.envs.airline.tasks_test import TASKS as AIRLINE_TASKS
 from tau_bench.envs.retail.tasks_test import TASKS_TEST as RETAIL_TASKS
+from tau_bench.model_utils.args import api_parser
 from tau_bench.types import Task, Action
 from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
 
 def get_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
+    parser = api_parser()
     parser.add_argument("--env", type=str, required=True, choices=["airline", "retail"], help="The environment that the original trajectories are from (used to fetch the user instructions)")
     parser.add_argument("--results-path", type=str, help="Path to the results file")
     parser.add_argument("--max-concurrency", type=int, default=1, help="Maximum number of concurrent API calls")
@@ -175,7 +176,7 @@ def fault_type_analysis(api: API, results: List[OriginalResult], max_concurrency
 
 def main() -> None:
     args = get_args()
-    api = default_api()
+    api = default_api_from_args(args)
     with open(args.results_path, "r") as f:
         results = json.load(f)
     print(f"Loaded {len(results)} results")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
@@ -403,6 +404,11 @@ def default_api(
         request_router=request_router,
         log_file=log_file,
     )
+
+def default_api_from_args(args: argparse.Namespace) -> API:
+    from tau_bench.model_utils.model.general_model import model_factory
+    model = model_factory(model_id=args.model, platform=args.platform, base_url=args.base_url)
+    return API.from_general_model(model=model)
 
 
 def default_quick_api(

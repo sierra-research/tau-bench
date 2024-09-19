@@ -1,4 +1,5 @@
 from tau_bench.model_utils.api.api import API as API
+from tau_bench.model_utils.api.api import default_api_from_args as default_api_from_args
 from tau_bench.model_utils.api.api import BinaryClassifyDatapoint as BinaryClassifyDatapoint
 from tau_bench.model_utils.api.api import ClassifyDatapoint as ClassifyDatapoint
 from tau_bench.model_utils.api.api import GenerateDatapoint as GenerateDatapoint
