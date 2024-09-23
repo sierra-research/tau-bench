@@ -5,13 +5,14 @@ from tau_bench.envs.airline.rules import RULES
 from tau_bench.envs.airline.tools import ALL_TOOLS
 from tau_bench.envs.airline.wiki import WIKI
 from tau_bench.envs.base import Env
-from typing import Optional
+from typing import Optional, Union
+from tau_bench.envs.user import UserStrategy
 
 
 class MockAirlineDomainEnv(Env):
     def __init__(
         self,
-        user_strategy: str = "llm",
+        user_strategy: Union[str, UserStrategy] = UserStrategy.LLM,
         user_model: str = "gpt-4o",
         user_provider: Optional[str] = None,
         task_split: str = "test",

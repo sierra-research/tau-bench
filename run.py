@@ -15,15 +15,17 @@ from tau_bench.envs import get_env
 from tau_bench.agents.base import Agent
 from tau_bench.types import EnvRunResult
 from litellm import provider_list
+from tau_bench.envs.user import UserStrategy
 
 
 def run(
     args: argparse.Namespace,
     ckpt_path: str,
 ) -> List[EnvRunResult]:
+    print(f"Loading user with strategy: {args.user_strategy}")
     env = get_env(
         args.env,
-        user_strategy="llm",
+        user_strategy=args.user_strategy,
         user_model=args.user_model,
         user_provider=args.user_model_provider,
         task_split=args.task_split,
@@ -49,7 +51,7 @@ def run(
         def _run(idx: int) -> EnvRunResult:
             isolated_env = get_env(
                 args.env,
-                user_strategy="llm",
+                user_strategy=args.user_strategy,
                 user_model=args.user_model,
                 task_split=args.task_split,
                 user_provider=args.user_model_provider,
@@ -226,6 +228,7 @@ def main():
     )
     parser.add_argument("--seed", type=int, default=10)
     parser.add_argument("--shuffle", type=int, default=0)
+    parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
 
     args = parser.parse_args()
     print(args)

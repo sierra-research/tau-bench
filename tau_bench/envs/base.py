@@ -5,7 +5,7 @@ from hashlib import sha256
 from tau_bench.envs.tool import Tool
 from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
 
-from tau_bench.envs.user import load_user
+from tau_bench.envs.user import load_user, UserStrategy
 from tau_bench.types import (
     Action,
     Task,
@@ -49,7 +49,7 @@ class Env(object):
         tasks: List[Task],
         wiki: str,
         rules: List[str],
-        user_strategy: str,
+        user_strategy: Union[str, UserStrategy],
         user_model: str,
         user_provider: Optional[str] = None,
         task_index: Optional[int] = None,

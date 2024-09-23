@@ -57,18 +57,52 @@ MISTRAL_API_KEY=...
 Run a tool-calling agent on the τ-retail environment:
 
 ```bash
-python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --max-concurrency 10
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --user-strategy llm --max-concurrency 10
 ```
 
 Set max concurrency according to your API limit(s).
 
 ## User simulators
 
-By default, we use `gpt-4o` as the user simulator. You can use other models by setting the `--user-model` flag. For example, run a function calling agent with a claude user simulator:
+By default, we use `gpt-4o` as the user simulator with strategy `llm`. You can use other models by setting the `--user-model` flag, or other strategies by setting the `--user-strategy` flag. For example, run a tool-calling agent with a claude user simulator:
 
 ```bash
-python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model claude-3-5-sonnet-20240620 --user-model-provider anthropic --user-strategy llm
 ```
+
+Other strategies:
+
+To run `react` user simulator:
+
+```bash
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model gpt-4o --user-model-provider openai --user-strategy react
+```
+
+Example of a `react` user response:
+
+```md
+Thought:
+I should provide my name and zip code as I wasn't given an email address to use.
+
+User Response:
+Sure, my name is Yusuf Rossi, and my zip code is 19122.
+```
+
+To run `verify` user simulator:
+
+```bash
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model gpt-4o --user-model-provider openai --user-strategy verify
+```
+
+This strategy uses a subsequent LLM verification step to check if the user simulator's response is satisfactory. If not, the user simulator will be prompted to generate a new response.
+
+To run `reflection` user simulator:
+
+```bash
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --max-concurrency 10 --user-model gpt-4o --user-model-provider openai --user-strategy reflection
+```
+
+This strategy uses a subsequent LLM verification step to check if the user simulator's response is satisfactory. If not, the user simulator will be prompted to reflect on its response and generate a new response.
 
 ## Auto error identification
 

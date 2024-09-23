@@ -1,12 +1,13 @@
 # Copyright Sierra
 
-from typing import Optional
+from typing import Optional, Union
 from tau_bench.envs.base import Env
+from tau_bench.envs.user import UserStrategy
 
 
 def get_env(
     env_name: str,
-    user_strategy: str,
+    user_strategy: Union[str, UserStrategy],
     user_model: str,
     task_split: str,
     user_provider: Optional[str] = None,
