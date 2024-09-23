@@ -53,7 +53,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         return message.content
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
-        return f"""You are an user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
+        return f"""You are a user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
 Rules:
 - Just generate one line at a time to simulate the user's message.
 - Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
@@ -85,7 +85,7 @@ class ReactUserSimulationEnv(LLMUserSimulationEnv):
         self.reset()
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
-        return f"""You are an user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
+        return f"""You are a user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
 Rules:
 - First, generate a Thought about what to do next (this message will not be sent to the agent).
 - Then, generate a one line User Response to simulate the user's message (this message will be sent to the agent).
