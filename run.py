@@ -235,7 +235,7 @@ def main():
     random.seed(args.seed)
 
     time_str = datetime.now().strftime("%m%d%H%M%S")
-    file_str = f"{args.log_dir}/{args.agent_strategy}-{args.model.split('/')[-1]}-{args.temperature}_range_{args.start_index}-{args.end_index}_user{args.user_model}_{time_str}.json"
+    file_str = f"{args.log_dir}/{args.agent_strategy}-{args.model.split('/')[-1]}-{args.temperature}_range_{args.start_index}-{args.end_index}_user-{args.user_model}-{args.user_strategy}_{time_str}.json"
 
     if not os.path.exists(args.log_dir):
         os.makedirs(args.log_dir)
