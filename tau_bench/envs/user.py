@@ -123,8 +123,16 @@ User Response:
         return self.generate_next_message(self.messages)
     
     def parse_response(self, response: str) -> str:
-        _, user_response = response.split("Thought:")
-        return user_response.strip()
+        if "###STOP###" in response:
+            return "###STOP###"
+        elif "Thought:" in response:
+            _, user_response = response.split("Thought:")
+            return user_response.strip()
+        elif "User Response:" in response:
+            _, user_response = response.split("User Response:")
+            return user_response.strip()
+        else:
+            raise ValueError(f"Invalid response format: {response}")
 
     def step(self, content: str) -> str:
         self.messages.append({"role": "user", "content": content})
