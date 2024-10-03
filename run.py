@@ -40,11 +40,17 @@ def run(
     )
     results: List[EnvRunResult] = []
     lock = multiprocessing.Lock()
-    print(
-        f"Running tasks {args.start_index} to {end_index} (checkpoint path: {ckpt_path})"
+    if args.task_ids and len(args.task_ids) > 0:
+        print(f"Running tasks {args.task_ids} (checkpoint path: {ckpt_path})")
+    else:
+        print(
+            f"Running tasks {args.start_index} to {end_index} (checkpoint path: {ckpt_path})"
     )
     for i in range(args.num_trials):
-        idxs = list(range(args.start_index, end_index))
+        if args.task_ids and len(args.task_ids) > 0:
+            idxs = args.task_ids
+        else:
+            idxs = list(range(args.start_index, end_index))
         if args.shuffle:
             random.shuffle(idxs)
 
@@ -219,6 +225,7 @@ def main():
     )
     parser.add_argument("--start-index", type=int, default=0)
     parser.add_argument("--end-index", type=int, default=-1, help="Run all tasks if -1")
+    parser.add_argument("--task-ids", type=int, nargs="+", help="(Optional) run only the tasks with the given IDs")
     parser.add_argument("--log-dir", type=str, default="results")
     parser.add_argument(
         "--max-concurrency",

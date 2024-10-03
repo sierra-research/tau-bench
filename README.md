@@ -62,6 +62,14 @@ python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-
 
 Set max concurrency according to your API limit(s).
 
+To run specific tasks, use the `--task-ids` flag. For example:
+
+```bash
+python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --user-strategy llm --max-concurrency 10 --task-ids 2 4 6
+```
+
+This command will run only the tasks with IDs 2, 4, and 6.
+
 ## User simulators
 
 By default, we use `gpt-4o` as the user simulator with strategy `llm`. You can use other models by setting the `--user-model` flag, or other strategies by setting the `--user-strategy` flag. For example, run a tool-calling agent with a claude user simulator:
