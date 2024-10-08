@@ -18,6 +18,8 @@ Citation:
 
 ## Leaderboard
 
+### Airline
+
 | Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
 | -------------- | ------ | ------ | ------ | ------ |
 | [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)     | 0.420     | 0.273     | 0.220     | 0.200     |
@@ -27,7 +29,18 @@ Citation:
 | [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | 0.365 | 0.217 | 0.160 | 0.140     |
 | [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | 0.325 | 0.233 | 0.185 | 0.160     |
 
-*TC = `tool-calling` strategy (the function-calling strategy reported in the paper) on 50 Airline tasks
+### Retail
+
+| Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
+| -------------- | ------ | ------ | ------ | ------ |
+| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)     | ??     | ??     | ??     | ??     |
+| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)      | 0.626     | 0.506     | 0.435     | 0.387     |
+| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)     | ??     | ??     | ??     | ??     |
+| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)     | ??     | ??     | ??     | ??     |
+| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
+| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
+
+*TC = `tool-calling` strategy (the function-calling strategy reported in the paper)
 
 ## Setup
 
