@@ -53,7 +53,12 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         return message.content
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
-        return f"""You are a user interacting with an agent.{("\n\nInstruction: " + instruction + "\n") if instruction is not None else ""}
+        instruction_display = (
+            ("\n\nInstruction: " + instruction + "\n")
+            if instruction is not None
+            else ""
+        )
+        return f"""You are a user interacting with an agent.{instruction_display}
 Rules:
 - Just generate one line at a time to simulate the user's message.
 - Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
