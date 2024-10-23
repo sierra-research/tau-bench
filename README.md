@@ -125,7 +125,7 @@ Both of the labels are accompanied with a description.
 To run the auto error identification, run:
 
 ```bash
-python auto_error_identification.py --env <airline/retail> --results-path <the path to your results file here> --max-concurrency 16 --output-path test-auto-error-identification -n 10
+python auto_error_identification.py --env <airline/retail> --platform openai --results-path <the path to your results file here> --max-concurrency 16 --output-path test-auto-error-identification --max-num-failed-results 10
 ```
 
 Please note that this feature utilizes an LLM, which may lead to inaccurate error identifications.
