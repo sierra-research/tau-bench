@@ -16,7 +16,9 @@ from tau_bench.agents.base import Agent
 from tau_bench.types import EnvRunResult
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def run(
     args: argparse.Namespace,
