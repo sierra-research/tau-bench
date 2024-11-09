@@ -117,6 +117,9 @@ class Env(object):
             info.reward_info = reward_res
             info.user_cost = self.user.get_total_cost()
         return EnvResponse(observation=observation, reward=reward, done=done, info=info)
+    
+    def custom_step(self, action: Action) -> EnvResponse:
+        pass
 
     def get_data_hash(self) -> str:
         return consistent_hash(to_hashable(self.data))
