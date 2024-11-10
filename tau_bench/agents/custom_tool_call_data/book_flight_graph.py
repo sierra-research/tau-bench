@@ -25,7 +25,8 @@ find_flight_node_schema = NodeSchema(
     node_prompt="You are helping the users book a flight and you need to get the trip info",
     input_pydantic_model=UserState,
     state_pydantic_model=FlightOrder,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.SearchDirectFlight.get_info(), TOOLS.SearchOnestopFlight.get_info()],
+    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.SearchDirectFlight.get_info(), TOOLS.SearchOnestopFlight.get_info(),
+                                    TOOLS.ListAllAirports.get_info()],
     )
 
 #---------------------------------------------------------
