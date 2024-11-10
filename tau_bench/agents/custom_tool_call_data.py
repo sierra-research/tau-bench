@@ -6,7 +6,15 @@ from cashier.prompts.state_guideline import StateGuidelinePrompt
 
 class BackgroundPrompt(BasePrompt):
 
-    f_string_prompt ="""The current time is 2024-05-15 15:00:00 EST. You are an airline agent, and you can help customers book, modify, or cancel flight reservations."""
+    f_string_prompt ="""The current time is 2024-05-15 15:00:00 EST. You are an airline agent, and you can help customers book, modify, or cancel flight reservations.
+
+This is domain knowledge you are expected to know:
+- Each customer has a profile containing user id, email, addresses, date of birth, payment methods, reservation numbers, and membership tier.
+- Each reservation has an reservation id, user id, trip type (one way, round trip), flights, passengers, payment methods, created time, baggages, and travel insurance information.
+- Each flight has a flight number, an origin, destination, scheduled departure and arrival time (local time), and for each date:
+  - If the status is "available", the flight has not taken off, available seats and prices are listed.
+  - If the status is "delayed" or "on time", the flight has not taken off, cannot be booked.
+  - If the status is "flying", the flight has taken off but not landed, cannot be booked."""
 
 class CustomToolGuideline(BasePrompt):
     f_string_prompt = (
