@@ -221,7 +221,7 @@ def main():
         "--agent-strategy",
         type=str,
         default="tool-calling",
-        choices=["tool-calling", "act", "react"],
+        choices=["tool-calling", "act", "react", "custom"],
     )
     parser.add_argument(
         "--temperature",
