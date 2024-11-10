@@ -5,8 +5,8 @@ from cashier.prompts.response_guideline import ResponseGuidelinePrompt
 from cashier.prompts.state_guideline import StateGuidelinePrompt
 from cashier.graph import NodeSchema, BaseStateModel
 from typing import Optional, List, Dict
+from tau_bench.agents.custom_tool_call_data.types import FlightInfo, PassengerInfo, PaymentMethod
 import tau_bench.envs.airline.tools as TOOLS
-from enum import StrEnum
 from pydantic import Field, BaseModel
 
 class BackgroundPrompt(BasePrompt):
@@ -52,22 +52,6 @@ get_user_id_node_schema = NodeSchema(
     tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.GetUserDetails.get_info()],
     )
 
-#---------------------------------------------------------
-class TripType(StrEnum):
-    ONE_WAY = "one_way"
-    ROUND_TRIP = "round_trip"
-
-class CabinType(StrEnum):
-    BASIC_ECONOMY="basic_economy"
-    ECONOMY = "economy"
-    BUSINESS="business"
-
-class FlightInfo(BaseModel):
-    type: TripType
-    flight_number: str = Field(description = "Flight number, such as 'HAT001'.")
-    date: str = Field(description="The date for the flight in the format 'YYYY-MM-DD', such as '2024-05-01'.")
-    cabin: CabinType
-
 class FlightOrder(BaseStateModel):
     flight_infos: List[FlightInfo] = Field(default_factory=list)
 
@@ -77,12 +61,6 @@ find_flight_node_schema = NodeSchema(
     state_pydantic_model=FlightOrder,
     tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.SearchDirectFlight.get_info(), TOOLS.SearchOnestopFlight.get_info()],
     )
-
-#---------------------------------------------------------
-class PassengerInfo(BaseModel):
-    first_name: str
-    last_name: str
-    dob: str = Field(description="The date of birth of the passenger in the format 'YYYY-MM-DD', such as '1990-01-01'.")
 
 class PassengerState(BaseStateModel):
     passengers: List[PassengerInfo] = Field(default_factory=list)
@@ -125,10 +103,6 @@ luggage_node_schema = NodeSchema(
 class Input(BaseModel):
     user_info: Dict
 
-
-class PaymentMethod(BaseModel):
-     payment_id: str
-     amount: float
 
 class PaymentState(BaseStateModel):
     payments: List[PaymentMethod] = Field(default_factory=list)
