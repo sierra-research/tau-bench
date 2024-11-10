@@ -17,6 +17,7 @@ from tau_bench.types import (
     RewardActionInfo,
     RESPOND_ACTION_NAME,
 )
+from cashier.function_call_context import FunctionCallContext
 
 ToHashable = Union[
     str, int, float, Dict[str, "ToHashable"], List["ToHashable"], Set["ToHashable"]
@@ -118,8 +119,40 @@ class Env(object):
             info.user_cost = self.user.get_total_cost()
         return EnvResponse(observation=observation, reward=reward, done=done, info=info)
     
-    def custom_step(self, action: Action) -> EnvResponse:
-        pass
+    def custom_step(self, action,  model_completion, AE) -> EnvResponse:
+        self.actions.append(action)
+
+        info = EnvInfo(task=self.task)
+        reward = 0
+        done = False
+        if action.name == RESPOND_ACTION_NAME:
+            AE.add_assistant_turn(model_completion)
+            observation = self.user.step(action.kwargs["content"])
+            AE.add_user_turn(observation)
+            info.source = "user"
+            done = "###STOP###" in observation
+        elif action.name in self.tools_map:
+            with FunctionCallContext() as fn_call_context:
+                observation = self.tools_map[action.name].invoke(
+                    data=self.data, **action.kwargs
+                )
+            
+            if fn_call_context.has_exception():
+                observation = fn_call_context.exception
+
+            info.source = action.name
+            if action.name in self.terminate_tools:
+                done = True
+        else:
+            observation = f"Unknown action {action.name}"
+            info.source = action.name
+
+        if done:
+            reward_res = self.calculate_reward()
+            reward = reward_res.reward
+            info.reward_info = reward_res
+            info.user_cost = self.user.get_total_cost()
+        return EnvResponse(observation=observation, reward=reward, done=done, info=info)
 
     def get_data_hash(self) -> str:
         return consistent_hash(to_hashable(self.data))

@@ -7,6 +7,9 @@ from typing import List, Optional, Dict, Any
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 from tool_calling_agent import ToolCallingAgent
+from cashier.agent_executor import AgentExecutor
+from cashier.model import Model
+from cashier.graph_data.cashier import cashier_graph_schema
 
 
 class CustomToolCallingAgent(ToolCallingAgent):
@@ -23,15 +26,25 @@ class CustomToolCallingAgent(ToolCallingAgent):
             {"role": "system", "content": self.wiki},
             {"role": "user", "content": obs},
         ]
+
+        model = Model()
+        AE = AgentExecutor(
+            model,
+            None,
+            cashier_graph_schema,
+            False,
+            True,
+        )
         for _ in range(max_num_steps):
-            # call model for assistant msse, output is res
-            res = None # output of model completion
-            next_message = res.choices[0].message.model_dump()
-            total_cost += res._hidden_params["response_cost"]
-            env_response = env.custom_step(res)
+            model_completion = model.chat(
+                model_name="claude-3.5",
+                stream=False,
+                **AE.get_model_completion_kwargs(),
+            )
+            action = message_to_action(model_completion)
+            env_response = env.custom_step(action, model_completion, AE)
             reward = env_response.reward
             info = {**info, **env_response.info.model_dump()}
-
             if env_response.done:
                 break
         return SolveResult(
@@ -40,3 +53,16 @@ class CustomToolCallingAgent(ToolCallingAgent):
             messages=messages,
             total_cost=total_cost,
         )
+    
+
+def message_to_action(
+    model_completion,
+) -> Action:
+    fn_call = next(model_completion.get_or_stream_fn_calls(), None)
+    if fn_call is not None:
+        return Action(
+            name=fn_call.function_name,
+            kwargs=fn_call.function_args,
+        )
+    else:
+        return Action(name=RESPOND_ACTION_NAME, kwargs={"content": model_completion.get_or_stream_message()})
