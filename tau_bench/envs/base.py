@@ -4,6 +4,7 @@ import random
 from hashlib import sha256
 from tau_bench.envs.tool import Tool
 from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
+from functools import partial
 
 from tau_bench.envs.user import load_user, UserStrategy
 from tau_bench.types import (
@@ -17,7 +18,6 @@ from tau_bench.types import (
     RewardActionInfo,
     RESPOND_ACTION_NAME,
 )
-from cashier.function_call_context import FunctionCallContext
 
 ToHashable = Union[
     str, int, float, Dict[str, "ToHashable"], List["ToHashable"], Set["ToHashable"]
@@ -131,14 +131,14 @@ class Env(object):
             AE.add_user_turn(observation)
             info.source = "user"
             done = "###STOP###" in observation
-        elif action.name in self.tools_map:
-            with FunctionCallContext() as fn_call_context:
-                observation = self.tools_map[action.name].invoke(
-                    data=self.data, **action.kwargs
-                )
+        elif action.name in AE.curr_node.schema.tool_registry.tool_names:
+            callback_fn = None
+            if action.name in self.tools_map:
+                callback_fn = partial(self.tools_map[action.name].invoke, data=self.data)
+
+            AE.add_assistant_turn(model_completion, callback_fn)
             
-            if fn_call_context.has_exception():
-                observation = fn_call_context.exception
+            observation = list(AE.TC.turns[-1].fn_call_id_to_fn_output.values())[0]
 
             info.source = action.name
             if action.name in self.terminate_tools:
