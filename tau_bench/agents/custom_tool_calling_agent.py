@@ -35,6 +35,9 @@ class CustomToolCallingAgent(ToolCallingAgent):
             False,
             True,
         )
+
+        AE.add_user_turn(obs)
+
         for _ in range(max_num_steps):
             model_completion = model.chat(
                 model_name=self.model,
