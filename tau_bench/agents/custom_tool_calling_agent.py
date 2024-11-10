@@ -37,8 +37,9 @@ class CustomToolCallingAgent(ToolCallingAgent):
         )
         for _ in range(max_num_steps):
             model_completion = model.chat(
-                model_name="claude-3.5",
+                model_name=self.model,
                 stream=False,
+                temperature=self.temperature,
                 **AE.get_model_completion_kwargs(),
             )
             action = message_to_action(model_completion)
