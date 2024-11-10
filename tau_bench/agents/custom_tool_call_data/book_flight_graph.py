@@ -7,7 +7,7 @@ from pydantic import Field, BaseModel
 ## book flight graph
 
 class UserState(BaseStateModel):
-    user_info: Dict = None
+    user_details: Dict = None
 
 get_user_id_node_schema = NodeSchema(
     node_prompt="You are helping the users book a flight and you need to get the user ID",
@@ -27,6 +27,8 @@ find_flight_node_schema = NodeSchema(
     state_pydantic_model=FlightOrder,
     tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.SearchDirectFlight.get_info(), TOOLS.SearchOnestopFlight.get_info()],
     )
+
+#---------------------------------------------------------
 
 class PassengerState(BaseStateModel):
     passengers: List[PassengerInfo] = Field(default_factory=list)
