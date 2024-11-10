@@ -6,7 +6,7 @@ from typing import List, Optional, Dict, Any
 
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-from tool_calling_agent import ToolCallingAgent
+from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model import Model
 from cashier.graph_data.cashier import cashier_graph_schema
