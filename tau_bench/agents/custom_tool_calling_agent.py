@@ -1,7 +1,5 @@
 # Copyright Sierra
 
-import json
-from litellm import completion
 from typing import List, Optional, Dict, Any
 
 from tau_bench.envs.base import Env
