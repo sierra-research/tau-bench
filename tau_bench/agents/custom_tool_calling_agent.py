@@ -57,7 +57,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
             messages=messages,
             total_cost=total_cost,
         )
-    
+
 
 def message_to_action(
     model_completion,
@@ -69,4 +69,7 @@ def message_to_action(
             kwargs=fn_call.function_args,
         )
     else:
-        return Action(name=RESPOND_ACTION_NAME, kwargs={"content": model_completion.get_or_stream_message()})
+        return Action(
+            name=RESPOND_ACTION_NAME,
+            kwargs={"content": model_completion.get_or_stream_message()},
+        )

@@ -7,7 +7,7 @@ from cashier.prompts.state_guideline import StateGuidelinePrompt
 
 class BackgroundPrompt(BasePrompt):
 
-    f_string_prompt ="""The current time is 2024-05-15 15:00:00 EST. You are an airline agent, and you can help customers book, modify, or cancel flight reservations.
+    f_string_prompt = """The current time is 2024-05-15 15:00:00 EST. You are an airline agent, and you can help customers book, modify, or cancel flight reservations.
 
 This is domain knowledge you are expected to know:
 - Each customer has a profile containing user id, email, addresses, date of birth, payment methods, reservation numbers, and membership tier.
