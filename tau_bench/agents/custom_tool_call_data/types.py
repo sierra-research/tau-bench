@@ -21,7 +21,7 @@ class FlightInfo(BaseModel):
         description="The date for the flight in the format 'YYYY-MM-DD', such as '2024-05-01'."
     )
     cabin: CabinType
-    price: float
+    price: int # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
 
 
 class PassengerInfo(BaseModel):
