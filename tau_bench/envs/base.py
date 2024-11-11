@@ -18,6 +18,9 @@ from tau_bench.types import (
     RewardActionInfo,
     RESPOND_ACTION_NAME,
 )
+import json
+from cashier.model_turn import AssistantTurn
+from cashier.model_util import CustomJSONEncoder
 
 ToHashable = Union[
     str, int, float, Dict[str, "ToHashable"], List["ToHashable"], Set["ToHashable"]
@@ -138,7 +141,8 @@ class Env(object):
 
             AE.add_assistant_turn(model_completion, callback_fn)
             
-            observation = list(AE.TC.turns[-1].fn_call_id_to_fn_output.values())[0]
+            last_ass_turn = AE.TC.turns[-1] if isinstance(AE.TC.turns[-1], AssistantTurn) else AE.TC.turns[-2]
+            observation = json.dumps(list(last_ass_turn.fn_call_id_to_fn_output.values())[0], cls=CustomJSONEncoder)
 
             info.source = action.name
             if action.name in self.terminate_tools:
