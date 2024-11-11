@@ -239,7 +239,7 @@ edge_5 = EdgeSchema(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
         passengers=input.passengers,
-        add_insurance=state.add_insurance,
+        add_insurance=input.add_insurance,
         total_baggages=state.total_baggages,
         nonfree_baggages=state.nonfree_baggages,
     ),
