@@ -36,7 +36,7 @@ class PaymentMethod(BaseModel):
     payment_id: str = Field(
         description="The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'."
     )
-    amount: float = Field(description="The amount to be paid.")
+    amount: int = Field(description="The amount to be paid.") # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
 
 
 class InsuranceValue(StrEnum):
