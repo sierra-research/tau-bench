@@ -15,7 +15,7 @@ get_user_id_node_schema = NodeSchema(
     node_prompt= PREAMBLE + "Right now, you need to get their user details.",
     input_pydantic_model=None,
     state_pydantic_model=UserState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.GetUserDetails.get_info()],
+    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.GetUserDetails.get_info(), TOOLS.Calculate.get_info()],
     )
 
 #---------------------------------------------------------
@@ -31,7 +31,7 @@ find_flight_node_schema = NodeSchema(
     input_pydantic_model=UserInput,
     state_pydantic_model=FlightOrder,
     tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.SearchDirectFlight.get_info(), TOOLS.SearchOnestopFlight.get_info(),
-                                    TOOLS.ListAllAirports.get_info()],
+                                    TOOLS.ListAllAirports.get_info(), TOOLS.Calculate.get_info()],
     )
 
 #---------------------------------------------------------
@@ -48,7 +48,7 @@ get_passanger_info_schema = NodeSchema(
                  "Each reservation can have at most five passengers. All passengers must fly the same flights in the same cabin." )),
     input_pydantic_model=OrderInput,
     state_pydantic_model=PassengerState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info()],
+    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
     )
 #---------------------------------------------------------
 class OrderInput2(BaseModel):
@@ -125,6 +125,6 @@ book_flight_node_schema = NodeSchema(
     node_prompt=PREAMBLE + "Right now, you have all the data necessary to place the booking.",
     input_pydantic_model=OrderInput5,
     state_pydantic_model=BookingState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.BookReservation.get_info()],
+    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.BookReservation.get_info(), TOOLS.Calculate.get_info()],
     )
 
