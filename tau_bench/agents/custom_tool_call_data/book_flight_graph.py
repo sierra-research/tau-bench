@@ -53,6 +53,7 @@ find_flight_node_schema = NodeSchema(
         TOOLS.SearchOnestopFlight.get_info(),
         TOOLS.ListAllAirports.get_info(),
         TOOLS.Calculate.get_info(),
+        TOOLS.GetReservationDetails.get_info(),
     ],
 )
 
