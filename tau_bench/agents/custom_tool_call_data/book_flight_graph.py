@@ -112,10 +112,13 @@ class OrderInput5(BaseModel):
     nonfree_baggages: int
     payments: List[PaymentMethod]
 
+class BookingState(BaseStateModel):
+    is_booking_successfull: bool = False
+
 book_flight_node_schema = NodeSchema(
     node_prompt="You are helping the users book a flight and you need to get the trip info",
     input_pydantic_model=OrderInput5,
-    state_pydantic_model=InsuranceState,
+    state_pydantic_model=BookingState,
     tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.BookReservation.get_info()],
     )
 
