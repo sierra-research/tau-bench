@@ -7,7 +7,7 @@ from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model import Model
-from cashier.graph_data.cashier import cashier_graph_schema
+from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
 
 
 class CustomToolCallingAgent(ToolCallingAgent):
@@ -29,7 +29,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         AE = AgentExecutor(
             model,
             None,
-            cashier_graph_schema,
+            BOOK_FLIGHT_GRAPH,
             False,
             True,
         )
