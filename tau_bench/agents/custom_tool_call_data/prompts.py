@@ -29,10 +29,14 @@ class CustomToolGuideline(BasePrompt):
     )
 
 
+class TextOnlyResponseGuideline(ResponseGuidelinePrompt):
+    IS_VOICE_ONLY = False
+
+
 class AirlineNodeSystemPrompt(NodeSystemPrompt):
     BACKGROUND_PROMPT = BackgroundPrompt
     GUIDELINE_PROMPTS = [
-        ResponseGuidelinePrompt,
+        TextOnlyResponseGuideline,
         StateGuidelinePrompt,
         CustomToolGuideline,
         GeneralGuidelinePrompt,
