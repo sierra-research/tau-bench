@@ -11,7 +11,9 @@ from tau_bench.model_utils.args import api_parser
 from tau_bench.types import Task, Action
 from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
+from dotenv import load_dotenv
 
+load_dotenv()
 def get_args() -> argparse.Namespace:
     parser = api_parser()
     parser.add_argument("--env", type=str, required=True, choices=["airline", "retail"], help="The environment that the original trajectories are from (used to fetch the user instructions)")
