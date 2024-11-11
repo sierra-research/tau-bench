@@ -24,7 +24,7 @@ get_user_id_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=None,
     state_pydantic_model=UserState,
-    tool_registry_or_tool_defs_map=[
+    tool_registry_or_tool_defs=[
         TOOLS.Think.get_info(),
         TOOLS.GetUserDetails.get_info(),
         TOOLS.Calculate.get_info(),
@@ -47,7 +47,7 @@ find_flight_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=UserInput,
     state_pydantic_model=FlightOrder,
-    tool_registry_or_tool_defs_map=[
+    tool_registry_or_tool_defs=[
         TOOLS.Think.get_info(),
         TOOLS.SearchDirectFlight.get_info(),
         TOOLS.SearchOnestopFlight.get_info(),
@@ -78,7 +78,7 @@ get_passanger_info_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput,
     state_pydantic_model=PassengerState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
 )
 
 
@@ -101,7 +101,7 @@ ask_for_insurance_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput2,
     state_pydantic_model=InsuranceState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
 )
 
 # ------------------------------------------
@@ -128,7 +128,7 @@ luggage_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput3,
     state_pydantic_model=LuggageState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
 )
 
 # ---------------------------------------------------------
@@ -156,7 +156,7 @@ payment_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput4,
     state_pydantic_model=PaymentState,
-    tool_registry_or_tool_defs_map=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
 )
 
 
@@ -181,7 +181,7 @@ book_flight_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput5,
     state_pydantic_model=BookingState,
-    tool_registry_or_tool_defs_map=[
+    tool_registry_or_tool_defs=[
         TOOLS.Think.get_info(),
         TOOLS.BookReservation.get_info(),
         TOOLS.Calculate.get_info(),
