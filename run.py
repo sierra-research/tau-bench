@@ -48,63 +48,64 @@ def run(
         print(
             f"Running tasks {args.start_index} to {end_index} (checkpoint path: {ckpt_path})"
     )
-    for i in range(args.num_trials):
-        if args.task_ids and len(args.task_ids) > 0:
-            idxs = args.task_ids
-        else:
-            idxs = list(range(args.start_index, end_index))
-        if args.shuffle:
-            random.shuffle(idxs)
 
-        def _run(idx: int) -> EnvRunResult:
-            isolated_env = get_env(
-                args.env,
-                user_strategy=args.user_strategy,
-                user_model=args.user_model,
-                task_split=args.task_split,
-                user_provider=args.user_model_provider,
+    if args.task_ids and len(args.task_ids) > 0:
+        idxs = args.task_ids
+    else:
+        idxs = list(range(args.start_index, end_index))
+    if args.shuffle:
+        random.shuffle(idxs)
+    idxs = idxs * args.num_trials
+
+    def _run(idx: int) -> EnvRunResult:
+        isolated_env = get_env(
+            args.env,
+            user_strategy=args.user_strategy,
+            user_model=args.user_model,
+            task_split=args.task_split,
+            user_provider=args.user_model_provider,
+            task_index=idx,
+        )
+
+        print(f"Running task {idx}")
+        try:
+            res = agent.solve(
+                env=isolated_env,
                 task_index=idx,
             )
-
-            print(f"Running task {idx}")
-            try:
-                res = agent.solve(
-                    env=isolated_env,
-                    task_index=idx,
-                )
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=res.reward,
-                    info=res.info,
-                    traj=res.messages,
-                    trial=i,
-                )
-            except Exception as e:
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
-                    traj=[],
-                    trial=i,
-                )
-            print(
-                "✅" if result.reward == 1 else "❌",
-                f"task_id={idx}",
-                result.info,
+            result = EnvRunResult(
+                task_id=idx,
+                reward=res.reward,
+                info=res.info,
+                traj=res.messages,
+                trial=i,
             )
-            print("-----")
-            with lock:
-                data = []
-                if os.path.exists(ckpt_path):
-                    with open(ckpt_path, "r") as f:
-                        data = json.load(f)
-                with open(ckpt_path, "w") as f:
-                    json.dump(data + [result.model_dump()], f, indent=2)
-            return result
+        except Exception as e:
+            result = EnvRunResult(
+                task_id=idx,
+                reward=0.0,
+                info={"error": str(e), "traceback": traceback.format_exc()},
+                traj=[],
+                trial=i,
+            )
+        print(
+            "✅" if result.reward == 1 else "❌",
+            f"task_id={idx}",
+            result.info,
+        )
+        print("-----")
+        with lock:
+            data = []
+            if os.path.exists(ckpt_path):
+                with open(ckpt_path, "r") as f:
+                    data = json.load(f)
+            with open(ckpt_path, "w") as f:
+                json.dump(data + [result.model_dump()], f, indent=2)
+        return result
 
-        with ThreadPoolExecutor(max_workers=args.max_concurrency) as executor:
-            res = list(executor.map(_run, idxs))
-            results.extend(res)
+    with ThreadPoolExecutor(max_workers=args.max_concurrency) as executor:
+        res = list(executor.map(_run, idxs))
+        results.extend(res)
 
     return results
 
