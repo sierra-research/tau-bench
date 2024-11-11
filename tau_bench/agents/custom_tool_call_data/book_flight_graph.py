@@ -115,8 +115,8 @@ class OrderInput3(BaseModel):
 
 
 class LuggageState(BaseStateModel):
-    total_baggages: Optional[int]
-    nonfree_baggages: Optional[int]
+    total_baggages: Optional[int] = None
+    nonfree_baggages: Optional[int] = None
 
 
 luggage_node_schema = NodeSchema(
