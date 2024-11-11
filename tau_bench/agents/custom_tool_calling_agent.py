@@ -13,7 +13,7 @@ from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT
 class CustomToolCallingAgent(ToolCallingAgent):
 
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 90
     ) -> SolveResult:
         total_cost = 0.0
         env_reset_res = env.reset(task_index=task_index)
