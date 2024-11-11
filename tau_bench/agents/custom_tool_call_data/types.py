@@ -21,6 +21,7 @@ class FlightInfo(BaseModel):
         description="The date for the flight in the format 'YYYY-MM-DD', such as '2024-05-01'."
     )
     cabin: CabinType
+    price: float
 
 
 class PassengerInfo(BaseModel):
