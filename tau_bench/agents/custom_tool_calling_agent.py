@@ -49,10 +49,12 @@ class CustomToolCallingAgent(ToolCallingAgent):
             info = {**info, **env_response.info.model_dump()}
             if env_response.done:
                 break
+
+        model_provider = Model.get_model_provider(self.model)
         return SolveResult(
             reward=reward,
             info=info,
-            messages=messages,
+            messages=AE.TC.messages.model_provider_to_message_manager[model_provider].message_dicts,
             total_cost=total_cost,
         )
 
