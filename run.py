@@ -10,6 +10,7 @@ import multiprocessing
 from typing import List, Dict, Any
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from collections import defaultdict
 
 from tau_bench.envs import get_env
 from tau_bench.agents.base import Agent
@@ -55,6 +56,7 @@ def run(
         idxs = list(range(args.start_index, end_index))
     if args.shuffle:
         random.shuffle(idxs)
+    idx_to_trial = defaultdict(lambda: -1)
     idxs = idxs * args.num_trials
 
     def _run(idx: int) -> EnvRunResult:
@@ -67,6 +69,9 @@ def run(
             task_index=idx,
         )
 
+        idx_to_trial[idx] += 1
+        trial = idx_to_trial[idx]
+
         print(f"Running task {idx}")
         try:
             res = agent.solve(
@@ -78,7 +83,7 @@ def run(
                 reward=res.reward,
                 info=res.info,
                 traj=res.messages,
-                trial=i,
+                trial=trial,
             )
         except Exception as e:
             result = EnvRunResult(
@@ -86,7 +91,7 @@ def run(
                 reward=0.0,
                 info={"error": str(e), "traceback": traceback.format_exc()},
                 traj=[],
-                trial=i,
+                trial=trial,
             )
         print(
             "✅" if result.reward == 1 else "❌",
