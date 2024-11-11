@@ -151,7 +151,7 @@ payment_node_schema = NodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to get the payment information. "
-        "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards. The remaining amount of a travel certificate is not refundable. All payment methods must already be in user profile for safety reasons."
+        "IMPORTANT: Each reservation can use AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards. The remaining unused amount of a travel certificate is not refundable (i.e. forfeited). All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput4,
