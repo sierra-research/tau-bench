@@ -54,7 +54,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         return SolveResult(
             reward=reward,
             info=info,
-            messages=AE.TC.messages.model_provider_to_message_manager[model_provider].message_dicts,
+            messages=AE.TC.model_provider_to_message_manager[model_provider].message_dicts,
             total_cost=total_cost,
         )
 
