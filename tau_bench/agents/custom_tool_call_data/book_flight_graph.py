@@ -150,7 +150,7 @@ class PaymentState(BaseStateModel):
 payment_node_schema = NodeSchema(
     node_prompt=PREAMBLE
     + (
-        "Right now, you need to get the payment information"
+        "Right now, you need to get the payment information. "
         "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards. The remaining amount of a travel certificate is not refundable. All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
