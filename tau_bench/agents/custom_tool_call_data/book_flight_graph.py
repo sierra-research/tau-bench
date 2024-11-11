@@ -1,4 +1,4 @@
-from cashier.graph import NodeSchema, BaseStateModel, EdgeSchema
+from cashier.graph import NodeSchema, BaseStateModel, EdgeSchema, GraphSchema
 from typing import Optional, List, Dict
 from tau_bench.agents.custom_tool_call_data.types import (
     FlightInfo,
@@ -251,3 +251,7 @@ edge_6 = EdgeSchema(
         payments=state.payments,
     ),
 )
+#--------------------
+
+BOOK_FLIGHT_GRAPH = GraphSchema(start_node_schema=get_user_id_node_schema, edge_schemas=[edge_1, edge_2, edge_3, edge_4, edge_5, edge_6],
+                                node_schemas=[get_user_id_node_schema,find_flight_node_schema, get_passanger_info_schema, ask_for_insurance_node_schema, luggage_node_schema, payment_node_schema, book_flight_node_schema])
