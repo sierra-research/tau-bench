@@ -147,7 +147,8 @@ class OrderInput4(BaseModel):
 
 class PaymentState(BaseStateModel):
     payments: List[PaymentMethod] = Field(default_factory=list)
-
+    has_explained_payment_policy_to_customer: bool = Field(default=False, description='There are very important payment policies, and these must be clearly communicated to the customer.')
+    is_payment_finalized: bool = Field(default=False, description='This can only be true after payment policy has been communicated and payment method collected')
 
 payment_node_schema = NodeSchema(
     node_prompt=PREAMBLE
@@ -251,7 +252,7 @@ edge_5 = EdgeSchema(
 edge_6 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    state_condition_fn=lambda state: state.payments and len(state.payments) > 0,
+    state_condition_fn=lambda state: state.payments and len(state.payments) > 0 and state.is_payment_finalized,
     new_input_fn=lambda state, input: OrderInput5(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
