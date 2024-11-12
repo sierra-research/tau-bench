@@ -6,7 +6,6 @@ from tau_bench.agents.custom_tool_call_data.types import (
     PaymentMethod,
     InsuranceValue,
 )
-import tau_bench.envs.airline.tools as TOOLS
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
 from pydantic import Field, BaseModel
 from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_REGISTRY
@@ -26,7 +25,7 @@ get_user_id_node_schema = NodeSchema(
     input_pydantic_model=None,
     state_pydantic_model=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
-    tool_names=["think","think_2","get_user_details", "calculate" ]
+    tool_names=["think_2","get_user_details", "calculate" ]
 )
 
 # ---------------------------------------------------------
@@ -47,7 +46,6 @@ find_flight_node_schema = NodeSchema(
     state_pydantic_model=FlightOrder,
     tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
     tool_names=[
-        "think",
         "think_2",
         'search_direct_flight',
         "search_onestop_flight", 
@@ -80,7 +78,7 @@ get_passanger_info_schema = NodeSchema(
     input_pydantic_model=OrderInput,
     state_pydantic_model=PassengerState,
     tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=["think",'think_2', 'calculate']
+    tool_names=['think_2', 'calculate']
 )
 
 
@@ -104,7 +102,7 @@ ask_for_insurance_node_schema = NodeSchema(
     input_pydantic_model=OrderInput2,
     state_pydantic_model=InsuranceState,
     tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=["think",'think_2', 'calculate']
+    tool_names=['think_2', 'calculate']
 )
 
 # ------------------------------------------
@@ -132,7 +130,7 @@ luggage_node_schema = NodeSchema(
     input_pydantic_model=OrderInput3,
     state_pydantic_model=LuggageState,
     tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=["think",'think_2', 'calculate']
+    tool_names=['think_2', 'calculate']
 )
 
 # ---------------------------------------------------------
@@ -161,7 +159,7 @@ payment_node_schema = NodeSchema(
     input_pydantic_model=OrderInput4,
     state_pydantic_model=PaymentState,
     tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=["think",'think_2', 'calculate']
+    tool_names=['think_2', 'calculate']
 )
 
 
@@ -188,7 +186,6 @@ book_flight_node_schema = NodeSchema(
     state_pydantic_model=BookingState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
-        "think",
         "think_2",
         "book_reservation",
         "calculate",
