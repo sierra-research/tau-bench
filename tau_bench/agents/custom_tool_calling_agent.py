@@ -8,6 +8,7 @@ from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model import Model
 from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
+from cashier.model_util import ModelProvider
 
 
 class CustomToolCallingAgent(ToolCallingAgent):
@@ -24,7 +25,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
             {"role": "system", "content": self.wiki},
             {"role": "user", "content": obs},
         ]
-
+        model_provider = ModelProvider(self.provider.upper())
         model = Model()
         AE = AgentExecutor(
             model,
@@ -32,6 +33,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
             BOOK_FLIGHT_GRAPH,
             False,
             True,
+            model_provider,
         )
 
         AE.add_user_turn(obs)
@@ -65,8 +67,8 @@ def message_to_action(
     fn_call = next(model_completion.get_or_stream_fn_calls(), None)
     if fn_call is not None:
         return Action(
-            name=fn_call.function_name,
-            kwargs=fn_call.function_args,
+            name=fn_call.name,
+            kwargs=fn_call.args,
         )
     else:
         return Action(
