@@ -25,7 +25,7 @@ get_user_id_node_schema = NodeSchema(
     input_pydantic_model=None,
     state_pydantic_model=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
-    tool_names=["think_2","get_user_details", "calculate" ]
+    tool_names=["think_2", "get_user_details", "calculate"],
 )
 
 # ---------------------------------------------------------
@@ -44,11 +44,11 @@ find_flight_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=UserInput,
     state_pydantic_model=FlightOrder,
-    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "think_2",
-        'search_direct_flight',
-        "search_onestop_flight", 
+        "search_direct_flight",
+        "search_onestop_flight",
         "list_all_airports",
         "calculate",
         "get_reservation_details",
@@ -77,8 +77,8 @@ get_passanger_info_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput,
     state_pydantic_model=PassengerState,
-    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=['think_2', 'calculate']
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=["think_2", "calculate"],
 )
 
 
@@ -101,8 +101,8 @@ ask_for_insurance_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput2,
     state_pydantic_model=InsuranceState,
-    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=['think_2', 'calculate']
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=["think_2", "calculate"],
 )
 
 # ------------------------------------------
@@ -129,8 +129,8 @@ luggage_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput3,
     state_pydantic_model=LuggageState,
-    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=['think_2', 'calculate']
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=["think_2", "calculate"],
 )
 
 # ---------------------------------------------------------
@@ -158,8 +158,8 @@ payment_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput4,
     state_pydantic_model=PaymentState,
-    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
-    tool_names=['think_2', 'calculate']
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=["think_2", "calculate"],
 )
 
 
