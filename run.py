@@ -179,9 +179,17 @@ def display_metrics(results: List[EnvRunResult]) -> None:
         pass_hat_ks[k] = sum_task_pass_hat_k / len(c_per_task_id)
     print(f"🏆 Average reward: {avg_reward}")
     print("📈 Pass^k")
+    metric_dict = {
+        "total_rewards":sum(rewards),
+        "num_trials": num_trials,
+        "avg_reward": avg_reward,
+        "pass_k": {},
+    }
     for k, pass_hat_k in pass_hat_ks.items():
         print(f"  k={k}: {pass_hat_k}")
+        metric_dict['pass_k'][k] = pass_hat_k
 
+    return metric_dict
 
 def main():
     parser = argparse.ArgumentParser()
@@ -260,10 +268,10 @@ def main():
         ckpt_path=file_str,
     )
 
-    display_metrics(results)
-
+    metric_dict = display_metrics(results)
+    metric_dict['results'] = [result.model_dump() for result in results]
     with open(file_str, "w") as f:
-        json.dump([result.model_dump() for result in results], f, indent=2)
+        json.dump(metric_dict, f, indent=2)
         print(f"\n📄 Results saved to {file_str}\n")
 
 
