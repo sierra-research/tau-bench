@@ -3,6 +3,7 @@ from enum import StrEnum
 from pydantic import BaseModel, Field
 from typing import Literal, List, Union
 
+
 class FlightType(StrEnum):
     ONE_WAY = "one_way"
     ROUND_TRIP = "round_trip"
@@ -21,7 +22,7 @@ class FlightInfo(BaseModel):
         description="The date for the flight in the format 'YYYY-MM-DD', such as '2024-05-01'."
     )
     cabin: CabinType
-    price: int # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
+    price: int  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
 
 
 class PassengerInfo(BaseModel):
@@ -36,7 +37,9 @@ class PaymentMethod(BaseModel):
     payment_id: str = Field(
         description="The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'."
     )
-    amount: int = Field(description="The amount to be paid.") # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
+    amount: int = Field(
+        description="The amount to be paid."
+    )  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
 
 
 class InsuranceValue(StrEnum):
@@ -48,6 +51,7 @@ class Name(BaseModel):
     first_name: str
     last_name: str
 
+
 class Address(BaseModel):
     address1: str
     address2: str
@@ -56,26 +60,32 @@ class Address(BaseModel):
     province: str
     zip: str
 
+
 class PaymentSource(StrEnum):
-    CREDIT_CARD = 'credit_card'
-    CERTIFICATE = 'certificate'
-    GIFT_CARD = 'gift_card'
+    CREDIT_CARD = "credit_card"
+    CERTIFICATE = "certificate"
+    GIFT_CARD = "gift_card"
+
 
 class BaseSavedPaymentMethod(BaseModel):
     source: PaymentSource
     id: str
+
 
 class CreditCard(BaseSavedPaymentMethod):
     source: Literal[PaymentSource.CREDIT_CARD] = PaymentSource.CREDIT_CARD
     brand: str
     last_four: str
 
+
 class CertificateGift(BaseSavedPaymentMethod):
     source: Literal[PaymentSource.GIFT_CARD, PaymentSource.CERTIFICATE]
     amount: int
 
+
 class SavedPassenger(Name):
     dob: str
+
 
 class UserInfo(BaseModel):
     name: Name
