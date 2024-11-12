@@ -5,7 +5,7 @@ from tau_bench.agents.custom_tool_call_data.types import (
     PassengerInfo,
     PaymentMethod,
     InsuranceValue,
-    UserDetails
+    UserDetails,
 )
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
 from pydantic import Field, BaseModel
