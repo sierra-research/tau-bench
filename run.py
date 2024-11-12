@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def run(
     args: argparse.Namespace,
     ckpt_path: str,
@@ -48,7 +49,7 @@ def run(
     else:
         print(
             f"Running tasks {args.start_index} to {end_index} (checkpoint path: {ckpt_path})"
-    )
+        )
 
     if args.task_ids and len(args.task_ids) > 0:
         idxs = args.task_ids
@@ -180,16 +181,17 @@ def display_metrics(results: List[EnvRunResult]) -> None:
     print(f"🏆 Average reward: {avg_reward}")
     print("📈 Pass^k")
     metric_dict = {
-        "total_rewards":sum(rewards),
+        "total_rewards": sum(rewards),
         "num_trials": num_trials,
         "avg_reward": avg_reward,
         "pass_k": {},
     }
     for k, pass_hat_k in pass_hat_ks.items():
         print(f"  k={k}: {pass_hat_k}")
-        metric_dict['pass_k'][k] = pass_hat_k
+        metric_dict["pass_k"][k] = pass_hat_k
 
     return metric_dict
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -241,7 +243,12 @@ def main():
     )
     parser.add_argument("--start-index", type=int, default=0)
     parser.add_argument("--end-index", type=int, default=-1, help="Run all tasks if -1")
-    parser.add_argument("--task-ids", type=int, nargs="+", help="(Optional) run only the tasks with the given IDs")
+    parser.add_argument(
+        "--task-ids",
+        type=int,
+        nargs="+",
+        help="(Optional) run only the tasks with the given IDs",
+    )
     parser.add_argument("--log-dir", type=str, default="results")
     parser.add_argument(
         "--max-concurrency",
@@ -251,7 +258,12 @@ def main():
     )
     parser.add_argument("--seed", type=int, default=10)
     parser.add_argument("--shuffle", type=int, default=0)
-    parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
+    parser.add_argument(
+        "--user-strategy",
+        type=str,
+        default="llm",
+        choices=[item.value for item in UserStrategy],
+    )
 
     args = parser.parse_args()
     print(args)
@@ -269,7 +281,7 @@ def main():
     )
 
     metric_dict = display_metrics(results)
-    metric_dict['results'] = [result.model_dump() for result in results]
+    metric_dict["results"] = [result.model_dump() for result in results]
     with open(file_str, "w") as f:
         json.dump(metric_dict, f, indent=2)
         print(f"\n📄 Results saved to {file_str}\n")
