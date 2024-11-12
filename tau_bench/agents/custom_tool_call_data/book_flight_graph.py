@@ -147,7 +147,7 @@ class OrderInput4(BaseModel):
 
 class PaymentState(BaseStateModel):
     payments: List[PaymentMethod] = Field(default_factory=list)
-    has_explained_payment_policy_to_customer: bool = Field(default=False, description='There are very important payment policies, and these must be clearly communicated to the customer.')
+    has_explained_payment_policy_to_customer: bool = Field(default=False, description='There are very important payment policies, and these must be clearly communicated to the customer. Most importantly, the customer must understand that any left-over balance on a travel certificate will be forfeited.')
     is_payment_finalized: bool = Field(default=False, description='This can only be true after payment policy has been communicated and payment method collected')
 
 payment_node_schema = NodeSchema(
