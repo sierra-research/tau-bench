@@ -101,7 +101,7 @@ ask_for_insurance_node_schema = NodeSchema(
     input_pydantic_model=OrderInput2,
     state_pydantic_model=InsuranceState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
-    tool_names=[ "calculate"],
+    tool_names=["calculate"],
 )
 
 # ------------------------------------------
