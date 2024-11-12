@@ -9,6 +9,7 @@ from tau_bench.agents.custom_tool_call_data.types import (
 import tau_bench.envs.airline.tools as TOOLS
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
 from pydantic import Field, BaseModel
+from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_REGISTRY
 
 ## book flight graph
 
@@ -24,11 +25,8 @@ get_user_id_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=None,
     state_pydantic_model=UserState,
-    tool_registry_or_tool_defs=[
-        TOOLS.Think.get_info(),
-        TOOLS.GetUserDetails.get_info(),
-        TOOLS.Calculate.get_info(),
-    ],
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=["think","think_2","get_user_details", "calculate" ]
 )
 
 # ---------------------------------------------------------
@@ -47,13 +45,15 @@ find_flight_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=UserInput,
     state_pydantic_model=FlightOrder,
-    tool_registry_or_tool_defs=[
-        TOOLS.Think.get_info(),
-        TOOLS.SearchDirectFlight.get_info(),
-        TOOLS.SearchOnestopFlight.get_info(),
-        TOOLS.ListAllAirports.get_info(),
-        TOOLS.Calculate.get_info(),
-        TOOLS.GetReservationDetails.get_info(),
+    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_names=[
+        "think",
+        "think_2",
+        'search_direct_flight',
+        "search_onestop_flight", 
+        "list_all_airports",
+        "calculate",
+        "get_reservation_details",
     ],
 )
 
@@ -79,7 +79,8 @@ get_passanger_info_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput,
     state_pydantic_model=PassengerState,
-    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_names=["think",'think_2', 'calculate']
 )
 
 
@@ -102,7 +103,8 @@ ask_for_insurance_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput2,
     state_pydantic_model=InsuranceState,
-    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_names=["think",'think_2', 'calculate']
 )
 
 # ------------------------------------------
@@ -129,7 +131,8 @@ luggage_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput3,
     state_pydantic_model=LuggageState,
-    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_names=["think",'think_2', 'calculate']
 )
 
 # ---------------------------------------------------------
@@ -157,7 +160,8 @@ payment_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput4,
     state_pydantic_model=PaymentState,
-    tool_registry_or_tool_defs=[TOOLS.Think.get_info(), TOOLS.Calculate.get_info()],
+    tool_registry_or_tool_defs = AIRLINE_TOOL_REGISTRY,
+    tool_names=["think",'think_2', 'calculate']
 )
 
 
@@ -182,10 +186,12 @@ book_flight_node_schema = NodeSchema(
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput5,
     state_pydantic_model=BookingState,
-    tool_registry_or_tool_defs=[
-        TOOLS.Think.get_info(),
-        TOOLS.BookReservation.get_info(),
-        TOOLS.Calculate.get_info(),
+    tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
+    tool_names=[
+        "think",
+        "think_2",
+        "book_reservation",
+        "calculate",
     ],
 )
 
