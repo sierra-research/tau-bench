@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 from pydantic import BaseModel, Field
-
+from typing import Literal, List, Union
 
 class FlightType(StrEnum):
     ONE_WAY = "one_way"
@@ -42,3 +42,47 @@ class PaymentMethod(BaseModel):
 class InsuranceValue(StrEnum):
     YES = "yes"
     NO = "no"
+
+
+class Name(BaseModel):
+    first_name: str
+    last_name: str
+
+class Address(BaseModel):
+    address1: str
+    address2: str
+    city: str
+    country: str
+    province: str
+    zip: str
+
+class PaymentSource(StrEnum):
+    CREDIT_CARD = 'credit_card'
+    CERTIFICATE = 'certificate'
+    GIFT_CARD = 'gift_card'
+
+class BaseSavedPaymentMethod(BaseModel):
+    source: PaymentSource
+    id: str
+
+class CreditCard(BaseSavedPaymentMethod):
+    source: Literal[PaymentSource.CREDIT_CARD] = PaymentSource.CREDIT_CARD
+    brand: str
+    last_four: str
+
+class CertificateGift(BaseSavedPaymentMethod):
+    source: Literal[PaymentSource.GIFT_CARD, PaymentSource.CERTIFICATE]
+    amount: int
+
+class SavedPassenger(Name):
+    dob: str
+
+class UserInfo(BaseModel):
+    name: Name
+    address: Address
+    email: str
+    dob: str
+    payment_methods: List[Union[CreditCard, CertificateGift]]
+    saved_passengers: List[SavedPassenger]
+    membership: str
+    reservations: List[str]
