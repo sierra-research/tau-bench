@@ -5,6 +5,7 @@ from tau_bench.agents.custom_tool_call_data.types import (
     PassengerInfo,
     PaymentMethod,
     InsuranceValue,
+    UserDetails
 )
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
 from pydantic import Field, BaseModel
@@ -16,7 +17,7 @@ PREAMBLE = "You are helping the customer to book a flight. "
 
 
 class UserState(BaseStateModel):
-    user_details: Dict = None
+    user_details: UserDetails = None
 
 
 get_user_id_node_schema = NodeSchema(
@@ -32,7 +33,7 @@ get_user_id_node_schema = NodeSchema(
 
 
 class UserInput(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
 
 
 class FlightOrder(BaseStateModel):
@@ -57,7 +58,7 @@ find_flight_node_schema = NodeSchema(
 
 # ---------------------------------------------------------
 class OrderInput(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
     flight_infos: List[FlightInfo]
 
 
@@ -83,7 +84,7 @@ get_passanger_info_schema = NodeSchema(
 
 # ---------------------------------------------------------
 class OrderInput2(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
     flight_infos: List[FlightInfo]
     passengers: List[PassengerInfo]
 
@@ -108,7 +109,7 @@ ask_for_insurance_node_schema = NodeSchema(
 
 
 class OrderInput3(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
     flight_infos: List[FlightInfo]
     passengers: List[PassengerInfo]
     add_insurance: InsuranceValue
@@ -136,7 +137,7 @@ luggage_node_schema = NodeSchema(
 
 
 class OrderInput4(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
     flight_infos: List[FlightInfo]
     passengers: List[PassengerInfo]
     add_insurance: InsuranceValue
@@ -164,7 +165,7 @@ payment_node_schema = NodeSchema(
 
 # ---------------------------------------------------------
 class OrderInput5(BaseModel):
-    user_details: Dict
+    user_details: UserDetails
     flight_infos: List[FlightInfo]
     passengers: List[PassengerInfo]
     add_insurance: InsuranceValue
