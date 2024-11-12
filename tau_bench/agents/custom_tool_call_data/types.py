@@ -87,7 +87,7 @@ class SavedPassenger(Name):
     dob: str
 
 
-class UserInfo(BaseModel):
+class UserDetails(BaseModel):
     name: Name
     address: Address
     email: str
