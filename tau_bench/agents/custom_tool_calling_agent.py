@@ -8,6 +8,7 @@ from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model import Model
 from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
+from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH
 from cashier.model_util import ModelProvider
 
 
