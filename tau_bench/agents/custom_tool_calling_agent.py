@@ -31,7 +31,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         AE = AgentExecutor(
             model,
             None,
-            BOOK_FLIGHT_GRAPH,
+            CHANGE_FLIGHT_GRAPH,
             False,
             True,
             model_provider,
