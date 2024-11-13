@@ -37,7 +37,7 @@ class UserInput(BaseModel):
     user_details: UserDetails
 
 
-class ReservationDetails(BaseStateModel):
+class ReservationDetailsState(BaseStateModel):
     reservation_details: Optional[ReservationDetails] = None
 
 
@@ -46,7 +46,7 @@ get_reservation_details_node_schema = NodeSchema(
     + "Right now, you need to get the reservation details by asking for the reservation id. If they don't know the id, lookup each reservation in their user details and find the one that best matches their description .",
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=UserInput,
-    state_pydantic_model=ReservationDetails,
+    state_pydantic_model=ReservationDetailsState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "get_reservation_details",
@@ -98,7 +98,7 @@ class OrderInput2(BaseModel):
 
 
 class PaymentOrder(BaseStateModel):
-    payment_id: str
+    payment_id: Optional[str] = None
 
 
 get_payment_node_schema = NodeSchema(
