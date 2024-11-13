@@ -96,3 +96,32 @@ class UserDetails(BaseModel):
     saved_passengers: List[SavedPassenger]
     membership: str
     reservations: List[str]
+
+
+class FlightReservationInfo(BaseModel):
+    origin: str
+    destination: str
+    flight_number: str = Field(description="Flight number, such as 'HAT001'.")
+    date: str = Field(
+        description="The date for the flight in the format 'YYYY-MM-DD', such as '2024-05-01'."
+    )
+    price: int  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
+
+class PaymentDetails(BaseModel):
+    payment_id: str
+    amount: str
+
+class ReservationDetails(BaseModel):
+    reservation_id: str
+    user_id: str
+    origin: str
+    destination: str
+    flight_type: FlightType
+    cabin: CabinType
+    flights: List[FlightReservationInfo]
+    passengers: List[PassengerInfo]
+    payment_history: List[PaymentDetails]
+    created_at: str
+    total_baggages: int
+    nonfree_baggages: int
+    insurance: InsuranceValue

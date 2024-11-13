@@ -70,7 +70,7 @@ get_passanger_info_schema = NodeSchema(
     node_prompt=(
         PREAMBLE
         + (
-            "Right now, you need to get the passenger info of all the passengers."
+            "Right now, you need to get the passenger info of all the passengers. "
             "Each reservation can have at most five passengers. All passengers must fly the same flights in the same cabin."
         )
     ),
