@@ -182,7 +182,16 @@ edge_schema_4 = EdgeSchema(
     ),
 )
 
-#------------------------
+# ------------------------
 
-CHANGE_FLIGHT_GRAPH = GraphSchema(start_node_schema=get_user_id_node_schema, node_schemas=[get_user_id_node_schema, get_reservation_details_node_schema, find_flight_node_schema, get_payment_node_schema, update_flight_node_schema],
-                                  edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4])
+CHANGE_FLIGHT_GRAPH = GraphSchema(
+    start_node_schema=get_user_id_node_schema,
+    node_schemas=[
+        get_user_id_node_schema,
+        get_reservation_details_node_schema,
+        find_flight_node_schema,
+        get_payment_node_schema,
+        update_flight_node_schema,
+    ],
+    edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
+)
