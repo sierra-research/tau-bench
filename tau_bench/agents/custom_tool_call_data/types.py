@@ -107,9 +107,11 @@ class FlightReservationInfo(BaseModel):
     )
     price: int  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
 
+
 class PaymentDetails(BaseModel):
     payment_id: str
     amount: str
+
 
 class ReservationDetails(BaseModel):
     reservation_id: str
