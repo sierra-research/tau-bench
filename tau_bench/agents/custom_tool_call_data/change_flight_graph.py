@@ -18,7 +18,7 @@ PREAMBLE = "You are helping the customer to change flight/s. "
 
 
 class UserState(BaseStateModel):
-    user_details: UserDetails = None
+    user_details: Optional[UserDetails] = None
 
 
 get_user_id_node_schema = NodeSchema(
@@ -38,7 +38,7 @@ class UserInput(BaseModel):
 
 
 class ReservationDetails(BaseStateModel):
-    reservation_details: ReservationDetails
+    reservation_details: Optional[ReservationDetails] = None
 
 
 get_reservation_details_node_schema = NodeSchema(
@@ -74,8 +74,8 @@ class FlightOrder(BaseStateModel):
 find_flight_node_schema = NodeSchema(
     node_prompt=PREAMBLE
     + (
-        "Right now, you need to help find flights for them. "
-        "Remember, basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type. Some flight segments can be kept, but their prices will not be updated based on the current price"
+        "Right now, you need to help find new flights for them. The customer can change anything from a single flight segment to all the flights. "
+        "Remember, basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput1,
@@ -104,8 +104,8 @@ class PaymentOrder(BaseStateModel):
 get_payment_node_schema = NodeSchema(
     node_prompt=PREAMBLE
     + (
-        "Right now, you need to get the payment information. "
-        "IMPORTANT: Each reservation can use AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards. The remaining unused amount of a travel certificate is not refundable (i.e. forfeited). All payment methods must already be in user profile for safety reasons."
+        "Right now, you need to get the payment information. They can only use gift card or credit card "
+        "IMPORTANT: All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput2,
