@@ -1,4 +1,4 @@
-from cashier.tool_registries.general import GeneralToolRegistry
+from cashier.tool.general import GeneralToolRegistry
 from tau_bench.envs.airline.tools import ALL_TOOLS
 
 AIRLINE_TOOL_REGISTRY = GeneralToolRegistry()

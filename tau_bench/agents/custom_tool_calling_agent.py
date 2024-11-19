@@ -6,10 +6,10 @@ from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
-from cashier.model import Model
+from cashier.model.model_client import Model
 from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
 from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH
-from cashier.model_util import ModelProvider
+from cashier.model.model_util import ModelProvider
 
 
 class CustomToolCallingAgent(ToolCallingAgent):
@@ -31,7 +31,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         AE = AgentExecutor(
             model,
             None,
-            CHANGE_FLIGHT_GRAPH,
+            BOOK_FLIGHT_GRAPH,
             False,
             True,
             model_provider,

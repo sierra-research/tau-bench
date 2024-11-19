@@ -19,8 +19,8 @@ from tau_bench.types import (
     RESPOND_ACTION_NAME,
 )
 import json
-from cashier.model_turn import AssistantTurn
-from cashier.model_util import CustomJSONEncoder
+from cashier.model.model_turn import AssistantTurn
+from cashier.model.model_util import CustomJSONEncoder
 
 ToHashable = Union[
     str, int, float, Dict[str, "ToHashable"], List["ToHashable"], Set["ToHashable"]
