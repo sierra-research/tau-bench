@@ -145,6 +145,19 @@ def agent_factory(
             use_reasoning=True,
             temperature=args.temperature,
         )
+    elif args.agent_strategy == "few-shot":
+        from tau_bench.agents.few_shot_agent import FewShotToolCallingAgent
+        with open(args.few_shot_displays_path, "r") as f:
+            few_shot_displays = [json.loads(line)["messages_display"] for line in f]
+
+        return FewShotToolCallingAgent(
+            tools_info=tools_info,
+            wiki=wiki,
+            model=args.model,
+            provider=args.model_provider,
+            few_shot_displays=few_shot_displays,
+            temperature=args.temperature,
+        )
     else:
         raise ValueError(f"Unknown agent strategy: {args.agent_strategy}")
 
@@ -208,7 +221,7 @@ def main():
         "--agent-strategy",
         type=str,
         default="tool-calling",
-        choices=["tool-calling", "act", "react"],
+        choices=["tool-calling", "act", "react", "few-shot"],
     )
     parser.add_argument(
         "--temperature",
@@ -236,7 +249,7 @@ def main():
     parser.add_argument("--seed", type=int, default=10)
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
-
+    parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
     args = parser.parse_args()
     print(args)
     random.seed(args.seed)
