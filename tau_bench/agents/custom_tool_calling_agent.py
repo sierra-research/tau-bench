@@ -8,8 +8,7 @@ from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model.model_completion import Model
 from cashier.model.model_client import ModelClient
-from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
-from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH
+from tau_bench.agents.custom_tool_call_data.request_graph_schema import AirlineRequestGraph
 from cashier.model.model_util import ModelProvider
 
 
@@ -30,9 +29,10 @@ class CustomToolCallingAgent(ToolCallingAgent):
         model_provider = ModelProvider(self.provider.upper())
         ModelClient.initialize()
         AE = AgentExecutor(
-            CHANGE_FLIGHT_GRAPH,
+            None,
             False,
             True,
+            request_graph_schema=AirlineRequestGraph,
         )
 
         AE.add_user_turn(obs)
