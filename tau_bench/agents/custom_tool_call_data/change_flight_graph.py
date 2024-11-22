@@ -1,4 +1,7 @@
-from cashier.graph import NodeSchema, BaseStateModel, EdgeSchema, GraphSchema
+from cashier.graph.node_schema import NodeSchema
+from cashier.graph.state_model import BaseStateModel
+from cashier.graph.edge_schema import EdgeSchema
+from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List, Dict
 from tau_bench.agents.custom_tool_call_data.types import (
     FlightInfo,
@@ -184,8 +187,15 @@ edge_schema_4 = EdgeSchema(
 
 # ------------------------
 
+class MockOutput(BaseModel):
+    success: bool
+
 CHANGE_FLIGHT_GRAPH = GraphSchema(
+    description="Help customers change flights",
     start_node_schema=get_user_id_node_schema,
+    last_node_schema=update_flight_node_schema,
+    output_schema=MockOutput,
+    last_node_success_fn=lambda state: state.is_change_successfull,
     node_schemas=[
         get_user_id_node_schema,
         get_reservation_details_node_schema,

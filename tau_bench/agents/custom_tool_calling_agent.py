@@ -6,7 +6,8 @@ from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
-from cashier.model.model_client import Model
+from cashier.model.model_completion import Model
+from cashier.model.model_client import ModelClient
 from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
 from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH
 from cashier.model.model_util import ModelProvider
@@ -27,20 +28,17 @@ class CustomToolCallingAgent(ToolCallingAgent):
             {"role": "user", "content": obs},
         ]
         model_provider = ModelProvider(self.provider.upper())
-        model = Model()
+        ModelClient.initialize()
         AE = AgentExecutor(
-            model,
-            None,
             BOOK_FLIGHT_GRAPH,
             False,
             True,
-            model_provider,
         )
 
         AE.add_user_turn(obs)
 
         for _ in range(max_num_steps):
-            model_completion = model.chat(
+            model_completion = Model.chat(
                 model_name=self.model,
                 stream=False,
                 temperature=self.temperature,
