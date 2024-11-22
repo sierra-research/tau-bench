@@ -30,7 +30,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         model_provider = ModelProvider(self.provider.upper())
         ModelClient.initialize()
         AE = AgentExecutor(
-            BOOK_FLIGHT_GRAPH,
+            CHANGE_FLIGHT_GRAPH,
             False,
             True,
         )
