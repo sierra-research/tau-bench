@@ -2,10 +2,14 @@ from cashier.graph.node_schema import NodeSchema
 from cashier.graph.state_model import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.graph_schema import GraphSchema
-from typing import Optional, List, Dict
+from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
+    CabinType,
     FlightInfo,
+    FlightReservationInfo,
+    FlightType,
     PassengerInfo,
+    PaymentDetails,
     PaymentMethod,
     InsuranceValue,
     UserDetails,
@@ -268,13 +272,25 @@ edge_6 = EdgeSchema(
 )
 # --------------------
 
-class MockOutput(BaseModel):
-    success: bool
+class GraphOutputSchema(BaseModel):
+    reservation_id: str
+    user_id: str
+    origin: str
+    destination: str
+    flight_type: FlightType
+    cabin: CabinType
+    flights: List[FlightReservationInfo]
+    passengers: List[PassengerInfo]
+    payment_history: List[PaymentDetails]
+    created_at: str
+    total_baggages: int
+    nonfree_baggages: int
+    insurance: InsuranceValue
 
 BOOK_FLIGHT_GRAPH = GraphSchema(
     description="Help customers books flights",
     start_node_schema=get_user_id_node_schema,
-    output_schema= MockOutput,
+    output_schema= GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
     last_node_success_fn=lambda state: state.is_booking_successfull,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4, edge_5, edge_6],
