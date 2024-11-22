@@ -4,6 +4,7 @@ from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT
 from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH
 
 
-class AirlineRequestGraph(RequestGraphSchema):
-    graph_schemas = [BOOK_FLIGHT_GRAPH, CHANGE_FLIGHT_GRAPH]
-    system_prompt = "You are a helpful assistant that helps customers with flight-related requests."
+AIRLINE_REQUEST_GRAPH = RequestGraphSchema(
+    graph_schemas=[BOOK_FLIGHT_GRAPH, CHANGE_FLIGHT_GRAPH],
+    system_prompt="You are a helpful assistant that helps customers with flight-related requests.",
+)
