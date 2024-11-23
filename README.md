@@ -132,6 +132,12 @@ Please note that this feature utilizes an LLM, which may lead to inaccurate erro
 
 *Notice: If an error is raised due to the structure of your results file, you may have to rerun the benchmark to produce a new results file. We have recently [rewritten](https://github.com/sierra-research/tau-bench/commit/043b544371757ebb3762b3d02a6675dfe0c41798) the benchmark to be more type-safe and extensible.
 
+## Historical trajectories
+
+τ-bench might be expensive to run. We have provided a set of historical trajectories for the airline and retail environments in `./historical_trajectories`.
+
+If you would like to contribute your historical trajectories to this benchmark, please submit a PR!
+
 ## License
 
 See `./LICENSE`.
