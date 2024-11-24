@@ -127,7 +127,7 @@ class OrderInput5(BaseModel):
 
 
 class BookingState(BaseStateModel):
-    is_booking_successfull: bool = False
+    is_baggage_change_successfull: bool = False
 
 
 book_flight_node_schema = NodeSchema(
@@ -207,7 +207,7 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
     start_node_schema=get_user_id_node_schema,
     output_schema= GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
-    last_node_success_fn=lambda state: state.is_booking_successfull,
+    last_node_success_fn=lambda state: state.is_baggage_change_successfull,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4],
     node_schemas=[
         get_user_id_node_schema,
