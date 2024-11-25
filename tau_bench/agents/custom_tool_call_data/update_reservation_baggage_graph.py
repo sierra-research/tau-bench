@@ -206,6 +206,7 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
     description="Help customers update baggage information for a reservation",
     start_node_schema=get_user_id_node_schema,
     output_schema= GraphOutputSchema,
+    final_fn_name="update_reservation_baggages",
     last_node_schema=book_flight_node_schema,
     last_node_success_fn=lambda state: state.is_baggage_change_successfull,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4],
