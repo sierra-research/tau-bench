@@ -110,7 +110,7 @@ class FlightReservationInfo(BaseModel):
 
 class PaymentDetails(BaseModel):
     payment_id: str
-    amount: str
+    amount: int
 
 
 class ReservationDetails(BaseModel):
