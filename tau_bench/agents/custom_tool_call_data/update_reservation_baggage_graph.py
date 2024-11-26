@@ -203,7 +203,13 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-StateSchema=OrderInput5
+class StateSchema(BaseModel):
+    user_details: Optional[UserDetails] = None
+    reservation_details: Optional[ReservationDetails] = None
+    total_baggages: Optional[int] = None
+    nonfree_baggages: Optional[int] = None
+    payments: List[PaymentMethod] = Field(default_factory=list)
+
 
 CHANGE_BAGGAGE_GRAPH = GraphSchema(
     description="Help customers update baggage information for a reservation",

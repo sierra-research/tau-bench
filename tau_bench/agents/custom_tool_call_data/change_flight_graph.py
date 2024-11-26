@@ -207,7 +207,11 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-StateSchema=OrderInput3
+class StateSchema(BaseModel):
+    user_details: Optional[UserDetails] = None
+    reservation_details: Optional[ReservationDetails] = None
+    flight_infos: List[FlightInfo] = Field(default_factory=list)
+    payment_id: Optional[str] = None
 
 CHANGE_FLIGHT_GRAPH = GraphSchema(
     description="Help customers change flights",

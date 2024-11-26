@@ -287,7 +287,15 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-StateSchema=OrderInput5
+class StateSchema(BaseModel):
+    user_details: Optional[UserDetails] = None
+    flight_infos: List[FlightInfo] = Field(default_factory=list)
+    passengers: List[PassengerInfo] = Field(default_factory=list)
+    add_insurance: Optional[InsuranceValue] = None
+    total_baggages: Optional[int] = None
+    nonfree_baggages: Optional[int] = None
+    payments: List[PaymentMethod] = Field(default_factory=list)
+
 BOOK_FLIGHT_GRAPH = GraphSchema(
     description="Help customers books flights",
     start_node_schema=get_user_id_node_schema,
