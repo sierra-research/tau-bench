@@ -301,7 +301,6 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
     start_node_schema=get_user_id_node_schema,
     output_schema= GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
-    last_node_success_fn=lambda state: state.is_booking_successfull,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4, edge_5, edge_6],
     node_schemas=[
         get_user_id_node_schema,
