@@ -1,6 +1,6 @@
 from cashier.graph.node_schema import NodeSchema
 from cashier.graph.state_model import BaseStateModel
-from cashier.graph.edge_schema import EdgeSchema
+from cashier.graph.edge_schema import EdgeSchema, StateTransitionConfig
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -204,14 +204,14 @@ book_flight_node_schema = NodeSchema(
 edge_1 = EdgeSchema(
     from_node_schema=get_user_id_node_schema,
     to_node_schema=find_flight_node_schema,
-    state_condition_fn=lambda state: state.user_details is not None,
+    transition_config= StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.user_details is not None),
     new_input_fn=lambda state, input: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
     from_node_schema=find_flight_node_schema,
     to_node_schema=get_passanger_info_schema,
-    state_condition_fn=lambda state: state.flight_infos and len(state.flight_infos) > 0,
+    transition_config= StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.flight_infos and len(state.flight_infos) > 0),
     new_input_fn=lambda state, input: OrderInput(
         user_details=input.user_details, flight_infos=state.flight_infos
     ),
@@ -220,7 +220,7 @@ edge_2 = EdgeSchema(
 edge_3 = EdgeSchema(
     from_node_schema=get_passanger_info_schema,
     to_node_schema=ask_for_insurance_node_schema,
-    state_condition_fn=lambda state: state.passengers and len(state.passengers) > 0,
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.passengers and len(state.passengers) > 0),
     new_input_fn=lambda state, input: OrderInput2(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
@@ -231,7 +231,7 @@ edge_3 = EdgeSchema(
 edge_4 = EdgeSchema(
     from_node_schema=ask_for_insurance_node_schema,
     to_node_schema=luggage_node_schema,
-    state_condition_fn=lambda state: state.add_insurance is not None,
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.add_insurance is not None),
     new_input_fn=lambda state, input: OrderInput3(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
@@ -244,8 +244,7 @@ edge_4 = EdgeSchema(
 edge_5 = EdgeSchema(
     from_node_schema=luggage_node_schema,
     to_node_schema=payment_node_schema,
-    state_condition_fn=lambda state: state.total_baggages is not None
-    and state.nonfree_baggages is not None,
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.total_baggages is not None and state.nonfree_baggages is not None),
     new_input_fn=lambda state, input: OrderInput4(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
@@ -259,7 +258,7 @@ edge_5 = EdgeSchema(
 edge_6 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    state_condition_fn=lambda state: state.payments and len(state.payments) > 0 and state.is_payment_finalized,
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.payments and len(state.payments) > 0 and state.is_payment_finalized),
     new_input_fn=lambda state, input: OrderInput5(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
