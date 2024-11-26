@@ -10,7 +10,7 @@ from tau_bench.agents.custom_tool_call_data.update_reservation_baggage_graph imp
 GRAPH_EDGE_SCHEMA_1 = GraphEdgeSchema(
     from_graph_schema=CHANGE_FLIGHT_GRAPH,
     to_graph_schema=CHANGE_BAGGAGE_GRAPH,
-    transition_config= FunctionTransitionConfig(fn_name="update_reservation_flights", state=FunctionState.CALLED_AND_SUCCEEDED)
+    transition_config= FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_flights", state=FunctionState.CALLED_AND_SUCCEEDED)
 )
 
 AIRLINE_REQUEST_GRAPH = RequestGraphSchema(
