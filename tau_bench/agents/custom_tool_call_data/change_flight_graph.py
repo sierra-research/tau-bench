@@ -144,6 +144,7 @@ update_flight_node_schema = NodeSchema(
     state_pydantic_model=UpdateOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["update_reservation_flights", "calculate"],
+    run_assistant_turn_before_transition=True,
 )
 # ----------------------------------------------
 
