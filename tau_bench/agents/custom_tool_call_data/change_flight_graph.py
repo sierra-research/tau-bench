@@ -132,16 +132,12 @@ class OrderInput3(BaseModel):
     payment_id: str
 
 
-class UpdateOrder(BaseStateModel):
-    is_change_successfull: bool = False
-
-
 update_flight_node_schema = NodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to place the booking.",
     node_system_prompt=AirlineNodeSystemPrompt,
     input_pydantic_model=OrderInput3,
-    state_pydantic_model=UpdateOrder,
+    state_pydantic_model=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["update_reservation_flights", "calculate"],
     run_assistant_turn_before_transition=True,
