@@ -168,7 +168,7 @@ edge_schema_2 = EdgeSchema(
 edge_schema_3 = EdgeSchema(
     from_node_schema=find_flight_node_schema,
     to_node_schema=get_payment_node_schema,
-    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.flight_infos and len(state.flight_infos) > 0 )
+    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.flight_infos and len(state.flight_infos) > 0 ),
     new_input_fn=lambda state, input: OrderInput2(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
@@ -180,7 +180,7 @@ edge_schema_3 = EdgeSchema(
 edge_schema_4 = EdgeSchema(
     from_node_schema=get_payment_node_schema,
     to_node_schema=update_flight_node_schema,
-    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.payment_id is not None)
+    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.payment_id is not None),
     new_input_fn=lambda state, input: OrderInput3(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
@@ -206,6 +206,9 @@ class GraphOutputSchema(BaseModel):
     nonfree_baggages: int
     insurance: InsuranceValue
 
+
+StateSchema=OrderInput3
+
 CHANGE_FLIGHT_GRAPH = GraphSchema(
     description="Help customers change flights",
     start_node_schema=get_user_id_node_schema,
@@ -221,4 +224,5 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
         update_flight_node_schema,
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
+    state_schema=StateSchema,
 )

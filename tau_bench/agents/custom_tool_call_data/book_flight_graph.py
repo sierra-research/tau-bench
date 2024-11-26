@@ -286,6 +286,8 @@ class GraphOutputSchema(BaseModel):
     nonfree_baggages: int
     insurance: InsuranceValue
 
+
+StateSchema=OrderInput5
 BOOK_FLIGHT_GRAPH = GraphSchema(
     description="Help customers books flights",
     start_node_schema=get_user_id_node_schema,
@@ -303,4 +305,5 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
+    state_schema=StateSchema,
 )

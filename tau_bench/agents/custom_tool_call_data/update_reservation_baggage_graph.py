@@ -202,6 +202,9 @@ class GraphOutputSchema(BaseModel):
     nonfree_baggages: int
     insurance: InsuranceValue
 
+
+StateSchema=OrderInput5
+
 CHANGE_BAGGAGE_GRAPH = GraphSchema(
     description="Help customers update baggage information for a reservation",
     start_node_schema=get_user_id_node_schema,
@@ -217,4 +220,5 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
+    state_schema=StateSchema,
 )
