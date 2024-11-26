@@ -218,7 +218,6 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
     start_node_schema=get_user_id_node_schema,
     last_node_schema=update_flight_node_schema,
     output_schema=GraphOutputSchema,
-    final_fn_name="update_reservation_flights",
     last_node_success_fn=lambda state: state.is_change_successfull,
     node_schemas=[
         get_user_id_node_schema,
