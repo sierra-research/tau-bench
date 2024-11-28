@@ -114,7 +114,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="yusuf_rossi_9620",
-        instruction="You are Yusuf Rossi in 19122. You want to know how many tshirt options are available in the online store right now. You want to modify all your pending tshirts to purple, s size, same v-neck, and prefer polyester. You are a private person that does not want to reveal much about yourself.",
+        instruction="You are Yusuf Rossi in 19122. You want to know how many tshirt options are available in the online store right now. You want to modify all your pending tshirts (i.e., your 2 relevant orders) to purple, s size, same v-neck, and prefer polyester. You are a private person that does not want to reveal much about yourself.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
@@ -155,7 +155,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="mei_kovacs_8020",
-        instruction="You are mei_kovacs_8020 (28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp. If the agent asks for confirmation again, do not exchange anything, and return the water bottle instead.",
+        instruction="You are mei_kovacs_8020 (zip code 28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp. If the agent asks for confirmation again, do not exchange anything, and return the water bottle instead.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
@@ -178,7 +178,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="mei_kovacs_8020",
-        instruction="You are mei_kovacs_8020 (28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp.",
+        instruction="You are mei_kovacs_8020 (zip code 28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
@@ -203,7 +203,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="mei_kovacs_8020",
-        instruction="You are mei_kovacs_8020 (28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer AC adapter > battery > USB). If the agent asks for confirmation, only exchange the desk lamp.",
+        instruction="You are mei_kovacs_8020 (zip code 28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a less bright one (prefer AC adapter > battery > USB). If the agent asks for confirmation, only exchange the desk lamp.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
@@ -228,7 +228,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="mei_kovacs_8020",
-        instruction="You are mei_kovacs_8020 (28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a brighter one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp.",
+        instruction="You are mei_kovacs_8020 (zip code 28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a brighter one (prefer battery > USB > AC). If the agent asks for confirmation, only exchange the desk lamp.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
@@ -253,7 +253,7 @@ TASKS_TEST = [
     Task(
         annotator="0",
         user_id="mei_kovacs_8020",
-        instruction="You are mei_kovacs_8020 (28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a brighter one (prefer AC adapter > battery > USB). If the agent asks for confirmation, only exchange the desk lamp.",
+        instruction="You are mei_kovacs_8020 (zip code 28236) and you want to exchange the water bottle and the desk lamp. You want to exchange the water bottle to a bigger one, and the desk lamp to a brighter one (prefer AC adapter > battery > USB). If the agent asks for confirmation, only exchange the desk lamp.",
         actions=[
             Action(
                 name="find_user_id_by_name_zip",
