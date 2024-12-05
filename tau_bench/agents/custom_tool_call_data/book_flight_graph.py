@@ -1,5 +1,5 @@
 from cashier.graph.node_schema import NodeSchema
-from cashier.graph.state_model import BaseStateModel
+from cashier.graph.mixin.state_mixin import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.mixin.base_edge_schema import StateTransitionConfig
 from cashier.graph.graph_schema import GraphSchema
