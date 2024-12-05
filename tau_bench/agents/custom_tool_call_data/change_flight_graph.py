@@ -158,7 +158,7 @@ edge_schema_2 = EdgeSchema(
     to_node_schema=find_flight_node_schema,
     transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"reservation_details": lambda val: val is not None}),
     new_input_fn=lambda state: OrderInput1(
-        user_details=input.user_details, reservation_details=state.reservation_details
+        user_details=state.user_details, reservation_details=state.reservation_details
     ),
 )
 
@@ -168,8 +168,8 @@ edge_schema_3 = EdgeSchema(
     to_node_schema=get_payment_node_schema,
     transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0 }),
     new_input_fn=lambda state: OrderInput2(
-        user_details=input.user_details,
-        reservation_details=input.reservation_details,
+        user_details=state.user_details,
+        reservation_details=state.reservation_details,
         flight_infos=state.flight_infos,
     ),
 )
@@ -180,9 +180,9 @@ edge_schema_4 = EdgeSchema(
     to_node_schema=update_flight_node_schema,
     transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payment_id": lambda val: val is not None}),
     new_input_fn=lambda state: OrderInput3(
-        user_details=input.user_details,
-        reservation_details=input.reservation_details,
-        flight_infos=input.flight_infos,
+        user_details=state.user_details,
+        reservation_details=state.reservation_details,
+        flight_infos=state.flight_infos,
         payment_id=state.payment_id,
     ),
 )
