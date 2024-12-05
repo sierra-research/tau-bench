@@ -148,14 +148,14 @@ book_flight_node_schema = NodeSchema(
 edge_1 = EdgeSchema(
     from_node_schema=get_user_id_node_schema,
     to_node_schema=get_reservation_details_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.user_details is not None),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"user_details": lambda val: val is not None}),
     new_input_fn=lambda state, input: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
     from_node_schema=get_reservation_details_node_schema,
     to_node_schema=luggage_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.reservation_details),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"reservation_details": lambda val: val is not None}),
     new_input_fn=lambda state, input: OrderInput3(
         user_details=input.user_details, reservation_details=state.reservation_details
     ),
@@ -164,7 +164,7 @@ edge_2 = EdgeSchema(
 edge_3 = EdgeSchema(
     from_node_schema=luggage_node_schema,
     to_node_schema=payment_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.total_baggages is not None and state.nonfree_baggages is not None),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"total_baggages": lambda val: val is not None, "nonfree_baggages": lambda val: val is not None}),
     new_input_fn=lambda state, input: OrderInput4(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
@@ -176,7 +176,7 @@ edge_3 = EdgeSchema(
 edge_4 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.payments and len(state.payments) > 0 and state.is_payment_finalized),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val and len(val) > 0, "is_payment_finalized": lambda val: val}),
     new_input_fn=lambda state, input: OrderInput5(
         user_details=input.user_details,
         reservation_details=input.reservation_details,

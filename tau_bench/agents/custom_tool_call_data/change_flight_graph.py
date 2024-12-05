@@ -1,6 +1,7 @@
 from cashier.graph.node_schema import NodeSchema
 from cashier.graph.state_model import BaseStateModel
-from cashier.graph.edge_schema import EdgeSchema, StateTransitionConfig
+from cashier.graph.edge_schema import EdgeSchema
+from cashier.graph.mixin.base_edge_schema import StateTransitionConfig
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List, Dict
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -147,7 +148,7 @@ update_flight_node_schema = NodeSchema(
 edge_schema_1 = EdgeSchema(
     from_node_schema=get_user_id_node_schema,
     to_node_schema=get_reservation_details_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.user_details is not None),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"user_details": lambda val: val is not None}),
     new_input_fn=lambda state, input: UserInput(user_details=state.user_details),
 )
 
@@ -155,7 +156,7 @@ edge_schema_1 = EdgeSchema(
 edge_schema_2 = EdgeSchema(
     from_node_schema=get_reservation_details_node_schema,
     to_node_schema=find_flight_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.reservation_details is not None),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"reservation_details": lambda val: val is not None}),
     new_input_fn=lambda state, input: OrderInput1(
         user_details=input.user_details, reservation_details=state.reservation_details
     ),
@@ -165,7 +166,7 @@ edge_schema_2 = EdgeSchema(
 edge_schema_3 = EdgeSchema(
     from_node_schema=find_flight_node_schema,
     to_node_schema=get_payment_node_schema,
-    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.flight_infos and len(state.flight_infos) > 0 ),
+    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0 }),
     new_input_fn=lambda state, input: OrderInput2(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
@@ -177,7 +178,7 @@ edge_schema_3 = EdgeSchema(
 edge_schema_4 = EdgeSchema(
     from_node_schema=get_payment_node_schema,
     to_node_schema=update_flight_node_schema,
-    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn=lambda state: state.payment_id is not None),
+    transition_config = StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payment_id": lambda val: val is not None}),
     new_input_fn=lambda state, input: OrderInput3(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
