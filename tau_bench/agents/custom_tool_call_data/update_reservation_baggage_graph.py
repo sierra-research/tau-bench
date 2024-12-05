@@ -150,14 +150,14 @@ edge_1 = EdgeSchema(
     from_node_schema=get_user_id_node_schema,
     to_node_schema=get_reservation_details_node_schema,
     transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"user_details": lambda val: val is not None}),
-    new_input_fn=lambda state, input: UserInput(user_details=state.user_details),
+    new_input_fn=lambda state: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
     from_node_schema=get_reservation_details_node_schema,
     to_node_schema=luggage_node_schema,
     transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"reservation_details": lambda val: bool(val)}),
-    new_input_fn=lambda state, input: OrderInput3(
+    new_input_fn=lambda state: OrderInput3(
         user_details=input.user_details, reservation_details=state.reservation_details
     ),
 )
@@ -166,7 +166,7 @@ edge_3 = EdgeSchema(
     from_node_schema=luggage_node_schema,
     to_node_schema=payment_node_schema,
     transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"total_baggages": lambda val: val is not None, "nonfree_baggages": lambda val: val is not None}),
-    new_input_fn=lambda state, input: OrderInput4(
+    new_input_fn=lambda state: OrderInput4(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
         total_baggages=state.total_baggages,
@@ -178,7 +178,7 @@ edge_4 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
     transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val and len(val) > 0, "is_payment_finalized": lambda val: bool(val)}),
-    new_input_fn=lambda state, input: OrderInput5(
+    new_input_fn=lambda state: OrderInput5(
         user_details=input.user_details,
         reservation_details=input.reservation_details,
         total_baggages=input.total_baggages,
