@@ -259,7 +259,7 @@ edge_5 = EdgeSchema(
 edge_6 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val and len(val) > 0, "is_payment_finalized": lambda val: val}),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val and len(val) > 0, "is_payment_finalized": lambda val: bool(val)}),
     new_input_fn=lambda state, input: OrderInput5(
         user_details=input.user_details,
         flight_infos=input.flight_infos,
