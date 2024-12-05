@@ -22,7 +22,9 @@ from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_RE
 
 ## book flight graph
 
-PREAMBLE = "You are helping the customer to change the baggage information for a reservation. "
+PREAMBLE = (
+    "You are helping the customer to change the baggage information for a reservation. "
+)
 
 
 class UserState(BaseStateModel):
@@ -100,9 +102,19 @@ class OrderInput4(BaseModel):
 
 
 class PaymentState(BaseStateModel):
-    payments: Optional[List[PaymentMethod]] = Field(default=None, description='If no payment is necessary, set this to an empty list.')
-    has_explained_payment_policy_to_customer: bool = Field(default=False, description='There are very important payment policies, and these must be clearly communicated to the customer. Most importantly, the customer must understand that any left-over balance on a travel certificate will be forfeited.')
-    is_payment_finalized: bool = Field(default=False, description='This can only be true after payment policy has been communicated and payment method collected')
+    payments: Optional[List[PaymentMethod]] = Field(
+        default=None,
+        description="If no payment is necessary, set this to an empty list.",
+    )
+    has_explained_payment_policy_to_customer: bool = Field(
+        default=False,
+        description="There are very important payment policies, and these must be clearly communicated to the customer. Most importantly, the customer must understand that any left-over balance on a travel certificate will be forfeited.",
+    )
+    is_payment_finalized: bool = Field(
+        default=False,
+        description="This can only be true after payment policy has been communicated and payment method collected",
+    )
+
 
 payment_node_schema = NodeSchema(
     node_prompt=PREAMBLE
@@ -149,14 +161,20 @@ book_flight_node_schema = NodeSchema(
 edge_1 = EdgeSchema(
     from_node_schema=get_user_id_node_schema,
     to_node_schema=get_reservation_details_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"user_details": lambda val: val is not None}),
+    transition_config=StateTransitionConfig(
+        need_user_msg=True,
+        state_check_fn_map={"user_details": lambda val: val is not None},
+    ),
     new_input_fn=lambda state: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
     from_node_schema=get_reservation_details_node_schema,
     to_node_schema=luggage_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"reservation_details": lambda val: bool(val)}),
+    transition_config=StateTransitionConfig(
+        need_user_msg=True,
+        state_check_fn_map={"reservation_details": lambda val: bool(val)},
+    ),
     new_input_fn=lambda state: OrderInput3(
         user_details=state.user_details, reservation_details=state.reservation_details
     ),
@@ -165,7 +183,13 @@ edge_2 = EdgeSchema(
 edge_3 = EdgeSchema(
     from_node_schema=luggage_node_schema,
     to_node_schema=payment_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"total_baggages": lambda val: val is not None, "nonfree_baggages": lambda val: val is not None}),
+    transition_config=StateTransitionConfig(
+        need_user_msg=True,
+        state_check_fn_map={
+            "total_baggages": lambda val: val is not None,
+            "nonfree_baggages": lambda val: val is not None,
+        },
+    ),
     new_input_fn=lambda state: OrderInput4(
         user_details=state.user_details,
         reservation_details=state.reservation_details,
@@ -177,16 +201,23 @@ edge_3 = EdgeSchema(
 edge_4 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val is not None, "is_payment_finalized": lambda val: bool(val)}),
+    transition_config=StateTransitionConfig(
+        need_user_msg=True,
+        state_check_fn_map={
+            "payments": lambda val: val is not None,
+            "is_payment_finalized": lambda val: bool(val),
+        },
+    ),
     new_input_fn=lambda state: OrderInput5(
         user_details=state.user_details,
         reservation_details=state.reservation_details,
         total_baggages=state.total_baggages,
         nonfree_baggages=state.nonfree_baggages,
-        payments=state.payments
+        payments=state.payments,
     ),
 )
 # --------------------
+
 
 class GraphOutputSchema(BaseModel):
     reservation_id: str
@@ -215,7 +246,7 @@ class ChangeBaggageGraphStateSchema(BaseModel):
 CHANGE_BAGGAGE_GRAPH = GraphSchema(
     description="Help customers update baggage information for a reservation",
     start_node_schema=get_user_id_node_schema,
-    output_schema= GraphOutputSchema,
+    output_schema=GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4],
     node_schemas=[
