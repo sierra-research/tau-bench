@@ -100,7 +100,7 @@ class OrderInput4(BaseModel):
 
 
 class PaymentState(BaseStateModel):
-    payments: List[PaymentMethod] = Field(default_factory=list)
+    payments: Optional[List[PaymentMethod]] = Field(default=None, description='If no payment is necessary, set this to an empty list.')
     has_explained_payment_policy_to_customer: bool = Field(default=False, description='There are very important payment policies, and these must be clearly communicated to the customer. Most importantly, the customer must understand that any left-over balance on a travel certificate will be forfeited.')
     is_payment_finalized: bool = Field(default=False, description='This can only be true after payment policy has been communicated and payment method collected')
 
@@ -177,7 +177,7 @@ edge_3 = EdgeSchema(
 edge_4 = EdgeSchema(
     from_node_schema=payment_node_schema,
     to_node_schema=book_flight_node_schema,
-    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val and len(val) > 0, "is_payment_finalized": lambda val: bool(val)}),
+    transition_config=StateTransitionConfig(need_user_msg=True, state_check_fn_map={"payments": lambda val: val is not None, "is_payment_finalized": lambda val: bool(val)}),
     new_input_fn=lambda state: OrderInput5(
         user_details=state.user_details,
         reservation_details=state.reservation_details,
