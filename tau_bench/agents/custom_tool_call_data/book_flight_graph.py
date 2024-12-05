@@ -312,5 +312,5 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    state_schema=StateSchema,
+    state_pydantic_model=StateSchema,
 )

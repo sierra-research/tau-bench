@@ -29,7 +29,6 @@ class CustomToolCallingAgent(ToolCallingAgent):
         model_provider = ModelProvider(self.provider.upper())
         ModelClient.initialize()
         AE = AgentExecutor(
-            None,
             False,
             True,
             request_graph_schema=AIRLINE_REQUEST_GRAPH,

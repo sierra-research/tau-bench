@@ -224,5 +224,5 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
         update_flight_node_schema,
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
-    state_schema=StateSchema,
+    state_pydantic_model=StateSchema,
 )

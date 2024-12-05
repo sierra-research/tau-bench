@@ -1,6 +1,7 @@
 from cashier.graph.node_schema import NodeSchema
 from cashier.graph.state_model import BaseStateModel
-from cashier.graph.edge_schema import EdgeSchema, StateTransitionConfig
+from cashier.graph.edge_schema import EdgeSchema
+from cashier.graph.mixin.base_edge_schema import StateTransitionConfig
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -224,5 +225,5 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    state_schema=StateSchema,
+    state_pydantic_model=StateSchema,
 )
