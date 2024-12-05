@@ -204,7 +204,7 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-class StateSchema(BaseModel):
+class ChangeBaggageGraphStateSchema(BaseModel):
     user_details: Optional[UserDetails] = None
     reservation_details: Optional[ReservationDetails] = None
     total_baggages: Optional[int] = None
@@ -225,5 +225,5 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    state_pydantic_model=StateSchema,
+    state_pydantic_model=ChangeBaggageGraphStateSchema,
 )
