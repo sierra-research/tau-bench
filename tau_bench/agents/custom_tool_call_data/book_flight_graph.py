@@ -1,7 +1,7 @@
-from cashier.graph.node_schema import NodeSchema
-from cashier.graph.mixin.state_mixin import BaseStateModel
+from cashier.graph.conversation_node import ConversationNodeSchema
+from cashier.graph.base.base_state import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
-from cashier.graph.mixin.base_edge_schema import StateTransitionConfig
+from cashier.graph.base.base_edge_schema import StateTransitionConfig, FunctionTransitionConfig, FunctionState
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -28,11 +28,11 @@ class UserState(BaseStateModel):
     user_details: UserDetails = None
 
 
-get_user_id_node_schema = NodeSchema(
+get_user_id_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to get their user details.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=None,
-    state_pydantic_model=UserState,
+    input_schema=None,
+    state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
 )
@@ -48,11 +48,11 @@ class FlightOrder(BaseStateModel):
     flight_infos: List[FlightInfo] = Field(default_factory=list)
 
 
-find_flight_node_schema = NodeSchema(
+find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to help find flights for them.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=UserInput,
-    state_pydantic_model=FlightOrder,
+    input_schema=UserInput,
+    state_schema=FlightOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "search_direct_flight",
@@ -74,7 +74,7 @@ class PassengerState(BaseStateModel):
     passengers: List[PassengerInfo] = Field(default_factory=list)
 
 
-get_passanger_info_schema = NodeSchema(
+get_passanger_info_schema = ConversationNodeSchema(
     node_prompt=(
         PREAMBLE
         + (
@@ -83,8 +83,8 @@ get_passanger_info_schema = NodeSchema(
         )
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput,
-    state_pydantic_model=PassengerState,
+    input_schema=OrderInput,
+    state_schema=PassengerState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
@@ -103,12 +103,12 @@ class InsuranceState(BaseStateModel):
     )
 
 
-ask_for_insurance_node_schema = NodeSchema(
+ask_for_insurance_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you need to ask if they want to add insurance, which is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput2,
-    state_pydantic_model=InsuranceState,
+    input_schema=OrderInput2,
+    state_schema=InsuranceState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
@@ -128,15 +128,15 @@ class LuggageState(BaseStateModel):
     nonfree_baggages: Optional[int] = None
 
 
-luggage_node_schema = NodeSchema(
+luggage_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to ask how many luggages to check. "
         "If the booking user is a regular member, 0 free checked bag for each basic economy passenger, 1 free checked bag for each economy passenger, and 2 free checked bags for each business passenger. If the booking user is a silver member, 1 free checked bag for each basic economy passenger, 2 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. If the booking user is a gold member, 2 free checked bag for each basic economy passenger, 3 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. Each extra baggage is 50 dollars."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput3,
-    state_pydantic_model=LuggageState,
+    input_schema=OrderInput3,
+    state_schema=LuggageState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
@@ -165,15 +165,15 @@ class PaymentState(BaseStateModel):
     )
 
 
-payment_node_schema = NodeSchema(
+payment_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to get the payment information. "
         "IMPORTANT: Each reservation can use AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards. The remaining unused amount of a travel certificate is not refundable (i.e. forfeited). All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput4,
-    state_pydantic_model=PaymentState,
+    input_schema=OrderInput4,
+    state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
@@ -194,12 +194,12 @@ class BookingState(BaseStateModel):
     is_booking_successfull: bool = False
 
 
-book_flight_node_schema = NodeSchema(
+book_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to place the booking.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput5,
-    state_pydantic_model=BookingState,
+    input_schema=OrderInput5,
+    state_schema=BookingState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "book_reservation",
@@ -345,5 +345,10 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    state_pydantic_model=StateSchema,
+    state_schema=StateSchema,
+    completion_config=FunctionTransitionConfig(
+        need_user_msg=False,
+        fn_name="book_reservation",
+        state=FunctionState.CALLED_AND_SUCCEEDED,
+    ),
 )

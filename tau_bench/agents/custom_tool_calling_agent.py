@@ -31,7 +31,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         AE = AgentExecutor(
             False,
             True,
-            request_graph_schema=AIRLINE_REQUEST_GRAPH,
+            AIRLINE_REQUEST_GRAPH,
         )
 
         AE.add_user_turn(obs)

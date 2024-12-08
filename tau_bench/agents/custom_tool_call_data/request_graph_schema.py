@@ -1,5 +1,5 @@
 from cashier.graph.request_graph import RequestGraphSchema, GraphEdgeSchema
-from cashier.graph.mixin.base_edge_schema import FunctionTransitionConfig, FunctionState
+from cashier.graph.base.base_edge_schema import FunctionTransitionConfig, FunctionState
 
 from tau_bench.agents.custom_tool_call_data.book_flight_graph import BOOK_FLIGHT_GRAPH
 from tau_bench.agents.custom_tool_call_data.change_flight_graph import CHANGE_FLIGHT_GRAPH

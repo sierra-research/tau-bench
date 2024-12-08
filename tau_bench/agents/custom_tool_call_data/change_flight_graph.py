@@ -1,7 +1,7 @@
-from cashier.graph.node_schema import NodeSchema
-from cashier.graph.mixin.state_mixin import BaseStateModel
+from cashier.graph.conversation_node import ConversationNodeSchema
+from cashier.graph.base.base_state import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
-from cashier.graph.mixin.base_edge_schema import StateTransitionConfig
+from cashier.graph.base.base_edge_schema import StateTransitionConfig, FunctionTransitionConfig, FunctionState
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List, Dict
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -29,11 +29,11 @@ class UserState(BaseStateModel):
     user_details: Optional[UserDetails] = None
 
 
-get_user_id_node_schema = NodeSchema(
+get_user_id_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to get their user details.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=None,
-    state_pydantic_model=UserState,
+    input_schema=None,
+    state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
 )
@@ -49,12 +49,12 @@ class ReservationDetailsState(BaseStateModel):
     reservation_details: Optional[ReservationDetails] = None
 
 
-get_reservation_details_node_schema = NodeSchema(
+get_reservation_details_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you need to get the reservation details by asking for the reservation id. If they don't know the id, lookup each reservation in their user details and find the one that best matches their description .",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=UserInput,
-    state_pydantic_model=ReservationDetailsState,
+    input_schema=UserInput,
+    state_schema=ReservationDetailsState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "get_reservation_details",
@@ -79,15 +79,15 @@ class FlightOrder(BaseStateModel):
     )
 
 
-find_flight_node_schema = NodeSchema(
+find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to help find new flights for them. The customer can change anything from a single flight segment to all the flights. "
         "Remember, basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput1,
-    state_pydantic_model=FlightOrder,
+    input_schema=OrderInput1,
+    state_schema=FlightOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "search_direct_flight",
@@ -109,15 +109,15 @@ class PaymentOrder(BaseStateModel):
     payment_id: Optional[str] = None
 
 
-get_payment_node_schema = NodeSchema(
+get_payment_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to get the payment information. They can only use gift card or credit card "
         "IMPORTANT: All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput2,
-    state_pydantic_model=PaymentOrder,
+    input_schema=OrderInput2,
+    state_schema=PaymentOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
@@ -133,12 +133,12 @@ class OrderInput3(BaseModel):
     payment_id: str
 
 
-update_flight_node_schema = NodeSchema(
+update_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to place the booking.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_pydantic_model=OrderInput3,
-    state_pydantic_model=None,
+    input_schema=OrderInput3,
+    state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["update_reservation_flights", "calculate"],
     run_assistant_turn_before_transition=True,
@@ -238,5 +238,10 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
         update_flight_node_schema,
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
-    state_pydantic_model=StateSchema,
+    state_schema=StateSchema,
+        completion_config=FunctionTransitionConfig(
+            need_user_msg=False,
+        fn_name="update_reservation_flights",
+        state=FunctionState.CALLED_AND_SUCCEEDED,
+    ),
 )
