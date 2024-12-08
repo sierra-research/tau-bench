@@ -3,8 +3,6 @@ from cashier.graph.base.base_state import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
-    FunctionTransitionConfig,
-    FunctionState,
 )
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
@@ -158,6 +156,8 @@ class OrderInput4(BaseModel):
 
 
 class PaymentState(BaseStateModel):
+    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized']
+
     payments: List[PaymentMethod] = Field(default_factory=list)
     has_explained_payment_policy_to_customer: bool = Field(
         default=False,
@@ -350,9 +350,4 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         book_flight_node_schema,
     ],
     state_schema=StateSchema,
-    completion_config=FunctionTransitionConfig(
-        need_user_msg=False,
-        fn_name="book_reservation",
-        state=FunctionState.CALLED_AND_SUCCEEDED,
-    ),
 )

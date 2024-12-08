@@ -3,8 +3,6 @@ from cashier.graph.base.base_state import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
-    FunctionTransitionConfig,
-    FunctionState,
 )
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List, Dict
@@ -243,9 +241,5 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
     state_schema=StateSchema,
-    completion_config=FunctionTransitionConfig(
-        need_user_msg=False,
-        fn_name="update_reservation_flights",
-        state=FunctionState.CALLED_AND_SUCCEEDED,
-    ),
+    run_assistant_turn_before_transition=True,
 )

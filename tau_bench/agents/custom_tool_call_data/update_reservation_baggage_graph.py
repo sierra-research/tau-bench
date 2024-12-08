@@ -3,8 +3,6 @@ from cashier.graph.base.base_state import BaseStateModel
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
-    FunctionTransitionConfig,
-    FunctionState,
 )
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
@@ -261,9 +259,4 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         book_flight_node_schema,
     ],
     state_schema=ChangeBaggageGraphStateSchema,
-    completion_config=FunctionTransitionConfig(
-        need_user_msg=False,
-        fn_name="update_reservation_baggages",
-        state=FunctionState.CALLED_AND_SUCCEEDED,
-    ),
 )
