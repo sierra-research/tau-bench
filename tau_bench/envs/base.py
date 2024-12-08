@@ -134,7 +134,7 @@ class Env(object):
             AE.add_user_turn(observation)
             info.source = "user"
             done = "###STOP###" in observation
-        elif action.name in AE.curr_node.schema.tool_registry.tool_names:
+        elif action.name in AE.graph.curr_conversation_node.schema.tool_registry.tool_names:
             callback_fn = None
             if action.name in self.tools_map:
                 callback_fn = partial(self.tools_map[action.name].invoke, data=self.data)

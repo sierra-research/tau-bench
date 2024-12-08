@@ -239,7 +239,7 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-class ChangeBaggageGraphStateSchema(BaseModel):
+class ChangeBaggageGraphStateSchema(BaseStateModel):
     user_details: Optional[UserDetails] = None
     reservation_details: Optional[ReservationDetails] = None
     total_baggages: Optional[int] = None

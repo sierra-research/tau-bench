@@ -324,7 +324,7 @@ class GraphOutputSchema(BaseModel):
     insurance: InsuranceValue
 
 
-class StateSchema(BaseModel):
+class StateSchema(BaseStateModel):
     user_details: Optional[UserDetails] = None
     flight_infos: List[FlightInfo] = Field(default_factory=list)
     passengers: List[PassengerInfo] = Field(default_factory=list)
