@@ -143,16 +143,12 @@ class OrderInput5(BaseModel):
     payments: List[PaymentMethod]
 
 
-class BookingState(BaseStateModel):
-    is_baggage_change_successfull: bool = False
-
-
 book_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to change the baggage for the reservation.",
     node_system_prompt=AirlineNodeSystemPrompt,
     input_schema=OrderInput5,
-    state_schema=BookingState,
+    state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
         "update_reservation_baggages",
