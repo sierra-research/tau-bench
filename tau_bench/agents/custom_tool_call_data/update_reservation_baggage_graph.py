@@ -105,6 +105,7 @@ class OrderInput4(BaseModel):
 
 
 class PaymentState(BaseStateModel):
+    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized' ]
     payments: Optional[List[PaymentMethod]] = Field(
         default=None,
         description="If no payment is necessary, set this to an empty list.",
