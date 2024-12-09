@@ -1,5 +1,6 @@
 from cashier.graph.conversation_node import ConversationNodeSchema
 from cashier.graph.base.base_state import BaseStateModel
+from cashier.graph.base.base_edge_schema import FunctionTransitionConfig, FunctionState
 from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
@@ -349,5 +350,6 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
+    transition_config=FunctionTransitionConfig(need_user_msg=False,fn_name="book_reservation", state=FunctionState.CALLED_AND_SUCCEEDED),
     state_schema=StateSchema,
 )

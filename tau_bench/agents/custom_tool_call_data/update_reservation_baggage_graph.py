@@ -4,6 +4,7 @@ from cashier.graph.edge_schema import EdgeSchema
 from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
 )
+from cashier.graph.base.base_edge_schema import FunctionTransitionConfig, FunctionState
 from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
@@ -258,5 +259,6 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
+    transition_config=FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_baggages", state=FunctionState.CALLED_AND_SUCCEEDED),
     state_schema=ChangeBaggageGraphStateSchema,
 )
