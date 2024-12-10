@@ -81,6 +81,7 @@ class FlightOrder(BaseStateModel):
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
     )
+    net_new_cost: int = Field(default=None, description="the total difference in cost between the old and new flights")
     has_confirmed_new_flights: bool = Field(
         default=False,
         descripion="this can only be set to true if the customer has explicitly confirmed the new flights",
@@ -112,6 +113,7 @@ class OrderInput2(BaseModel):
     user_details: UserDetails
     reservation_details: ReservationDetails
     flight_infos: List[FlightInfo]
+    net_new_cost: int
 
 
 class PaymentOrder(BaseStateModel):
@@ -140,6 +142,7 @@ class OrderInput3(BaseModel):
     reservation_details: ReservationDetails
     flight_infos: List[FlightInfo]
     payment_id: str
+    net_new_cost: int
 
 
 update_flight_node_schema = ConversationNodeSchema(
@@ -183,12 +186,13 @@ edge_schema_3 = EdgeSchema(
     to_node_schema=get_payment_node_schema,
     transition_config=StateTransitionConfig(
         need_user_msg=True,
-        state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0},
+        state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0, "has_confirmed_new_flights": lambda val: val is True, "net_new_cost": lambda val: val is not None},
     ),
     new_input_fn=lambda state: OrderInput2(
         user_details=state.user_details,
         reservation_details=state.reservation_details,
         flight_infos=state.flight_infos,
+        net_new_cost=state.net_new_cost,
     ),
 )
 
@@ -205,6 +209,7 @@ edge_schema_4 = EdgeSchema(
         reservation_details=state.reservation_details,
         flight_infos=state.flight_infos,
         payment_id=state.payment_id,
+        net_new_cost=state.net_new_cost,
     ),
 )
 
@@ -231,6 +236,7 @@ class StateSchema(BaseStateModel):
     user_details: Optional[UserDetails] = None
     reservation_details: Optional[ReservationDetails] = None
     flight_infos: List[FlightInfo] = Field(default_factory=list)
+    net_new_cost: Optional[int] = None
     payment_id: Optional[str] = None
 
 
