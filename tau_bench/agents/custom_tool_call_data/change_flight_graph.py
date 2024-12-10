@@ -86,7 +86,8 @@ find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
         "Right now, you need to help find new flights for them. The customer can change anything from a single flight segment to all the flights. "
-        "Remember, basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type."
+        "Remember, basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type. "
+        "Also, make sure to check that the new flights have available seats."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
     input_schema=OrderInput1,
