@@ -131,6 +131,7 @@ payment_node_schema = ConversationNodeSchema(
     state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
+    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_explained_payment_policy_to_customer": lambda val: bool(val), "is_payment_finalized": lambda val: val is True}),
 )
 
 
@@ -205,7 +206,6 @@ edge_4 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={
             "payments": lambda val: val is not None,
-            "is_payment_finalized": lambda val: bool(val),
         },
     ),
     new_input_fn=lambda state: OrderInput5(

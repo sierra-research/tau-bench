@@ -105,6 +105,7 @@ find_flight_node_schema = ConversationNodeSchema(
         "list_all_airports",
         "calculate",
     ],
+    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True}),
 )
 
 
@@ -186,7 +187,7 @@ edge_schema_3 = EdgeSchema(
     to_node_schema=get_payment_node_schema,
     transition_config=StateTransitionConfig(
         need_user_msg=True,
-        state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0, "has_confirmed_new_flights": lambda val: val is True, "net_new_cost": lambda val: val is not None},
+        state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0, "net_new_cost": lambda val: val is not None},
     ),
     new_input_fn=lambda state: OrderInput2(
         user_details=state.user_details,
