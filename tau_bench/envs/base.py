@@ -128,6 +128,19 @@ class Env(object):
             action for action in self.task.actions if action.name != RESPOND_ACTION_NAME
         ]
 
+        # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
+        # TODO: cache gt_data_hash in tasks.py (low priority)
+        self.data = self.data_load_func()
+        for action in self.task.actions:
+            if action.name not in self.terminate_tools:
+                self.step(action)
+        gt_data_hash = self.get_data_hash()
+        info = RewardActionInfo(
+            r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash
+        )
+        if not info.r_actions:
+            reward = 0.0
+
         if len(self.task.outputs) > 0:
             # check outputs
             r_outputs = 1.0
@@ -147,17 +160,5 @@ class Env(object):
                     r_outputs = 0.0
                     reward = 0.0
             info = RewardOutputInfo(r_outputs=r_outputs, outputs=outputs)
-        else:
-            # check database change
-            # TODO: cache gt_data_hash in tasks.py (low priority)
-            self.data = self.data_load_func()
-            for action in self.task.actions:
-                if action.name not in self.terminate_tools:
-                    self.step(action)
-            gt_data_hash = self.get_data_hash()
-            info = RewardActionInfo(
-                r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash
-            )
-            if not info.r_actions:
-                reward = 0.0
+            
         return RewardResult(reward=reward, info=info, actions=actions)
