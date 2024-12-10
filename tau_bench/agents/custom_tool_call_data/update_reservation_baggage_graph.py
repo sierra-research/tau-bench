@@ -105,19 +105,7 @@ class OrderInput4(BaseModel):
 
 
 class PaymentState(BaseStateModel):
-    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized' ]
-    payments: Optional[List[PaymentMethod]] = Field(
-        default=None,
-        description="If no payment is necessary, set this to an empty list.",
-    )
-    has_explained_payment_policy_to_customer: bool = Field(
-        default=False,
-        description="There are very important payment policies, and these must be clearly communicated to the customer. Most importantly, the customer must understand that any left-over balance on a travel certificate will be forfeited.",
-    )
-    is_payment_finalized: bool = Field(
-        default=False,
-        description="This can only be true after payment policy has been communicated and payment method collected",
-    )
+    payment_id: Optional[str] = None
 
 
 payment_node_schema = ConversationNodeSchema(
@@ -131,7 +119,6 @@ payment_node_schema = ConversationNodeSchema(
     state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_explained_payment_policy_to_customer": lambda val: bool(val), "is_payment_finalized": lambda val: val is True}),
 )
 
 
@@ -205,7 +192,7 @@ edge_4 = EdgeSchema(
     transition_config=StateTransitionConfig(
         need_user_msg=True,
         state_check_fn_map={
-            "payments": lambda val: val is not None,
+            "payment_id": lambda val: val is not None,
         },
     ),
     new_input_fn=lambda state: OrderInput5(
