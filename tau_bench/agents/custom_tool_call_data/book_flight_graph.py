@@ -350,6 +350,6 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    transition_config=FunctionTransitionConfig(need_user_msg=False,fn_name="book_reservation", state=FunctionState.CALLED_AND_SUCCEEDED),
+    completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="book_reservation", state=FunctionState.CALLED_AND_SUCCEEDED),
     state_schema=StateSchema,
 )

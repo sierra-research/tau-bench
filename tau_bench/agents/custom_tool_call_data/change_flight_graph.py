@@ -254,6 +254,6 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
     state_schema=StateSchema,
-    transition_config=FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_flights", state=FunctionState.CALLED_AND_SUCCEEDED),
+    completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_flights", state=FunctionState.CALLED_AND_SUCCEEDED),
     run_assistant_turn_before_transition=True,
 )
