@@ -76,9 +76,14 @@ class OrderInput1(BaseModel):
 
 
 class FlightOrder(BaseStateModel):
+    resettable_fields = ["has_confirmed_new_flights"]
     flight_infos: List[FlightInfo] = Field(
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
+    )
+    has_confirmed_new_flights: bool = Field(
+        default=False,
+        descripion="this can only be set to true if the customer has explicitly confirmed the new flights",
     )
 
 
