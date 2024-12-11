@@ -35,7 +35,6 @@ class UserState(BaseStateModel):
 get_user_id_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to get their user details.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=None,
     state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
@@ -43,9 +42,6 @@ get_user_id_node_schema = ConversationNodeSchema(
 
 # ---------------------------------------------------------
 
-
-class UserInput(BaseModel):
-    user_details: UserDetails
 
 
 class ReservationDetailsState(BaseStateModel):
@@ -56,7 +52,6 @@ get_reservation_details_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you need to get the reservation details by asking for the reservation id. If they don't know the id, lookup each reservation in their user details and find the one that best matches their description .",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=UserInput,
     state_schema=ReservationDetailsState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -69,10 +64,6 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 # ---------------------------------------------------------
 
-
-class OrderInput1(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
 
 
 class FlightOrder(BaseStateModel):
@@ -96,7 +87,6 @@ find_flight_node_schema = ConversationNodeSchema(
         "Also, make sure to check that all new flights have available seats."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput1,
     state_schema=FlightOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -110,13 +100,6 @@ find_flight_node_schema = ConversationNodeSchema(
 
 
 # ------------------------------------------------------------------
-class OrderInput2(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
-    flight_infos: List[FlightInfo]
-    net_new_cost: int
-
-
 class PaymentOrder(BaseStateModel):
     payment_id: Optional[str] = None
 
@@ -128,7 +111,6 @@ get_payment_node_schema = ConversationNodeSchema(
         "IMPORTANT: All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput2,
     state_schema=PaymentOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
@@ -138,19 +120,10 @@ get_payment_node_schema = ConversationNodeSchema(
 # ------------------------------------------------------------------
 
 
-class OrderInput3(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
-    flight_infos: List[FlightInfo]
-    payment_id: str
-    net_new_cost: int
-
-
 update_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to place the booking.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput3,
     state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["update_reservation_flights", "calculate"],
@@ -165,7 +138,6 @@ edge_schema_1 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"user_details": lambda val: val is not None},
     ),
-    new_input_fn=lambda state: UserInput(user_details=state.user_details),
 )
 
 
@@ -175,9 +147,6 @@ edge_schema_2 = EdgeSchema(
     transition_config=StateTransitionConfig(
         need_user_msg=True,
         state_check_fn_map={"reservation_details": lambda val: val is not None},
-    ),
-    new_input_fn=lambda state: OrderInput1(
-        user_details=state.user_details, reservation_details=state.reservation_details
     ),
 )
 
@@ -189,12 +158,6 @@ edge_schema_3 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0, "net_new_cost": lambda val: val is not None},
     ),
-    new_input_fn=lambda state: OrderInput2(
-        user_details=state.user_details,
-        reservation_details=state.reservation_details,
-        flight_infos=state.flight_infos,
-        net_new_cost=state.net_new_cost,
-    ),
 )
 
 
@@ -204,13 +167,6 @@ edge_schema_4 = EdgeSchema(
     transition_config=StateTransitionConfig(
         need_user_msg=True,
         state_check_fn_map={"payment_id": lambda val: val is not None},
-    ),
-    new_input_fn=lambda state: OrderInput3(
-        user_details=state.user_details,
-        reservation_details=state.reservation_details,
-        flight_infos=state.flight_infos,
-        payment_id=state.payment_id,
-        net_new_cost=state.net_new_cost,
     ),
 )
 

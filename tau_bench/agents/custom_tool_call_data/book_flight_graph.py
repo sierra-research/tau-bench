@@ -34,17 +34,12 @@ class UserState(BaseStateModel):
 get_user_id_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to get their user details.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=None,
     state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
 )
 
 # ---------------------------------------------------------
-
-
-class UserInput(BaseModel):
-    user_details: UserDetails
 
 
 class FlightOrder(BaseStateModel):
@@ -54,7 +49,6 @@ class FlightOrder(BaseStateModel):
 find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to help find flights for them.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=UserInput,
     state_schema=FlightOrder,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -68,10 +62,6 @@ find_flight_node_schema = ConversationNodeSchema(
 
 
 # ---------------------------------------------------------
-class OrderInput(BaseModel):
-    user_details: UserDetails
-    flight_infos: List[FlightInfo]
-
 
 class PassengerState(BaseStateModel):
     passengers: List[PassengerInfo] = Field(default_factory=list)
@@ -86,7 +76,6 @@ get_passanger_info_schema = ConversationNodeSchema(
         )
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput,
     state_schema=PassengerState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
@@ -94,11 +83,6 @@ get_passanger_info_schema = ConversationNodeSchema(
 
 
 # ---------------------------------------------------------
-class OrderInput2(BaseModel):
-    user_details: UserDetails
-    flight_infos: List[FlightInfo]
-    passengers: List[PassengerInfo]
-
 
 class InsuranceState(BaseStateModel):
     add_insurance: Optional[InsuranceValue] = Field(
@@ -110,20 +94,12 @@ ask_for_insurance_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you need to ask if they want to add insurance, which is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput2,
     state_schema=InsuranceState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
 
 # ------------------------------------------
-
-
-class OrderInput3(BaseModel):
-    user_details: UserDetails
-    flight_infos: List[FlightInfo]
-    passengers: List[PassengerInfo]
-    add_insurance: InsuranceValue
 
 
 class LuggageState(BaseStateModel):
@@ -138,22 +114,12 @@ luggage_node_schema = ConversationNodeSchema(
         "If the booking user is a regular member, 0 free checked bag for each basic economy passenger, 1 free checked bag for each economy passenger, and 2 free checked bags for each business passenger. If the booking user is a silver member, 1 free checked bag for each basic economy passenger, 2 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. If the booking user is a gold member, 2 free checked bag for each basic economy passenger, 3 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. Each extra baggage is 50 dollars."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput3,
     state_schema=LuggageState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
 
 # ---------------------------------------------------------
-
-
-class OrderInput4(BaseModel):
-    user_details: UserDetails
-    flight_infos: List[FlightInfo]
-    passengers: List[PassengerInfo]
-    add_insurance: InsuranceValue
-    total_baggages: int
-    nonfree_baggages: int
 
 
 class PaymentState(BaseStateModel):
@@ -177,7 +143,6 @@ payment_node_schema = ConversationNodeSchema(
         "IMPORTANT: Each reservation can use AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards. The remaining unused amount of a travel certificate is not refundable (i.e. forfeited). All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput4,
     state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
@@ -189,21 +154,11 @@ payment_node_schema = ConversationNodeSchema(
 
 
 # ---------------------------------------------------------
-class OrderInput5(BaseModel):
-    user_details: UserDetails
-    flight_infos: List[FlightInfo]
-    passengers: List[PassengerInfo]
-    add_insurance: InsuranceValue
-    total_baggages: int
-    nonfree_baggages: int
-    payments: List[PaymentMethod]
-
 
 book_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to place the booking.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput5,
     state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -221,7 +176,6 @@ edge_1 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"user_details": lambda val: val is not None},
     ),
-    new_input_fn=lambda state: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
@@ -230,9 +184,6 @@ edge_2 = EdgeSchema(
     transition_config=StateTransitionConfig(
         need_user_msg=True,
         state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0},
-    ),
-    new_input_fn=lambda state: OrderInput(
-        user_details=state.user_details, flight_infos=state.flight_infos
     ),
 )
 
@@ -243,11 +194,6 @@ edge_3 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"passengers": lambda val: val and len(val) > 0},
     ),
-    new_input_fn=lambda state: OrderInput2(
-        user_details=state.user_details,
-        flight_infos=state.flight_infos,
-        passengers=state.passengers,
-    ),
 )
 
 edge_4 = EdgeSchema(
@@ -257,12 +203,7 @@ edge_4 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"add_insurance": lambda val: val is not None},
     ),
-    new_input_fn=lambda state: OrderInput3(
-        user_details=state.user_details,
-        flight_infos=state.flight_infos,
-        passengers=state.passengers,
-        add_insurance=state.add_insurance,
-    ),
+
 )
 
 
@@ -276,14 +217,6 @@ edge_5 = EdgeSchema(
             "nonfree_baggages": lambda val: val is not None,
         },
     ),
-    new_input_fn=lambda state: OrderInput4(
-        user_details=state.user_details,
-        flight_infos=state.flight_infos,
-        passengers=state.passengers,
-        add_insurance=state.add_insurance,
-        total_baggages=state.total_baggages,
-        nonfree_baggages=state.nonfree_baggages,
-    ),
 )
 
 edge_6 = EdgeSchema(
@@ -294,15 +227,6 @@ edge_6 = EdgeSchema(
         state_check_fn_map={
             "payments": lambda val: val and len(val) > 0
         },
-    ),
-    new_input_fn=lambda state: OrderInput5(
-        user_details=state.user_details,
-        flight_infos=state.flight_infos,
-        passengers=state.passengers,
-        add_insurance=state.add_insurance,
-        total_baggages=state.total_baggages,
-        nonfree_baggages=state.nonfree_baggages,
-        payments=state.payments,
     ),
 )
 # --------------------

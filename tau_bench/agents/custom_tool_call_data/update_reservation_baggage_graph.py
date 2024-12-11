@@ -37,17 +37,12 @@ class UserState(BaseStateModel):
 get_user_id_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE + "Right now, you need to get their user details.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=None,
     state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
 )
 
 # ---------------------------------------------------------
-
-
-class UserInput(BaseModel):
-    user_details: UserDetails
 
 
 class ReservationDetailsState(BaseStateModel):
@@ -58,7 +53,6 @@ get_reservation_details_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you need to get the reservation details by asking for the reservation id. If they don't know the id, lookup each reservation in their user details and find the one that best matches their description .",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=UserInput,
     state_schema=ReservationDetailsState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -69,11 +63,6 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 )
 
 # ------------------------------------------
-
-
-class OrderInput3(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
 
 
 class LuggageState(BaseStateModel):
@@ -88,21 +77,12 @@ luggage_node_schema = ConversationNodeSchema(
         "If the booking user is a regular member, 0 free checked bag for each basic economy passenger, 1 free checked bag for each economy passenger, and 2 free checked bags for each business passenger. If the booking user is a silver member, 1 free checked bag for each basic economy passenger, 2 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. If the booking user is a gold member, 2 free checked bag for each basic economy passenger, 3 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. Each extra baggage is 50 dollars."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput3,
     state_schema=LuggageState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
 )
 
 # ---------------------------------------------------------
-
-
-class OrderInput4(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
-    total_baggages: int
-    nonfree_baggages: int
-
 
 class PaymentState(BaseStateModel):
     payment_id: Optional[str] = None
@@ -115,7 +95,6 @@ payment_node_schema = ConversationNodeSchema(
         "IMPORTANT: Each reservation can use AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards. The remaining unused amount of a travel certificate is not refundable (i.e. forfeited). All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput4,
     state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
@@ -123,19 +102,11 @@ payment_node_schema = ConversationNodeSchema(
 
 
 # ---------------------------------------------------------
-class OrderInput5(BaseModel):
-    user_details: UserDetails
-    reservation_details: ReservationDetails
-    total_baggages: int
-    nonfree_baggages: int
-    payments: List[PaymentMethod]
-
 
 book_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + "Right now, you have all the data necessary to change the baggage for the reservation.",
     node_system_prompt=AirlineNodeSystemPrompt,
-    input_schema=OrderInput5,
     state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=[
@@ -153,7 +124,6 @@ edge_1 = EdgeSchema(
         need_user_msg=True,
         state_check_fn_map={"user_details": lambda val: val is not None},
     ),
-    new_input_fn=lambda state: UserInput(user_details=state.user_details),
 )
 
 edge_2 = EdgeSchema(
@@ -162,9 +132,6 @@ edge_2 = EdgeSchema(
     transition_config=StateTransitionConfig(
         need_user_msg=True,
         state_check_fn_map={"reservation_details": lambda val: bool(val)},
-    ),
-    new_input_fn=lambda state: OrderInput3(
-        user_details=state.user_details, reservation_details=state.reservation_details
     ),
 )
 
@@ -178,12 +145,6 @@ edge_3 = EdgeSchema(
             "nonfree_baggages": lambda val: val is not None,
         },
     ),
-    new_input_fn=lambda state: OrderInput4(
-        user_details=state.user_details,
-        reservation_details=state.reservation_details,
-        total_baggages=state.total_baggages,
-        nonfree_baggages=state.nonfree_baggages,
-    ),
 )
 
 edge_4 = EdgeSchema(
@@ -194,13 +155,6 @@ edge_4 = EdgeSchema(
         state_check_fn_map={
             "payment_id": lambda val: val is not None,
         },
-    ),
-    new_input_fn=lambda state: OrderInput5(
-        user_details=state.user_details,
-        reservation_details=state.reservation_details,
-        total_baggages=state.total_baggages,
-        nonfree_baggages=state.nonfree_baggages,
-        payments=state.payments,
     ),
 )
 # --------------------
