@@ -181,7 +181,7 @@ class ChangeBaggageGraphStateSchema(BaseStateModel):
     reservation_details: Optional[ReservationDetails] = None
     total_baggages: Optional[int] = None
     nonfree_baggages: Optional[int] = None
-    payments: List[PaymentMethod] = Field(default_factory=list)
+    payment_id: Optional[str] = None
 
 
 CHANGE_BAGGAGE_GRAPH = GraphSchema(
