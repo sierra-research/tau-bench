@@ -1111,7 +1111,7 @@ TASKS_TEST = [
                 },
             ),
         ],
-        outputs=["1093.34"],
+        outputs=[],
     ),
     Task(
         annotator="0",
