@@ -235,7 +235,7 @@ class StateSchema(BaseStateModel):
 
 BOOK_FLIGHT_GRAPH = GraphSchema(
     description="Help customers books flights",
-    start_node_schema=get_user_id_node_schema,
+    start_node_schema=AND_GRAPH_SCHEMA,
     output_schema=GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
     edge_schemas=[edge_6],

@@ -94,6 +94,8 @@ def run(
                 traj=[],
                 trial=trial,
             )
+            print("TRACEBACK")
+            print(traceback.format_exc())
         print(
             "✅" if result.reward == 1 else "❌",
             f"task_id={idx}",
