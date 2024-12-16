@@ -6,7 +6,7 @@ from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
 )
 from cashier.graph.graph_schema import GraphSchema
-from cashier.graph.and_graph_schema import AndGraphSchema
+from cashier.graph.and_graph_schema import ANDGraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
     CabinType,
@@ -186,7 +186,7 @@ class ANDStateSchema(BaseStateModel):
     payments: List[PaymentMethod] = Field(default_factory=list)
 
 
-AND_GRAPH_SCHEMA = AndGraphSchema(
+AND_GRAPH_SCHEMA = ANDGraphSchema(
     description="Help customers gather info to book flights",
     node_schemas=[get_user_id_node_schema, find_flight_node_schema, get_passanger_info_schema, ask_for_insurance_node_schema, luggage_node_schema, payment_node_schema],
     state_schema=ANDStateSchema,
