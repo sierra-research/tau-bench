@@ -195,7 +195,7 @@ AND_GRAPH_SCHEMA = AndGraphSchema(
 
 
 edge_6 = EdgeSchema(
-    from_node_schema=payment_node_schema,
+    from_node_schema=AND_GRAPH_SCHEMA,
     to_node_schema=book_flight_node_schema,
     transition_config=StateTransitionConfig(
         need_user_msg=True,
@@ -238,14 +238,9 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
     start_node_schema=get_user_id_node_schema,
     output_schema=GraphOutputSchema,
     last_node_schema=book_flight_node_schema,
-    edge_schemas=[edge_1, edge_2, edge_3, edge_4, edge_5, edge_6],
+    edge_schemas=[edge_6],
     node_schemas=[
-        get_user_id_node_schema,
-        find_flight_node_schema,
-        get_passanger_info_schema,
-        ask_for_insurance_node_schema,
-        luggage_node_schema,
-        payment_node_schema,
+        AND_GRAPH_SCHEMA,
         book_flight_node_schema,
     ],
     completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="book_reservation", state=FunctionState.CALLED_AND_SUCCEEDED),
