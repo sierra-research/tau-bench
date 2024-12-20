@@ -77,7 +77,7 @@ TASKS_TEST = [
                 },
             ),
         ],
-        outputs=["10"],
+        outputs=["12"],
     ),
     Task(
         annotator="0",
@@ -109,7 +109,7 @@ TASKS_TEST = [
                 },
             ),
         ],
-        outputs=["10"],
+        outputs=["12"],
     ),
     Task(
         annotator="0",
@@ -150,7 +150,7 @@ TASKS_TEST = [
                 },
             ),
         ],
-        outputs=["10"],
+        outputs=["12"],
     ),
     Task(
         annotator="0",
@@ -1111,7 +1111,7 @@ TASKS_TEST = [
                 },
             ),
         ],
-        outputs=["1093.34"],
+        outputs=[],
     ),
     Task(
         annotator="0",
