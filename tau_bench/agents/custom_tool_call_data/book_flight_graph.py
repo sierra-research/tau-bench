@@ -237,7 +237,7 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
     description="Help customers books flights",
     start_node_schema=AND_GRAPH_SCHEMA,
     output_schema=GraphOutputSchema,
-    last_node_schema=book_flight_node_schema,
+    end_node_schema=book_flight_node_schema,
     edge_schemas=[edge_6],
     node_schemas=[
         AND_GRAPH_SCHEMA,

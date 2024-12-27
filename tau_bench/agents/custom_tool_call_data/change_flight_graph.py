@@ -200,7 +200,7 @@ class StateSchema(BaseStateModel):
 CHANGE_FLIGHT_GRAPH = GraphSchema(
     description="Help customers change flights",
     start_node_schema=get_user_id_node_schema,
-    last_node_schema=update_flight_node_schema,
+    end_node_schema=update_flight_node_schema,
     output_schema=GraphOutputSchema,
     node_schemas=[
         get_user_id_node_schema,
