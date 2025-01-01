@@ -31,7 +31,7 @@ PREAMBLE = (
 
 
 class UserState(BaseStateModel):
-    user_details: UserDetails = None
+    user_details: Optional[UserDetails] = None
 
 
 get_user_id_node_schema = ConversationNodeSchema(
@@ -188,7 +188,7 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
     description="Help customers update baggage information for a reservation",
     start_node_schema=get_user_id_node_schema,
     output_schema=GraphOutputSchema,
-    last_node_schema=book_flight_node_schema,
+    end_node_schema=book_flight_node_schema,
     edge_schemas=[edge_1, edge_2, edge_3, edge_4],
     node_schemas=[
         get_user_id_node_schema,

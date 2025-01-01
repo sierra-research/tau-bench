@@ -85,6 +85,7 @@ def run(
                 info=res.info,
                 traj=res.messages,
                 trial=trial,
+                raw_messages=res.raw_messages,
             )
         except Exception as e:
             result = EnvRunResult(
@@ -94,6 +95,8 @@ def run(
                 traj=[],
                 trial=trial,
             )
+            print("TRACEBACK")
+            print(traceback.format_exc())
         print(
             "✅" if result.reward == 1 else "❌",
             f"task_id={idx}",

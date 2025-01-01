@@ -19,7 +19,7 @@ from tau_bench.agents.custom_tool_call_data.types import (
     UserDetails,
 )
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, computed_field
 from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_REGISTRY
 from tau_bench.agents.custom_tool_call_data.types import ReservationDetails
 
@@ -72,12 +72,25 @@ class FlightOrder(BaseStateModel):
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
     )
-    net_new_cost: int = Field(default=None, description="the total difference in cost between the old and new flights")
     has_confirmed_new_flights: bool = Field(
         default=False,
         descripion="this can only be set to true if the customer has explicitly confirmed the new flights",
     )
 
+
+    @computed_field(
+        description="the total difference in cost between the old and new flights. If the value is negative, it represents the refund amount."
+    )
+    @property
+    def net_new_cost(self) -> Optional[int]:
+        if self._input is not None and len(self.flight_infos) > 0:
+            old_cost = sum(
+                [flight.price for flight in self._input.reservation_details.flights]
+            )
+            new_cost = sum([flight.price for flight in self.flight_infos])
+            return new_cost - old_cost
+        else:
+            return None
 
 find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
@@ -200,7 +213,7 @@ class StateSchema(BaseStateModel):
 CHANGE_FLIGHT_GRAPH = GraphSchema(
     description="Help customers change flights",
     start_node_schema=get_user_id_node_schema,
-    last_node_schema=update_flight_node_schema,
+    end_node_schema=update_flight_node_schema,
     output_schema=GraphOutputSchema,
     node_schemas=[
         get_user_id_node_schema,
