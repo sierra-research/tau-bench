@@ -31,7 +31,7 @@ PREAMBLE = (
 
 
 class UserState(BaseStateModel):
-    user_details: UserDetails = None
+    user_details: Optional[UserDetails] = None
 
 
 get_user_id_node_schema = ConversationNodeSchema(

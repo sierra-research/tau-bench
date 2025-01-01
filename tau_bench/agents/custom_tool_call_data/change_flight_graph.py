@@ -72,7 +72,7 @@ class FlightOrder(BaseStateModel):
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
     )
-    net_new_cost: int = Field(default=None, description="the total difference in cost between the old and new flights")
+    net_new_cost: Optional[int] = Field(default=None, description="the total difference in cost between the old and new flights")
     has_confirmed_new_flights: bool = Field(
         default=False,
         descripion="this can only be set to true if the customer has explicitly confirmed the new flights",
