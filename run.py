@@ -85,6 +85,7 @@ def run(
                 info=res.info,
                 traj=res.messages,
                 trial=trial,
+                raw_messages=res.raw_messages,
             )
         except Exception as e:
             result = EnvRunResult(
