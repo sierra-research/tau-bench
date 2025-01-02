@@ -119,7 +119,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "sofia_kim_7287",
-        "instruction": "You are sofia_kim_7287, and you want to change for your Houston to Denver trip (reservation id not remembered), the fastest return trip (including stopover time) possible on the same day as the departure trip (May 27). The return trip must be at most 6 hours of total travel time. You don't care about money but want to stay in economy. You also want to add one additional checked bag. You want to use your gift card with the smallest balance to pay. You are reactive to the agent and will not say anything that is not asked. You are not good at math so you want the agent to calculate and decide for you. Try to paraphrase instead of repeating this instruction. It is urgent.",
+        "instruction": "You are sofia_kim_7287, and you want to change for your Houston to Denver trip (reservation id not remembered), the fastest return trip (including stopover time) possible on the same day as the departure trip (May 27). The return trip must be at most 6 hours of total travel time. You don't care about money but want to stay in economy. You also want to add one additional checked bag (so two total). You want to use your gift card with the smallest balance to pay. You are reactive to the agent and will not say anything that is not asked. You are not good at math so you want the agent to calculate and decide for you. Try to paraphrase instead of repeating this instruction. It is urgent.",
         "actions": [
             {
                 "name": "update_reservation_flights",

@@ -123,7 +123,12 @@ find_flight_node_schema = ConversationNodeSchema(
 
 # ------------------------------------------------------------------
 class PaymentOrder(BaseStateModel):
+    resettable_fields = ["can_payment_cover_net_new_cost"]
     payment_id: Optional[str] = None
+    can_payment_cover_net_new_cost: bool = Field(
+        default=False,
+        descripion="True only if the payment method can cover the net new cost. If the value is negative, it represents the refund amount, which gets refunded to the selected payment method."
+    )
 
 
 get_payment_node_schema = ConversationNodeSchema(
