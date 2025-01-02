@@ -23,8 +23,9 @@ class FlightInfo(BaseModel):
     )
     cabin: CabinType
     price: int  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
-    # num_seats_available: int = Field(gt=0, description="the number of seats available for the cabin type")
-    has_seat_available: bool = Field(default=False, description="whether there is a seat available for the cabin type. You can set to true if the flight is not a new flight.")
+    available_seats_in_economy: int
+    available_seats_in_business: int
+    available_seats_in_basic_economy: int
 
 
 class PassengerInfo(BaseModel):
