@@ -45,7 +45,7 @@ get_user_id_node_schema = ConversationNodeSchema(
 
 
 class FlightOrder(BaseStateModel):
-    flight_infos: List[FlightInfo] = Field(default_factory=list)
+    flights_to_book: List[FlightInfo] = Field(default_factory=list)
 
 
 find_flight_node_schema = ConversationNodeSchema(
@@ -60,7 +60,7 @@ find_flight_node_schema = ConversationNodeSchema(
         "calculate",
         "get_reservation_details",
     ],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0}),
+    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"flights_to_book": lambda val: val and len(val) > 0}),
 )
 
 
@@ -129,7 +129,7 @@ luggage_node_schema = ConversationNodeSchema(
 
 
 class PaymentState(BaseStateModel):
-    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized']
+    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized', 'are_payments_allowed']
 
     payments: List[PaymentMethod] = Field(default_factory=list)
     has_explained_payment_policy_to_customer: bool = Field(
@@ -139,6 +139,10 @@ class PaymentState(BaseStateModel):
     is_payment_finalized: bool = Field(
         default=False,
         description="This can only be true after payment policy has been communicated and payment method collected",
+    )
+    are_payments_allowed: bool = Field(
+        default=False,
+        description="True only if provided payments consist of AT MOST one travel certificate, AT MOST one credit card, and AT MOST three gift cards.",
     )
 
 
@@ -155,6 +159,7 @@ payment_node_schema = ConversationNodeSchema(
     completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"is_payment_finalized": lambda val: val is True,
                                                                                     "has_explained_payment_policy_to_customer": lambda val: val is True,
                                                                                     "payments": lambda val: val and len(val) > 0,
+                                                                                    "are_payments_allowed": lambda val: val is True,
                                                                                     }),
 )
 
@@ -163,7 +168,7 @@ payment_node_schema = ConversationNodeSchema(
 
 book_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
-    + "Right now, you have all the data necessary to place the booking.",
+    + "Right now, you have all the data necessary to place the booking. You must pass all the flights in the input's `flights_to_book` field to `book_reservation`.",
     node_system_prompt=AirlineNodeSystemPrompt,
     state_schema=None,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
@@ -178,7 +183,7 @@ book_flight_node_schema = ConversationNodeSchema(
 
 class ANDStateSchema(BaseStateModel):
     user_details: Optional[UserDetails] = None
-    flight_infos: List[FlightInfo] = Field(default_factory=list)
+    flights_to_book: List[FlightInfo] = Field(default_factory=list)
     passengers: List[PassengerInfo] = Field(default_factory=list)
     add_insurance: Optional[InsuranceValue] = None
     total_baggages: Optional[int] = None
@@ -225,7 +230,7 @@ class GraphOutputSchema(BaseModel):
 
 class StateSchema(BaseStateModel):
     user_details: Optional[UserDetails] = None
-    flight_infos: List[FlightInfo] = Field(default_factory=list)
+    flights_to_book: List[FlightInfo] = Field(default_factory=list)
     passengers: List[PassengerInfo] = Field(default_factory=list)
     add_insurance: Optional[InsuranceValue] = None
     total_baggages: Optional[int] = None
