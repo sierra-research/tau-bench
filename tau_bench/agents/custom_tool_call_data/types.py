@@ -23,6 +23,8 @@ class FlightInfo(BaseModel):
     )
     cabin: CabinType
     price: int  # keeping this int because hasing is type sensitive (4 vs 4.0 create different hashes), and all prices are integers
+
+class NewFlightInfo(FlightInfo):
     available_seats_in_economy: int
     available_seats_in_business: int
     available_seats_in_basic_economy: int

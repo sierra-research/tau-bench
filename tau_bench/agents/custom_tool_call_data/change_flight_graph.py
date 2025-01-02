@@ -17,6 +17,7 @@ from tau_bench.agents.custom_tool_call_data.types import (
     PaymentMethod,
     InsuranceValue,
     UserDetails,
+    NewFlightInfo,
 )
 from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemPrompt
 from pydantic import Field, BaseModel, computed_field
@@ -67,14 +68,18 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class FlightOrder(BaseStateModel):
-    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats"]
-    do_new_flights_have_available_seats: bool = Field(
+    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats_in_chosen_cabin", "new_flight_infos"]
+    do_new_flights_have_available_seats_in_chosen_cabin: bool = Field(
         default=False,
         descripion="True only if all the new flights have available seats in the selected cabin. Pre-existing flights in the reservation already have guaranteed seats.",
     )
     flight_infos: List[FlightInfo] = Field(
         default_factory=list,
-        descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
+        descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if a flight segment is not changed, it should still be included in the array.",
+    )
+    new_flight_infos: List[NewFlightInfo] = Field(
+        default_factory=list,
+        descripion="An array of objects containing details about new flights only",
     )
     has_confirmed_new_flights: bool = Field(
         default=False,
