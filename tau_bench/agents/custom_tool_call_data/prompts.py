@@ -66,4 +66,5 @@ class NoAvailableSeatsPrompt(BasePrompt):
             if target_seat_numb == 0:
                 offending_flights.append(flight_info)
 
-        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin_type})" for flight_info in offending_flights]) + ". Please try again with a different flight."
+        assert len(offending_flights) > 0, "No offending flights found"
+        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin_type})" for flight_info in offending_flights]) + ". I need to choose different flights."
