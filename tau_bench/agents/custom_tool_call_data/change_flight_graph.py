@@ -111,14 +111,14 @@ def alert_check(state, input):
     flight_infos = state.new_flight_infos
     offending_flights = []
     for flight_info in flight_infos:
-        if flight_info.cabin_type == CabinType.ECONOMY:
+        if flight_info.cabin == CabinType.ECONOMY:
             target_seat_numb = flight_info.available_seats_in_economy
-        elif flight_info.cabin_type == CabinType.BUSINESS:
+        elif flight_info.cabin == CabinType.BUSINESS:
             target_seat_numb = flight_info.available_seats_in_business
-        elif flight_info.cabin_type == CabinType.BASIC_ECONOMY:
+        elif flight_info.cabin == CabinType.BASIC_ECONOMY:
             target_seat_numb = flight_info.available_seats_in_basic_economy
         else:
-            raise ValueError(f"Unknown cabin type: {flight_info.cabin_type}")
+            raise ValueError(f"Unknown cabin type: {flight_info.cabin}")
         
         if target_seat_numb == 0:
             offending_flights.append(flight_info)
