@@ -67,4 +67,11 @@ class NoAvailableSeatsPrompt(BasePrompt):
                 offending_flights.append(flight_info)
 
         assert len(offending_flights) > 0, "No offending flights found"
-        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin_type})" for flight_info in offending_flights]) + ". I need to choose different flights."
+        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin})" for flight_info in offending_flights]) + ". I need to choose different flights."
+
+
+    @classmethod
+    def get_output(
+        cls, model_provider, chat_completion, input
+    ):
+        return chat_completion.get_or_stream_message()
