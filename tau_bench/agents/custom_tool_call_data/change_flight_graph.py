@@ -23,7 +23,8 @@ from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemProm
 from pydantic import Field, BaseModel, computed_field
 from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_REGISTRY
 from tau_bench.agents.custom_tool_call_data.types import ReservationDetails
-
+from cashier.graph.conversation_node import AlertConfig
+from tau_bench.agents.custom_tool_call_data.prompts import NoAvailableSeatsPrompt
 ## book flight graph
 
 PREAMBLE = "You are helping the customer to change flight/s. "
@@ -104,6 +105,31 @@ class FlightOrder(BaseStateModel):
             return new_cost - old_cost
         else:
             return None
+        
+
+def alert_check(state, input):
+    flight_infos = state.new_flight_infos
+    offending_flights = []
+    for flight_info in flight_infos:
+        if flight_info.cabin_type == CabinType.ECONOMY:
+            target_seat_numb = flight_info.available_seats_in_economy
+        elif flight_info.cabin_type == CabinType.BUSINESS:
+            target_seat_numb = flight_info.available_seats_in_business
+        elif flight_info.cabin_type == CabinType.BASIC_ECONOMY:
+            target_seat_numb = flight_info.available_seats_in_basic_economy
+        else:
+            raise ValueError(f"Unknown cabin type: {flight_info.cabin_type}")
+        
+        if target_seat_numb == 0:
+            offending_flights.append(flight_info)
+
+    return len(offending_flights) > 0
+
+alert_config = AlertConfig(
+    state_field = "new_flight_infos",
+    alert_condition = alert_check,
+    alert_msg = NoAvailableSeatsPrompt()
+)
 
 find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
@@ -123,6 +149,7 @@ find_flight_node_schema = ConversationNodeSchema(
     ],
     completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True,
                                                                                     "has_communicated_new_flights_total_travel_time": lambda val: val is True}),
+    alert_configs = [alert_config]
 )
 
 
