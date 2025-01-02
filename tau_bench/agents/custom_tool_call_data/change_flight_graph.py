@@ -69,15 +69,12 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class FlightOrder(BaseStateModel):
-    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats_in_chosen_cabin", "new_flight_infos","has_communicated_new_flights_total_travel_time"]
+    resettable_fields = ["has_confirmed_new_flights", "new_flight_infos","has_communicated_new_flights_total_travel_time", "new_flights_total_travel_time"]
     has_communicated_new_flights_total_travel_time: bool = Field( # this doesnt work that well
         default=False,
         descripion="True only if you have communicated the total travel time for the new flights to the customer",
     )
-    do_new_flights_have_available_seats_in_chosen_cabin: bool = Field(
-        default=False,
-        descripion="True only if all the new flights have available seats in the selected cabin. Pre-existing flights in the reservation already have guaranteed seats.",
-    )
+    new_flights_total_travel_time: Optional[int] = Field(None, description="The total travel time of the new flights in hours, including layover time")
     flight_infos: List[FlightInfo] = Field(
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if a flight segment is not changed, it should still be included in the array.",
