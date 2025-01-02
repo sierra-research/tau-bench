@@ -128,7 +128,7 @@ def alert_check(state, input):
 alert_config = AlertConfig(
     state_field = "new_flight_infos",
     alert_condition = alert_check,
-    alert_msg = NoAvailableSeatsPrompt()
+    alert_msg = NoAvailableSeatsPrompt
 )
 
 find_flight_node_schema = ConversationNodeSchema(
