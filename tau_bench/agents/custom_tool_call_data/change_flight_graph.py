@@ -124,7 +124,7 @@ class PaymentOrder(BaseStateModel):
 get_payment_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
-        "Right now, you need to get the payment information. They can only use gift card or credit card "
+        "Right now, you need to get the payment information. They can only use gift card or credit card. Only one payment method can be used. "
         "IMPORTANT: All payment methods must already be in user profile for safety reasons."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
