@@ -68,7 +68,11 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class FlightOrder(BaseStateModel):
-    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats_in_chosen_cabin", "new_flight_infos"]
+    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats_in_chosen_cabin", "new_flight_infos","has_communicated_new_flights_total_travel_time"]
+    has_communicated_new_flights_total_travel_time: bool = Field( # this doesnt work that well
+        default=False,
+        descripion="True only if you have communicated the total travel time for the new flights to the customer",
+    )
     do_new_flights_have_available_seats_in_chosen_cabin: bool = Field(
         default=False,
         descripion="True only if all the new flights have available seats in the selected cabin. Pre-existing flights in the reservation already have guaranteed seats.",
@@ -117,7 +121,8 @@ find_flight_node_schema = ConversationNodeSchema(
         "list_all_airports",
         "calculate",
     ],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True}),
+    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True,
+                                                                                    "has_communicated_new_flights_total_travel_time": lambda val: val is True}),
 )
 
 
