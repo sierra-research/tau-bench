@@ -66,7 +66,7 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class LuggageState(BaseStateModel):
-    total_baggages: Optional[int] = Field(None, description="The total final number of luggage to check. So if the reservation had 2 and the customer wants to add 1, this should be 3. ")
+    total_baggages: Optional[int] = Field(None, description="The total final number of luggages to check. So if the reservation had 2 and the customer wants to add 1, this should be 3. ")
     nonfree_baggages: Optional[int] = Field(None, description="The number of free luggages out of total_baggages")
 
 
