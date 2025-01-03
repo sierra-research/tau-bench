@@ -54,10 +54,12 @@ class CustomToolCallingAgent(ToolCallingAgent):
         turns = AE.TC.turns
         messages = []
         raw_messages = []
+        anthropic_messages = []
         for turn in turns:
             if isinstance(turn, (NodeSystemTurn, AssistantTurn, UserTurn)):
                 messages.extend(turn.build_oai_messages())
             raw_messages.extend(turn.build_oai_messages())
+            anthropic_messages.extend(turn.build_anthropic_messages())
 
         return SolveResult(
             reward=reward,
@@ -65,7 +67,8 @@ class CustomToolCallingAgent(ToolCallingAgent):
             messages=messages,
             total_cost=total_cost,
             raw_messages=raw_messages,
-            node_turns = [node_turn.model_dump() for node_turn in AE.TC.turns]
+            node_turns = [node_turn.model_dump() for node_turn in AE.TC.turns],
+            anthropic_messages=anthropic_messages,
         )
 
 
