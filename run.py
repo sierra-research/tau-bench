@@ -86,6 +86,7 @@ def run(
                 traj=res.messages,
                 trial=trial,
                 raw_messages=res.raw_messages,
+                node_turns=res.node_turns,
             )
         except Exception as e:
             result = EnvRunResult(

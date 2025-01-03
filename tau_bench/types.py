@@ -41,6 +41,7 @@ class SolveResult(BaseModel):
     info: Dict[str, Any]
     total_cost: Optional[float] = None
     raw_messages: Optional[List[Dict[str, Any]]] = None
+    node_turns: Optional[List[Dict]] = None
 
 
 class EnvInfo(BaseModel):
@@ -69,3 +70,4 @@ class EnvRunResult(BaseModel):
     traj: List[Dict[str, Any]]
     trial: int
     raw_messages: Optional[List[Dict[str, Any]]] = None
+    node_turns: Optional[List[Dict]] = None

@@ -65,6 +65,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
             messages=messages,
             total_cost=total_cost,
             raw_messages=raw_messages,
+            node_turns = [node_turn.model_dump() for node_turn in AE.TC.turns]
         )
 
 
