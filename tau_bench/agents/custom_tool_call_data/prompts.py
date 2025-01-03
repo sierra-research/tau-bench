@@ -3,6 +3,8 @@ from cashier.prompts.general_guideline import GeneralGuidelinePrompt
 from cashier.prompts.node_system import NodeSystemPrompt
 from cashier.prompts.response_guideline import ResponseGuidelinePrompt
 from cashier.prompts.state_guideline import StateGuidelinePrompt
+from pydantic import BaseModel
+from tau_bench.agents.custom_tool_call_data.types import CabinType
 
 
 class BackgroundPrompt(BasePrompt):
@@ -41,3 +43,28 @@ class AirlineNodeSystemPrompt(NodeSystemPrompt):
         CustomToolGuideline,
         GeneralGuidelinePrompt,
     ]
+
+class NoAvailableSeatsPrompt(BasePrompt):
+
+    def dynamic_prompt(
+        self,
+        state: BaseModel,
+        input: BaseModel,
+    ) -> str:
+        flight_infos = state.new_flight_infos
+        offending_flights = []
+        for flight_info in flight_infos:
+            if flight_info.cabin == CabinType.ECONOMY:
+                target_seat_numb = flight_info.available_seats_in_economy
+            elif flight_info.cabin == CabinType.BUSINESS:
+                target_seat_numb = flight_info.available_seats_in_business
+            elif flight_info.cabin == CabinType.BASIC_ECONOMY:
+                target_seat_numb = flight_info.available_seats_in_basic_economy
+            else:
+                raise ValueError(f"Unknown cabin type: {flight_info.cabin}")
+            
+            if target_seat_numb == 0:
+                offending_flights.append(flight_info)
+
+        assert len(offending_flights) > 0, "No offending flights found"
+        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin})" for flight_info in offending_flights]) + ". I need to choose different flights."
