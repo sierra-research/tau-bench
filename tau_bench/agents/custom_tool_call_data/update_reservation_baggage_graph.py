@@ -66,14 +66,14 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class LuggageState(BaseStateModel):
-    total_baggages: Optional[int] = None
-    nonfree_baggages: Optional[int] = None
+    total_baggages: Optional[int] = Field(None, description="The total final number of luggage to check. So if the reservation had 2 and the customer wants to add 1, this should be 3. ")
+    nonfree_baggages: Optional[int] = Field(None, description="The number of free luggages out of total_baggages")
 
 
 luggage_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
     + (
-        "Right now, you need to ask how many luggages to check. "
+        "Right now, you need to ask if they want to add or subtract luggage from existing reservation. "
         "If the booking user is a regular member, 0 free checked bag for each basic economy passenger, 1 free checked bag for each economy passenger, and 2 free checked bags for each business passenger. If the booking user is a silver member, 1 free checked bag for each basic economy passenger, 2 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. If the booking user is a gold member, 2 free checked bag for each basic economy passenger, 3 free checked bag for each economy passenger, and 3 free checked bags for each business passenger. Each extra baggage is 50 dollars."
     ),
     node_system_prompt=AirlineNodeSystemPrompt,
