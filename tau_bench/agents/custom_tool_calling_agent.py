@@ -23,7 +23,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         obs = env_reset_res.observation
         info = env_reset_res.info.model_dump()
         reward = 0.0
-        messages: List[Dict[str, Any]] = [
+        oai_messages: List[Dict[str, Any]] = [
             {"role": "system", "content": self.wiki},
             {"role": "user", "content": obs},
         ]
@@ -52,23 +52,24 @@ class CustomToolCallingAgent(ToolCallingAgent):
                 break
 
         turns = AE.TC.turns
-        messages = []
+        oai_messages = []
         raw_messages = []
         anthropic_messages = []
         for turn in turns:
             if isinstance(turn, (NodeSystemTurn, AssistantTurn, UserTurn)):
-                messages.extend(turn.build_oai_messages())
+                oai_messages.extend(turn.build_oai_messages())
             raw_messages.extend(turn.build_oai_messages())
             anthropic_messages.extend(turn.build_anthropic_messages())
 
         return SolveResult(
             reward=reward,
             info=info,
-            messages=messages,
+            messages=AE.TC.model_provider_to_message_manager[ModelProvider.OPENAI].conversation_dicts,
             total_cost=total_cost,
             raw_messages=raw_messages,
             node_turns = [node_turn.model_dump() for node_turn in AE.TC.turns],
             anthropic_messages=anthropic_messages,
+            oai_messages=oai_messages,
         )
 
 

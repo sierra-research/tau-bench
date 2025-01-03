@@ -87,6 +87,7 @@ def run(
                 trial=trial,
                 raw_messages=res.raw_messages,
                 node_turns=res.node_turns,
+                oai_messages=res.oai_messages,
                 anthropic_messages=res.anthropic_messages,
             )
         except Exception as e:
