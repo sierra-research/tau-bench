@@ -23,7 +23,8 @@ from tau_bench.agents.custom_tool_call_data.prompts import AirlineNodeSystemProm
 from pydantic import Field, BaseModel, computed_field
 from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_REGISTRY
 from tau_bench.agents.custom_tool_call_data.types import ReservationDetails
-
+from cashier.graph.conversation_node import AlertConfig
+from tau_bench.agents.custom_tool_call_data.prompts import NoAvailableSeatsPrompt
 ## book flight graph
 
 PREAMBLE = "You are helping the customer to change flight/s. "
@@ -68,15 +69,12 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class FlightOrder(BaseStateModel):
-    resettable_fields = ["has_confirmed_new_flights", "do_new_flights_have_available_seats_in_chosen_cabin", "new_flight_infos","has_communicated_new_flights_total_travel_time"]
+    resettable_fields = ["has_confirmed_new_flights", "new_flight_infos","has_communicated_new_flights_total_travel_time", "new_flights_total_travel_time"]
     has_communicated_new_flights_total_travel_time: bool = Field( # this doesnt work that well
         default=False,
         descripion="True only if you have communicated the total travel time for the new flights to the customer",
     )
-    do_new_flights_have_available_seats_in_chosen_cabin: bool = Field(
-        default=False,
-        descripion="True only if all the new flights have available seats in the selected cabin. Pre-existing flights in the reservation already have guaranteed seats.",
-    )
+    new_flights_total_travel_time: Optional[int] = Field(None, description="The total travel time of the new flights in hours, including layover time")
     flight_infos: List[FlightInfo] = Field(
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if a flight segment is not changed, it should still be included in the array.",
@@ -104,6 +102,31 @@ class FlightOrder(BaseStateModel):
             return new_cost - old_cost
         else:
             return None
+        
+
+def alert_check(state, input):
+    flight_infos = state.new_flight_infos
+    offending_flights = []
+    for flight_info in flight_infos:
+        if flight_info.cabin == CabinType.ECONOMY:
+            target_seat_numb = flight_info.available_seats_in_economy
+        elif flight_info.cabin == CabinType.BUSINESS:
+            target_seat_numb = flight_info.available_seats_in_business
+        elif flight_info.cabin == CabinType.BASIC_ECONOMY:
+            target_seat_numb = flight_info.available_seats_in_basic_economy
+        else:
+            raise ValueError(f"Unknown cabin type: {flight_info.cabin}")
+        
+        if target_seat_numb == 0:
+            offending_flights.append(flight_info)
+
+    return len(offending_flights) > 0
+
+alert_config = AlertConfig(
+    state_field = "new_flight_infos",
+    alert_condition = alert_check,
+    alert_msg = NoAvailableSeatsPrompt
+)
 
 find_flight_node_schema = ConversationNodeSchema(
     node_prompt=PREAMBLE
@@ -123,6 +146,7 @@ find_flight_node_schema = ConversationNodeSchema(
     ],
     completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True,
                                                                                     "has_communicated_new_flights_total_travel_time": lambda val: val is True}),
+    alert_configs = [alert_config]
 )
 
 
