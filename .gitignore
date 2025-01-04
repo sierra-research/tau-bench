@@ -2,6 +2,7 @@
 results/**
 
 note.ipynb
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
