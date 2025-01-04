@@ -146,7 +146,8 @@ find_flight_node_schema = ConversationNodeSchema(
     ],
     completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True,
                                                                                     "has_communicated_new_flights_total_travel_time": lambda val: val is True}),
-    alert_configs = [alert_config]
+    alert_configs = [alert_config],
+    pre_alert_fn_names=["search_direct_flight", "search_onestop_flight"]
 )
 
 
