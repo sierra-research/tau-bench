@@ -121,8 +121,8 @@ class Env(object):
             info.reward_info = reward_res
             info.user_cost = self.user.get_total_cost()
         return EnvResponse(observation=observation, reward=reward, done=done, info=info)
-    
-    def custom_step(self, action,  model_completion, AE) -> EnvResponse:
+
+    def custom_step(self, action, model_completion, AE) -> EnvResponse:
         self.actions.append(action)
 
         info = EnvInfo(task=self.task)
@@ -138,12 +138,25 @@ class Env(object):
             fn_names = [fn_call.name for fn_call in action.fn_calls]
             tool_fn_registry = {}
             for tool in fn_names:
-                if not tool.startswith("update_state_") and tool not in ['think', 'get_state', 'think_deep']:
-                    tool_fn_registry[tool] = partial(self.tools_map[tool].invoke, data=self.data)
+                if not tool.startswith("update_state_") and tool not in [
+                    "think",
+                    "get_state",
+                    "think_deep",
+                ]:
+                    tool_fn_registry[tool] = partial(
+                        self.tools_map[tool].invoke, data=self.data
+                    )
             AE.add_assistant_turn(model_completion, tool_fn_registry)
-            
-            last_ass_turn = AE.TC.turns[-1] if isinstance(AE.TC.turns[-1], AssistantTurn) else AE.TC.turns[-2]
-            observation = json.dumps(list(last_ass_turn.fn_call_id_to_fn_output.values())[0], cls=CustomJSONEncoder)
+
+            last_ass_turn = (
+                AE.TC.turns[-1]
+                if isinstance(AE.TC.turns[-1], AssistantTurn)
+                else AE.TC.turns[-2]
+            )
+            observation = json.dumps(
+                list(last_ass_turn.fn_call_id_to_fn_output.values())[0],
+                cls=CustomJSONEncoder,
+            )
 
             info.source = action.name
             if action.name in self.terminate_tools:

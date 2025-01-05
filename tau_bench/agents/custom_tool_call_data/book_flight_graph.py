@@ -38,7 +38,10 @@ get_user_id_node_schema = ConversationNodeSchema(
     state_schema=UserState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["get_user_details", "calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"user_details": lambda val: val is not None}),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={"user_details": lambda val: val is not None},
+    ),
 )
 
 # ---------------------------------------------------------
@@ -60,11 +63,15 @@ find_flight_node_schema = ConversationNodeSchema(
         "calculate",
         "get_reservation_details",
     ],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"flights_to_book": lambda val: val and len(val) > 0}),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={"flights_to_book": lambda val: val and len(val) > 0},
+    ),
 )
 
 
 # ---------------------------------------------------------
+
 
 class PassengerState(BaseStateModel):
     passengers: List[PassengerInfo] = Field(default_factory=list)
@@ -82,11 +89,15 @@ get_passanger_info_schema = ConversationNodeSchema(
     state_schema=PassengerState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"passengers": lambda val: val and len(val) > 0}),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={"passengers": lambda val: val and len(val) > 0},
+    ),
 )
 
 
 # ---------------------------------------------------------
+
 
 class InsuranceState(BaseStateModel):
     add_insurance: Optional[InsuranceValue] = Field(
@@ -101,7 +112,10 @@ ask_for_insurance_node_schema = ConversationNodeSchema(
     state_schema=InsuranceState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"add_insurance": lambda val: val is not None}),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={"add_insurance": lambda val: val is not None},
+    ),
 )
 
 # ------------------------------------------
@@ -122,14 +136,24 @@ luggage_node_schema = ConversationNodeSchema(
     state_schema=LuggageState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"total_baggages": lambda val: val is not None, "nonfree_baggages": lambda val: val is not None}),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={
+            "total_baggages": lambda val: val is not None,
+            "nonfree_baggages": lambda val: val is not None,
+        },
+    ),
 )
 
 # ---------------------------------------------------------
 
 
 class PaymentState(BaseStateModel):
-    resettable_fields = ['has_explained_payment_policy_to_customer', 'is_payment_finalized', 'are_payments_allowed']
+    resettable_fields = [
+        "has_explained_payment_policy_to_customer",
+        "is_payment_finalized",
+        "are_payments_allowed",
+    ]
 
     payments: List[PaymentMethod] = Field(default_factory=list)
     has_explained_payment_policy_to_customer: bool = Field(
@@ -156,11 +180,15 @@ payment_node_schema = ConversationNodeSchema(
     state_schema=PaymentState,
     tool_registry_or_tool_defs=AIRLINE_TOOL_REGISTRY,
     tool_names=["calculate"],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"is_payment_finalized": lambda val: val is True,
-                                                                                    "has_explained_payment_policy_to_customer": lambda val: val is True,
-                                                                                    "payments": lambda val: val and len(val) > 0,
-                                                                                    "are_payments_allowed": lambda val: val is True,
-                                                                                    }),
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={
+            "is_payment_finalized": lambda val: val is True,
+            "has_explained_payment_policy_to_customer": lambda val: val is True,
+            "payments": lambda val: val and len(val) > 0,
+            "are_payments_allowed": lambda val: val is True,
+        },
+    ),
 )
 
 
@@ -193,9 +221,16 @@ class ANDStateSchema(BaseStateModel):
 
 AND_GRAPH_SCHEMA = ANDGraphSchema(
     description="Help customers gather info to book flights",
-    node_schemas=[get_user_id_node_schema, find_flight_node_schema, get_passanger_info_schema, ask_for_insurance_node_schema, luggage_node_schema, payment_node_schema],
+    node_schemas=[
+        get_user_id_node_schema,
+        find_flight_node_schema,
+        get_passanger_info_schema,
+        ask_for_insurance_node_schema,
+        luggage_node_schema,
+        payment_node_schema,
+    ],
     state_schema=ANDStateSchema,
-    default_start_node_schema= get_user_id_node_schema,
+    default_start_node_schema=get_user_id_node_schema,
 )
 
 
@@ -204,9 +239,7 @@ edge_6 = EdgeSchema(
     to_node_schema=book_flight_node_schema,
     transition_config=StateTransitionConfig(
         need_user_msg=True,
-        state_check_fn_map={
-            "payments": lambda val: val and len(val) > 0
-        },
+        state_check_fn_map={"payments": lambda val: val and len(val) > 0},
     ),
 )
 # --------------------
@@ -248,6 +281,10 @@ BOOK_FLIGHT_GRAPH = GraphSchema(
         AND_GRAPH_SCHEMA,
         book_flight_node_schema,
     ],
-    completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="book_reservation", state=FunctionState.CALLED_AND_SUCCEEDED),
+    completion_config=FunctionTransitionConfig(
+        need_user_msg=False,
+        fn_name="book_reservation",
+        state=FunctionState.CALLED_AND_SUCCEEDED,
+    ),
     state_schema=StateSchema,
 )

@@ -44,6 +44,7 @@ class AirlineNodeSystemPrompt(NodeSystemPrompt):
         GeneralGuidelinePrompt,
     ]
 
+
 class NoAvailableSeatsPrompt(BasePrompt):
 
     def dynamic_prompt(
@@ -62,9 +63,18 @@ class NoAvailableSeatsPrompt(BasePrompt):
                 target_seat_numb = flight_info.available_seats_in_basic_economy
             else:
                 raise ValueError(f"Unknown cabin type: {flight_info.cabin}")
-            
+
             if target_seat_numb == 0:
                 offending_flights.append(flight_info)
 
         assert len(offending_flights) > 0, "No offending flights found"
-        return "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: " + ", ".join([f"{flight_info.flight_number} ({flight_info.cabin})" for flight_info in offending_flights]) + ". I need to choose different flights."
+        return (
+            "I can only add new flights that have available seats in the chosen cabin. However, the following flights do not have available seats in the chosen cabin: "
+            + ", ".join(
+                [
+                    f"{flight_info.flight_number} ({flight_info.cabin})"
+                    for flight_info in offending_flights
+                ]
+            )
+            + ". I need to choose different flights."
+        )

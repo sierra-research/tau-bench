@@ -25,6 +25,7 @@ from tau_bench.agents.custom_tool_call_data.tool_registry import AIRLINE_TOOL_RE
 from tau_bench.agents.custom_tool_call_data.types import ReservationDetails
 from cashier.graph.conversation_node import AlertConfig
 from tau_bench.agents.custom_tool_call_data.prompts import NoAvailableSeatsPrompt
+
 ## book flight graph
 
 PREAMBLE = "You are helping the customer to change flight/s. "
@@ -43,7 +44,6 @@ get_user_id_node_schema = ConversationNodeSchema(
 )
 
 # ---------------------------------------------------------
-
 
 
 class ReservationDetailsState(BaseStateModel):
@@ -67,14 +67,23 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 # ---------------------------------------------------------
 
 
-
 class FlightOrder(BaseStateModel):
-    resettable_fields = ["has_confirmed_new_flights", "new_flight_infos","has_communicated_new_flights_total_travel_time", "new_flights_total_travel_time"]
-    has_communicated_new_flights_total_travel_time: bool = Field( # this doesnt work that well
-        default=False,
-        descripion="True only if you have communicated the total travel time for the new flights to the customer",
+    resettable_fields = [
+        "has_confirmed_new_flights",
+        "new_flight_infos",
+        "has_communicated_new_flights_total_travel_time",
+        "new_flights_total_travel_time",
+    ]
+    has_communicated_new_flights_total_travel_time: bool = (
+        Field(  # this doesnt work that well
+            default=False,
+            descripion="True only if you have communicated the total travel time for the new flights to the customer",
+        )
     )
-    new_flights_total_travel_time: Optional[int] = Field(None, description="The total travel time of the new flights in hours, including layover time")
+    new_flights_total_travel_time: Optional[int] = Field(
+        None,
+        description="The total travel time of the new flights in hours, including layover time",
+    )
     flight_infos: List[FlightInfo] = Field(
         default_factory=list,
         descripion="An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if a flight segment is not changed, it should still be included in the array.",
@@ -87,7 +96,6 @@ class FlightOrder(BaseStateModel):
         default=False,
         descripion="this can only be set to true if the customer has explicitly confirmed the new flights",
     )
-
 
     @computed_field(
         description="the total difference in cost between the old and new flights. If the value is negative, it represents the refund amount."
@@ -102,7 +110,7 @@ class FlightOrder(BaseStateModel):
             return new_cost - old_cost
         else:
             return None
-        
+
 
 def alert_check(state, input):
     flight_infos = state.new_flight_infos
@@ -116,16 +124,17 @@ def alert_check(state, input):
             target_seat_numb = flight_info.available_seats_in_basic_economy
         else:
             raise ValueError(f"Unknown cabin type: {flight_info.cabin}")
-        
+
         if target_seat_numb == 0:
             offending_flights.append(flight_info)
 
     return len(offending_flights) > 0
 
+
 alert_config = AlertConfig(
-    state_field = "new_flight_infos",
-    alert_condition = alert_check,
-    alert_msg = NoAvailableSeatsPrompt
+    state_field="new_flight_infos",
+    alert_condition=alert_check,
+    alert_msg=NoAvailableSeatsPrompt,
 )
 
 find_flight_node_schema = ConversationNodeSchema(
@@ -144,10 +153,15 @@ find_flight_node_schema = ConversationNodeSchema(
         "list_all_airports",
         "calculate",
     ],
-    completion_config=StateTransitionConfig(need_user_msg=False,state_check_fn_map={"has_confirmed_new_flights": lambda val: val is True,
-                                                                                    "has_communicated_new_flights_total_travel_time": lambda val: val is True}),
-    alert_configs = [alert_config],
-    pre_alert_fn_names=["search_direct_flight", "search_onestop_flight"]
+    completion_config=StateTransitionConfig(
+        need_user_msg=False,
+        state_check_fn_map={
+            "has_confirmed_new_flights": lambda val: val is True,
+            "has_communicated_new_flights_total_travel_time": lambda val: val is True,
+        },
+    ),
+    alert_configs=[alert_config],
+    pre_alert_fn_names=["search_direct_flight", "search_onestop_flight"],
 )
 
 
@@ -157,7 +171,7 @@ class PaymentOrder(BaseStateModel):
     payment_id: Optional[str] = None
     can_payment_cover_net_new_cost: bool = Field(
         default=False,
-        descripion="True only if the payment method can cover the net new cost. If net new cost is negative, it represents the refund amount, which gets refunded to the selected payment method."
+        descripion="True only if the payment method can cover the net new cost. If net new cost is negative, it represents the refund amount, which gets refunded to the selected payment method.",
     )
 
 
@@ -213,7 +227,10 @@ edge_schema_3 = EdgeSchema(
     to_node_schema=get_payment_node_schema,
     transition_config=StateTransitionConfig(
         need_user_msg=True,
-        state_check_fn_map={"flight_infos": lambda val: val and len(val) > 0, "net_new_cost": lambda val: val is not None},
+        state_check_fn_map={
+            "flight_infos": lambda val: val and len(val) > 0,
+            "net_new_cost": lambda val: val is not None,
+        },
     ),
 )
 
@@ -268,6 +285,10 @@ CHANGE_FLIGHT_GRAPH = GraphSchema(
     ],
     edge_schemas=[edge_schema_1, edge_schema_2, edge_schema_3, edge_schema_4],
     state_schema=StateSchema,
-    completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_flights", state=FunctionState.CALLED_AND_SUCCEEDED),
+    completion_config=FunctionTransitionConfig(
+        need_user_msg=False,
+        fn_name="update_reservation_flights",
+        state=FunctionState.CALLED_AND_SUCCEEDED,
+    ),
     run_assistant_turn_before_transition=True,
 )

@@ -8,7 +8,9 @@ from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 from cashier.agent_executor import AgentExecutor
 from cashier.model.model_completion import Model
 from cashier.model.model_client import ModelClient
-from tau_bench.agents.custom_tool_call_data.request_graph_schema import AIRLINE_REQUEST_GRAPH
+from tau_bench.agents.custom_tool_call_data.request_graph_schema import (
+    AIRLINE_REQUEST_GRAPH,
+)
 from cashier.model.model_util import ModelProvider
 from cashier.model.model_turn import NodeSystemTurn, AssistantTurn, UserTurn
 
@@ -64,10 +66,12 @@ class CustomToolCallingAgent(ToolCallingAgent):
         return SolveResult(
             reward=reward,
             info=info,
-            messages=AE.TC.model_provider_to_message_manager[ModelProvider.OPENAI].conversation_dicts,
+            messages=AE.TC.model_provider_to_message_manager[
+                ModelProvider.OPENAI
+            ].conversation_dicts,
             total_cost=total_cost,
             raw_messages=raw_messages,
-            node_turns = [node_turn.model_dump() for node_turn in AE.TC.turns],
+            node_turns=[node_turn.model_dump() for node_turn in AE.TC.turns],
             anthropic_messages=anthropic_messages,
             oai_messages=oai_messages,
         )

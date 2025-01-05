@@ -66,8 +66,13 @@ get_reservation_details_node_schema = ConversationNodeSchema(
 
 
 class LuggageState(BaseStateModel):
-    total_baggages: Optional[int] = Field(None, description="The total final number of luggages to check. So if the reservation had 2 and the customer wants to add 1, this should be 3. ")
-    nonfree_baggages: Optional[int] = Field(None, description="The number of free luggages out of total_baggages")
+    total_baggages: Optional[int] = Field(
+        None,
+        description="The total final number of luggages to check. So if the reservation had 2 and the customer wants to add 1, this should be 3. ",
+    )
+    nonfree_baggages: Optional[int] = Field(
+        None, description="The number of free luggages out of total_baggages"
+    )
 
 
 luggage_node_schema = ConversationNodeSchema(
@@ -83,6 +88,7 @@ luggage_node_schema = ConversationNodeSchema(
 )
 
 # ---------------------------------------------------------
+
 
 class PaymentState(BaseStateModel):
     payment_id: Optional[str] = None
@@ -197,6 +203,10 @@ CHANGE_BAGGAGE_GRAPH = GraphSchema(
         payment_node_schema,
         book_flight_node_schema,
     ],
-    completion_config=FunctionTransitionConfig(need_user_msg=False,fn_name="update_reservation_baggages", state=FunctionState.CALLED_AND_SUCCEEDED),
+    completion_config=FunctionTransitionConfig(
+        need_user_msg=False,
+        fn_name="update_reservation_baggages",
+        state=FunctionState.CALLED_AND_SUCCEEDED,
+    ),
     state_schema=ChangeBaggageGraphStateSchema,
 )
