@@ -72,6 +72,7 @@ class Env(object):
         else:
             self.task_index = random.randint(0, len(tasks))
         self.task = tasks[self.task_index]
+        self.key_action_names = [action.name for action in self.task.actions if action.name != RESPOND_ACTION_NAME]
         self.wiki = wiki
         self.rules = rules
         self.user = load_user(
@@ -85,6 +86,7 @@ class Env(object):
         self.task_index = task_index
         self.data = self.data_load_func()
         self.task = self.tasks[task_index]
+        self.key_action_names = [action.name for action in self.task.actions if action.name != RESPOND_ACTION_NAME]
         self.actions = []
         initial_observation = self.user.reset(instruction=self.task.instruction)
         return EnvResetResponse(

@@ -22,6 +22,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
     ) -> SolveResult:
         total_cost = 0.0
         env_reset_res = env.reset(task_index=task_index)
+        key_action_names = env.key_action_names
         obs = env_reset_res.observation
         info = env_reset_res.info.model_dump()
         reward = 0.0
@@ -37,6 +38,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
             AIRLINE_REQUEST_GRAPH,
         )
 
+        key_actions = []
         AE.add_user_turn(obs)
 
         for _ in range(max_num_steps):
@@ -46,7 +48,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
                 temperature=self.temperature,
                 **AE.get_model_completion_kwargs(),
             )
-            action = message_to_action(model_completion)
+            action = message_to_action(model_completion, key_action_names, key_actions)
             env_response = env.custom_step(action, model_completion, AE)
             reward = env_response.reward
             info = {**info, **env_response.info.model_dump()}
@@ -66,6 +68,7 @@ class CustomToolCallingAgent(ToolCallingAgent):
         return SolveResult(
             reward=reward,
             info=info,
+            key_actions=key_actions,
             messages=AE.TC.model_provider_to_message_manager[
                 ModelProvider.OPENAI
             ].conversation_dicts,
@@ -78,10 +81,12 @@ class CustomToolCallingAgent(ToolCallingAgent):
 
 
 def message_to_action(
-    model_completion,
+    model_completion, target_key_names, key_actions
 ) -> Action:
     fn_calls = []
     for fn_call in model_completion.get_or_stream_fn_calls():
+        if fn_call.name in target_key_names:
+            key_actions.append(Action(name=fn_call.name, kwargs=fn_call.args))
         fn_calls.append(fn_call)
     if fn_calls:
         return Action(

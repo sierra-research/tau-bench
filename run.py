@@ -83,6 +83,7 @@ def run(
                 task_id=idx,
                 reward=res.reward,
                 info=res.info,
+                key_actions=res.key_actions,
                 traj=res.messages,
                 trial=trial,
                 raw_messages=res.raw_messages,
