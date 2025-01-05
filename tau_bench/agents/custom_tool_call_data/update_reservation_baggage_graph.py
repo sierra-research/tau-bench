@@ -9,12 +9,10 @@ from cashier.graph.graph_schema import GraphSchema
 from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
     CabinType,
-    FlightInfo,
     FlightReservationInfo,
     FlightType,
     PassengerInfo,
     PaymentDetails,
-    PaymentMethod,
     InsuranceValue,
     ReservationDetails,
     UserDetails,

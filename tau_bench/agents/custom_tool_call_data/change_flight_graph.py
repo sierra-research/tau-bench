@@ -6,7 +6,7 @@ from cashier.graph.base.base_edge_schema import (
     StateTransitionConfig,
 )
 from cashier.graph.graph_schema import GraphSchema
-from typing import Optional, List, Dict
+from typing import Optional, List
 from tau_bench.agents.custom_tool_call_data.types import (
     CabinType,
     FlightInfo,
@@ -14,7 +14,6 @@ from tau_bench.agents.custom_tool_call_data.types import (
     FlightType,
     PassengerInfo,
     PaymentDetails,
-    PaymentMethod,
     InsuranceValue,
     UserDetails,
     NewFlightInfo,
