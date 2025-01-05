@@ -134,12 +134,13 @@ class Env(object):
             AE.add_user_turn(observation)
             info.source = "user"
             done = "###STOP###" in observation
-        elif action.name in AE.graph.curr_conversation_node.schema.tool_registry.tool_names:
-            callback_fn = None
-            if action.name in self.tools_map:
-                callback_fn = partial(self.tools_map[action.name].invoke, data=self.data)
-
-            AE.add_assistant_turn(model_completion, callback_fn)
+        elif action.name:
+            fn_names = [fn_call.name for fn_call in action.fn_calls]
+            tool_fn_registry = {}
+            for tool in fn_names:
+                if not tool.startswith("update_state_") and tool not in ['think', 'get_state', 'think_deep']:
+                    tool_fn_registry[tool] = partial(self.tools_map[tool].invoke, data=self.data)
+            AE.add_assistant_turn(model_completion, tool_fn_registry)
             
             last_ass_turn = AE.TC.turns[-1] if isinstance(AE.TC.turns[-1], AssistantTurn) else AE.TC.turns[-2]
             observation = json.dumps(list(last_ass_turn.fn_call_id_to_fn_output.values())[0], cls=CustomJSONEncoder)

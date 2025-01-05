@@ -10,6 +10,7 @@ RESPOND_ACTION_FIELD_NAME = "content"
 class Action(BaseModel):
     name: str
     kwargs: Dict[str, Any]
+    fn_calls: Any = None
 
 
 class Task(BaseModel):

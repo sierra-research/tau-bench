@@ -76,11 +76,14 @@ class CustomToolCallingAgent(ToolCallingAgent):
 def message_to_action(
     model_completion,
 ) -> Action:
-    fn_call = next(model_completion.get_or_stream_fn_calls(), None)
-    if fn_call is not None:
+    fn_calls = []
+    for fn_call in model_completion.get_or_stream_fn_calls():
+        fn_calls.append(fn_call)
+    if fn_calls:
         return Action(
-            name=fn_call.name,
-            kwargs=fn_call.args,
+            name=fn_calls[0].name,
+            kwargs=fn_calls[0].args,
+            fn_calls=fn_calls,
         )
     else:
         return Action(
