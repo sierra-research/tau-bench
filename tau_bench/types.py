@@ -67,3 +67,24 @@ class EnvRunResult(BaseModel):
     info: Dict[str, Any]
     traj: List[Dict[str, Any]]
     trial: int
+
+
+class RunConfig(BaseModel):
+    model_provider: str
+    user_model_provider: str
+    model: str
+    user_model: str = "gpt-4o"
+    num_trials: int = 1
+    env: str = "retail"
+    agent_strategy: str = "tool-calling"
+    temperature: float = 0.0
+    task_split: str = "test"
+    start_index: int = 0
+    end_index: int = -1
+    task_ids: Optional[List[int]] = None
+    log_dir: str = "results"
+    max_concurrency: int = 1
+    seed: int = 10
+    shuffle: int = 0
+    user_strategy: str = "llm"
+    few_shot_displays_path: Optional[str] = None
