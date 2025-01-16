@@ -1134,7 +1134,7 @@ TASKS_TEST = [
                     "address2": "Suite 491",
                     "city": "New York",
                     "country": "USA",
-                    "province": "NY",
+                    "state": "NY",
                     "zip": "10108",
                 },
             ),
