@@ -59,7 +59,7 @@ class ModifyUserAddress(Tool):
                         },
                         "state": {
                             "type": "string",
-                            "description": "The province, such as 'CA'.",
+                            "description": "The state, such as 'CA'.",
                         },
                         "country": {
                             "type": "string",
