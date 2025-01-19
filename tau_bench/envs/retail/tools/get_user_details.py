@@ -19,7 +19,7 @@ class GetUserDetails(Tool):
             "type": "function",
             "function": {
                 "name": "get_user_details",
-                "description": "Get the details of a user.",
+                "description": "Get the details of a user, including their orders.",
                 "parameters": {
                     "type": "object",
                     "properties": {
