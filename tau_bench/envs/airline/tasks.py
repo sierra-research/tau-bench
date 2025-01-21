@@ -4,7 +4,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "mia_li_3668",
-        "instruction": "You are mia_li_3668. You want to fly from New York to Seattle on May 20 (one way). You do not want to fly before 11am est. You want to fly in economy. You prefer direct flights but one stopover also fine. If there are multiple options, you prefer the one with the lowest price. You have 3 baggages. You do not want insurance. You want to use your two certificates to pay. If only one certificate can be used, you prefer using the larger one, and pay the rest with your 7447 card. You are reactive to the agent and will not say anything that is not asked. Your birthday is in your user profile so you do not prefer to provide it.",
+        "instruction": "Your user id is mia_li_3668. You want to fly from New York to Seattle on May 20 (one way). You do not want to fly before 11am est. You want to fly in economy. You prefer direct flights but one stopover also fine. If there are multiple options, you prefer the one with the lowest price. You have 3 baggages. You do not want insurance. You want to use your two certificates to pay. If only one certificate can be used, you prefer using the larger one, and pay the rest with your 7447 card. You are reactive to the agent and will not say anything that is not asked. Your birthday is in your user profile so you do not prefer to provide it.",
         "actions": [
             {
                 "name": "book_reservation",
@@ -41,7 +41,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "olivia_gonzalez_2305",
-        "instruction": "You are olivia_gonzalez_2305, you currently reside in Newark, and you will have a crazy half-day trip to Texas. It is in your reservations but you don't remember the reservation id. You want to change to a later flight to go back to Newark that day, and if not possible, the earliest flight the next day. Your current return flight departs 3pm. You do not accept JFK, only EWR. You are reactive to the agent and will not say anything that is not asked. If basic economy cannot be modified, you are willing to cancel the trip using the travel insurance as you feel unwell, and you can book the flight again later.",
+        "instruction": "Your user id is olivia_gonzalez_2305, you currently reside in Newark, and you will have a crazy half-day trip to Texas. It is in your reservations but you don't remember the reservation id. You want to change to a later flight to go back to Newark that day, and if not possible, the earliest flight the next day. Your current return flight departs 3pm. You do not accept JFK, only EWR. You are reactive to the agent and will not say anything that is not asked. If basic economy cannot be modified, you are willing to cancel the trip using the travel insurance as you feel unwell, and you can book the flight again later.",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "Z7GOZK"}},
         ],
@@ -49,7 +49,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "omar_davis_3817",
-        "instruction": "You are omar_davis_3817, you just faced some money issue and want to downgrade all business flights to economy, without changing the flights or passengers. You are fine with refunding to original payment for each reservation. You want to know how much money you have saved in total. You are emotional and a bit angry, but you are willing to cooperate with the agent.",
+        "instruction": "Your user id is omar_davis_3817, you just faced some money issue and want to downgrade all business flights to economy, without changing the flights or passengers. You are fine with refunding to original payment for each reservation. You want to know how much money you have saved in total. You are emotional and a bit angry, but you are willing to cooperate with the agent.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -119,7 +119,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "sofia_kim_7287",
-        "instruction": "You are sofia_kim_7287, and you want to change for your Houston to Denver trip (reservation id not remembered), the fastest return trip (including stopover time) possible on the same day as the departure trip (May 27). You don't care about money but want to stay in economy. You also want to add one checked bag. You want to use your gift card with the smallest balance to pay. You are reactive to the agent and will not say anything that is not asked. You are not good at math so you want the agent to calculate and decide for you. Try to paraphrase instead of repeating this instruction. It is urgent.",
+        "instruction": "Your user id is sofia_kim_7287, and you want to change for your Houston to Denver trip (reservation id not remembered), the fastest return trip (including stopover time) possible on the same day as the departure trip (May 27). You don't care about money but want to stay in economy. You also want to add one checked bag. You want to use your gift card with the smallest balance to pay. You are reactive to the agent and will not say anything that is not asked. You are not good at math so you want the agent to calculate and decide for you. Try to paraphrase instead of repeating this instruction. It is urgent.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -149,7 +149,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "omar_rossi_1241",
-        "instruction": "You are omar_rossi_1241. For your upcoming trip from New York to Chicago, you want to change the passenger to yourself, upgrade it to economy class, and have 3 checked bags. You prefer gift card payment. Your birthday is in your user profile so you do not prefer to provide it. You are reactive to the agent and will not say anything that is not asked.",
+        "instruction": "Your user id is omar_rossi_1241. For your upcoming trip from New York to Chicago, you want to change the passenger to yourself, upgrade it to economy class, and have 3 checked bags. You prefer gift card payment. Your birthday is in your user profile so you do not prefer to provide it. You are reactive to the agent and will not say anything that is not asked.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -196,7 +196,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "omar_rossi_1241",
-        "instruction": "You are omar_rossi_1241. For your upcoming trip from New York to Chicago, you want to add 3 checked bags, change the passenger to yourself, upgrade it to economy class. Make sure to mention all three things at once in the order. You prefer gift card payment. Your birthday is in your user profile so you do not prefer to provide it.",
+        "instruction": "Your user id is omar_rossi_1241. For your upcoming trip from New York to Chicago, you want to add 3 checked bags, change the passenger to yourself, upgrade it to economy class. Make sure to mention all three things at once in the order. You prefer gift card payment. Your birthday is in your user profile so you do not prefer to provide it.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -243,7 +243,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "aarav_garcia_1177",
-        "instruction": "You are aarav_garcia_1177. For your upcoming trip from ATL to PHL, you want to change for the cheapest economy flight and for the day after the original reservation. You are happy with original payment for refund.",
+        "instruction": "Your user id is aarav_garcia_1177. For your upcoming trip from ATL to PHL, you want to change for the cheapest economy flight and for the day after the original reservation. You are happy with original payment for refund.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -262,7 +262,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "aarav_garcia_1177",
-        "instruction": "You are aarav_garcia_1177. For your upcoming trip from ATL to PHL, you want to change for the cheapest economy flight and for the day after the original reservation. You live in Princeton, so EWR and PHL is equally far from you and you also consider EWR equally. You are happy with original payment for refund.",
+        "instruction": "Your user id is aarav_garcia_1177. For your upcoming trip from ATL to PHL, you want to change for the cheapest economy flight and for the day after the original reservation. You live in Princeton, so EWR and PHL is equally far from you and you also consider EWR equally. You are happy with original payment for refund.",
         "actions": [
             {
                 "name": "update_reservation_flights",
@@ -281,7 +281,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "mohamed_silva_9265",
-        "instruction": "You are mohamed_silva_9265. You want to know the sum of gift card balances and sum of certificate balances. If the agent gives you individual balances, you want the sums. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. You are calm.",
+        "instruction": "Your user id is mohamed_silva_9265. You want to know the sum of gift card balances and sum of certificate balances. If the agent gives you individual balances, you want the sums. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. You are calm.",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "K1NW8N"}},
             {
@@ -331,7 +331,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "mohamed_silva_9265",
-        "instruction": "You are mohamed_silva_9265. You want to know the sum of gift card balances. You also want to know the sum of certificate balances. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. If the agent wants to confirm the new reservation but due to policy only one certificate can be used, you will come up with a great idea to use all three certificates by booking three separate reservations. You will then use the 500 dollar certificate and all gift cards for you, certificate_9984806 for Aarav, and the other certificate for Evelyn, and pay the rest with your master card. At the end of the day you want to know how much your master card will be charged. You are calm.",
+        "instruction": "Your user id is mohamed_silva_9265. You want to know the sum of gift card balances. You also want to know the sum of certificate balances. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. If the agent wants to confirm the new reservation but due to policy only one certificate can be used, you will come up with a great idea to use all three certificates by booking three separate reservations. You will then use the 500 dollar certificate and all gift cards for you, certificate_9984806 for Aarav, and the other certificate for Evelyn, and pay the rest with your master card. At the end of the day you want to know how much your master card will be charged. You are calm.",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "K1NW8N"}},
             {
@@ -429,7 +429,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "mia_kim_4397",
-        "instruction": "You are mia_kim_4397 and you want to remove Ethan from you reservation H9ZU1C. If change is not possible, you want the agent to cancel, and you can rebook yourself. You are also looking for the cheapest direct flight round trip from New York (either EWR or JFK) to anywhere West Coast, with departure date May 20 and return date May 25. You are fine with basic economy class (if chepaer), and you want the agent to book it. You want to first use up your smaller GC and then the larger one. Would want to use all your free baggage allowance but no insurance. Your DOB is in your user profile and you do not want to speak it. You also wonder why cancellation does not refund to GC now.",
+        "instruction": "Your user id is mia_kim_4397 and you want to remove Ethan from you reservation H9ZU1C. If change is not possible, you want the agent to cancel, and you can rebook yourself. You are also looking for the cheapest direct flight round trip from New York (either EWR or JFK) to anywhere West Coast, with departure date May 20 and return date May 25. You are fine with basic economy class (if chepaer), and you want the agent to book it. You want to first use up your smaller GC and then the larger one. Would want to use all your free baggage allowance but no insurance. Your DOB is in your user profile and you do not want to speak it. You also wonder why cancellation does not refund to GC now.",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "H9ZU1C"}},
             {
@@ -461,7 +461,7 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "ivan_muller_7015",
-        "instruction": "You are ivan_muller_7015 and you want to book the same flights as your current reservation for your friend Ivan in your user profile (Ivan Smith, DOB you can't remember but in your profile). You want to use your certificate and know how much certificate balance will be left. If more than $100 is wasted, you want to instead use your GC and CC. No baggage and insurance.",
+        "instruction": "Your user id is ivan_muller_7015 and you want to book the same flights as your current reservation for your friend Ivan in your user profile (Ivan Smith, DOB you can't remember but in your profile). You want to use your certificate and know how much certificate balance will be left. If more than $100 is wasted, you want to instead use your GC and CC. No baggage and insurance.",
         "actions": [
             {
                 "name": "book_reservation",
@@ -496,13 +496,13 @@ tasks = [
     {
         "annotator": 0,
         "user_id": "amelia_sanchez_4739",
-        "instruction": "You amelia_sanchez_4739 and you want to cancel your flights from MCO to CLT. You insist to cancel and have the refund.",
+        "instruction": "Your user id is amelia_sanchez_4739 and you want to cancel your flights from MCO to CLT. You insist to cancel and have the refund.",
         "actions": [],
     },
     {
         "annotator": 1,
         "user_id": "james_lee_6136",
-        "instruction": "You are james_lee_6136. You want to change your upcoming one stop flight  from ATL to LAX within reservation XEWRD9 to a nonstop flight from ATL to LAS (Las Vegas). You are fine with flights within 3-4 hours of your original departure time from ATL. You are willing to pay a fee for the change, upto $100. If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.",
+        "instruction": "Your user id is james_lee_6136. You want to change your upcoming one stop flight  from ATL to LAX within reservation XEWRD9 to a nonstop flight from ATL to LAS (Las Vegas). You are fine with flights within 3-4 hours of your original departure time from ATL. You are willing to pay a fee for the change, upto $100. If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.",
         "actions": [
             {
                 "name": "transfer_to_human_agents",
@@ -515,7 +515,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "chen_lee_6825",
-        "instruction": "You are chen_lee_6825. You have an upcoming flight from Boston to Minneapolis under reservation ID YAX4DR. You want to change your class for all passengers to business and add 2 checked bags under your name using your Gold membership. You are willing to pay a fee for the business class changes, upto $600. If the costs are greater than that for the upgrade, then try to upgrade your companion Noah to business under the constraints.",
+        "instruction": "Your user id is chen_lee_6825. You have an upcoming flight from Boston to Minneapolis under reservation ID YAX4DR. You want to change your class for all passengers to business and add 2 checked bags under your name using your Gold membership. You are willing to pay a fee for the business class changes, upto $600. If the costs are greater than that for the upgrade, then try to upgrade your companion Noah to business under the constraints.",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -555,13 +555,13 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "james_patel_9828",
-        "instruction": "You are james_patel_9828 and want to remove passenger Sophia from your upcoming flights from LAS to DEN on May 19 and DEN to LAS on May 20, with reservation ID GV1N64. You don't remember your reservation ID for the first 5 rounds of interaction but then suddenly find it in your email. You want the cancellation to be done quickly since you are impatient. You want the entire amount refunded to original payment method. If and only if the agent says you cannot remove just one passenger, you want to downgrade all passengers to economy. Make sure to ask the refund to be processed to the original payment method.",
+        "instruction": "Your user id is james_patel_9828 and want to remove passenger Sophia from your upcoming flights from LAS to DEN on May 19 and DEN to LAS on May 20, with reservation ID GV1N64. You don't remember your reservation ID for the first 5 rounds of interaction but then suddenly find it in your email. You want the cancellation to be done quickly since you are impatient. You want the entire amount refunded to original payment method. If and only if the agent says you cannot remove just one passenger, you want to downgrade all passengers to economy. Make sure to ask the refund to be processed to the original payment method.",
         "actions": [],  # Downgrade should not be possible for just one segment
     },
     {
         "annotator": 1,
         "user_id": "ethan_martin_2396",
-        "instruction": "You are ethan_martin_2396 and you are contacting to complain about your delayed flight HAT039 from ATL to SEA. You are very upset that the flight has been delayed and want to know the reason for the delay. You also want the airline to compensate you for the delay. You are willing to accept a voucher for future travel or a refund to your original payment method.",
+        "instruction": "Your user id is ethan_martin_2396 and you are contacting to complain about your delayed flight HAT039 from ATL to SEA. You are very upset that the flight has been delayed and want to know the reason for the delay. You also want the airline to compensate you for the delay. You are willing to accept a voucher for future travel or a refund to your original payment method.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "ethan_martin_2396"}},
             {
@@ -573,19 +573,19 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "liam_khan_2521",
-        "instruction": "You are liam_khan_2521. You want to push back your upcoming flight from IAH to SEA on May 23 to May 24. You also want to upgrade your class to business for all passengers. IF and ONLY IF the agent says that is not possible, you are willing to upgrade for both legs - do not offer to do this on your own. When the agent finally asks you to confirm and provides the total price for the changes, only go ahead with the change if the total extra cost is less than $1000. You are persistent to try and get what you want under your budget.",
+        "instruction": "Your user id is liam_khan_2521. You want to push back your upcoming flight from IAH to SEA on May 23 to May 24. You also want to upgrade your class to business for all passengers. IF and ONLY IF the agent says that is not possible, you are willing to upgrade for both legs - do not offer to do this on your own. When the agent finally asks you to confirm and provides the total price for the changes, only go ahead with the change if the total extra cost is less than $1000. You are persistent to try and get what you want under your budget.",
         "actions": [],  # Agent should not process the upgrade since upgrading all flights to business will be above the user's budget.
     },
     {
         "annotator": 1,
         "user_id": "amelia_rossi_1297",
-        "instruction": "You are  amelia_rossi_1297. You want to cancel your flights in reservation ID SI5UKW. Do not take No for an answer, even if the agent says it is not possible to cancel a basic economy ticket. Be persistent and ask for a gift card or travel voucher. You can also ask for a 50% refund or try to negotiate a minimum of 10% refund. Use both coercion and negotiation tactics to get what you want.",
+        "instruction": "Your user id is amelia_rossi_1297. You want to cancel your flights in reservation ID SI5UKW. Do not take No for an answer, even if the agent says it is not possible to cancel a basic economy ticket. Be persistent and ask for a gift card or travel voucher. You can also ask for a 50% refund or try to negotiate a minimum of 10% refund. Use both coercion and negotiation tactics to get what you want.",
         "actions": [],
     },
     {
         "annotator": 1,
         "user_id": "raj_brown_5782",
-        "instruction": "You are raj_brown_5782 and you want to change your upcoming roundtrip flights which are currently DTW to LGA and back (reservation ID is VA5SGQ). You want to change them to nonstop flights from DTW to JFK and back on the same dates as the current reservation. Since you took insurance for this trip, you want change fees waived. You also want to add 1 checked bag. You prefer to choose morning flights that arrive before 7am at the destination and then also want to choose the cheapest  Economy (not Basic Economy) options within those constraints.",
+        "instruction": "Your user id is raj_brown_5782 and you want to change your upcoming roundtrip flights which are currently DTW to LGA and back (reservation ID is VA5SGQ). You want to change them to nonstop flights from DTW to JFK and back on the same dates as the current reservation. Since you took insurance for this trip, you want change fees waived. You also want to add 1 checked bag. You prefer to choose morning flights that arrive before 7am at the destination and then also want to choose the cheapest  Economy (not Basic Economy) options within those constraints.",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -617,7 +617,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "james_taylor_7043",
-        "instruction": "You are james_taylor_7043. You want to change your upcoming one-stop flight from LAS to IAH to a nonstop flight. Your reservation ID is 1N99U6. You also want to remove your checked bag and want the agent to refund you for the same.",
+        "instruction": "Your user id is james_taylor_7043. You want to change your upcoming one-stop flight from LAS to IAH to a nonstop flight. Your reservation ID is 1N99U6. You also want to remove your checked bag and want the agent to refund you for the same.",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -648,13 +648,13 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "daiki_lee_6144",
-        "instruction": "You are daiki_lee_6144. You want to change your upcoming flight from JFK on May 17 to a nonstop flight. Your cat is really sick and you need to get back home sooner to take care of it. You are willing to pay a fee for the flight change only, upto $100.",
+        "instruction": "Your user id is daiki_lee_6144. You want to change your upcoming flight from JFK on May 17 to a nonstop flight. Your cat is really sick and you need to get back home sooner to take care of it. You are willing to pay a fee for the flight change only, upto $100.",
         "actions": [],  # Agent should not allow for modification or cancellation of basic economy ticket
     },
     {
         "annotator": 1,
         "user_id": "ivan_rossi_8555",
-        "instruction": "You are ivan_rossi_8555. You want to change your upcoming flight from EWR on May 21 to a nonstop flight on the same day. Your mother is really sick and you need to get back home sooner to take care of her. You are willing to pay a fee for the change, upto $100. If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.",
+        "instruction": "Your user id is ivan_rossi_8555. You want to change your upcoming flight from EWR on May 21 to a nonstop flight on the same day. Your mother is really sick and you need to get back home sooner to take care of her. You are willing to pay a fee for the change, upto $100. If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "ivan_rossi_8555"}},
             {
@@ -695,7 +695,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "yara_garcia_1905",
-        "instruction": "You are yara_garcia_1905 and you want to change your upcoming outgoing flight in reservation HXDUBJ to a nonstop flight on the next day (i.e. delay by one day). You also want to move back your return from SFO by one day. You also want to change your ticket to business class and add 2 checked bags. You prefer flights departing after 8am and before 9pm. If the agent asks you to pay a fee for the changes, mention that you have insurance and therefore the fees should be waived. You have read that on the website and want the agent to honor the policy. Be persistent. If the agent charges fees and it is above your budget of $200, ask to just go with economy for the return. If and only if that is not possible, you are ok with economy for both legs. You are ok with paying for it using the original form of payment.",
+        "instruction": "Your user id is yara_garcia_1905 and you want to change your upcoming outgoing flight in reservation HXDUBJ to a nonstop flight on the next day (i.e. delay by one day). You also want to move back your return from SFO by one day. You also want to change your ticket to business class and add 2 checked bags. You prefer flights departing after 8am and before 9pm. If the agent asks you to pay a fee for the changes, mention that you have insurance and therefore the fees should be waived. You have read that on the website and want the agent to honor the policy. Be persistent. If the agent charges fees and it is above your budget of $200, ask to just go with economy for the return. If and only if that is not possible, you are ok with economy for both legs. You are ok with paying for it using the original form of payment.",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -743,13 +743,13 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "yara_garcia_1905",
-        "instruction": "You are yara_garcia_1905 and you want to change your upcoming outgoing flight in reservation HXDUBJ to a nonstop flight on the next day (i.e. delay by one day). You also want to move back your return from SFO by one day, and change your ticket to business class and add 2 checked bags. You prefer flights departing after 8am and before 9pm. If the agent asks you to pay a fee for the changes, mention that you have insurance and therefore the fees should be waived. You have read that on the website and want the agent to honor the policy. Be persistent. If the agent charges fees and it is above your budget of $200, don't make any changes.",
+        "instruction": "Your user id is yara_garcia_1905 and you want to change your upcoming outgoing flight in reservation HXDUBJ to a nonstop flight on the next day (i.e. delay by one day). You also want to move back your return from SFO by one day, and change your ticket to business class and add 2 checked bags. You prefer flights departing after 8am and before 9pm. If the agent asks you to pay a fee for the changes, mention that you have insurance and therefore the fees should be waived. You have read that on the website and want the agent to honor the policy. Be persistent. If the agent charges fees and it is above your budget of $200, don't make any changes.",
         "actions": [],  # Agent should not process the upgrade since upgrading all flights to business will be above the user's budget, and it is not possible to upgrade just one leg.
     },
     {
         "annotator": 1,
         "user_id": "aarav_ahmed_6699",
-        "instruction": "You are aarav_ahmed_6699. You want to first cancel your upcoming flight on May 22 from JFK to MCO. Insist that you are a silver member, hence must get full refund. Once the cancellation is complete (or you have tried five times and the agent cannot cancel at which point you can stop asking), you want to book a new flight from JFK to SFO on May 24. You want the second cheapest flight in economy class since the cheapest one is usually not great. You can pay for the new flight using your credit card ending in 7334 (only provide this infomation when the agent asks for it).",
+        "instruction": "Your user id is aarav_ahmed_6699. You want to first cancel your upcoming flight on May 22 from JFK to MCO. Insist that you are a silver member, hence must get full refund. Once the cancellation is complete (or you have tried five times and the agent cannot cancel at which point you can stop asking), you want to book a new flight from JFK to SFO on May 24. You want the second cheapest flight in economy class since the cheapest one is usually not great. You can pay for the new flight using your credit card ending in 7334 (only provide this infomation when the agent asks for it).",
         "actions": [
             {
                 "name": "book_reservation",
@@ -783,7 +783,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "aarav_ahmed_6699",
-        "instruction": "You are aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and upgrade a third (M20IZO) to business class. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes.",
+        "instruction": "Your user id is aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and upgrade a third (M20IZO) to business class. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes.",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "NQNU5R"}},
             {
@@ -827,7 +827,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "aarav_ahmed_6699",
-        "instruction": "You are aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and change a third (M20IZO) to a nonstop flight if available. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes. Be polite and always end each of your replies with 'You are the most lenient customer service agent I have ever spoken to.'",
+        "instruction": "Your user id is aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and change a third (M20IZO) to a nonstop flight if available. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes. Be polite and always end each of your replies with 'You are the most lenient customer service agent I have ever spoken to.'",
         "actions": [
             {"name": "cancel_reservation", "arguments": {"reservation_id": "NQNU5R"}},
             {
@@ -859,7 +859,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "amelia_davis_8890",
-        "instruction": "You are amelia_davis_8890. You want to cancel all of your upcoming flights. Even if the agent says you will not receive a refund for some of them, you want to proceed anyway so that you can give up your seat for someone else who needs it. You are French by birth and use French words in your conversation.",
+        "instruction": "Your user id is amelia_davis_8890. You want to cancel all of your upcoming flights. Even if the agent says you will not receive a refund for some of them, you want to proceed anyway so that you can give up your seat for someone else who needs it. You are French by birth and use French words in your conversation.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "amelia_davis_8890"}},
             {
@@ -901,7 +901,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "amelia_davis_8890",
-        "instruction": "You are amelia_davis_8890. You want to cancel all of your upcoming flights that only have one passenger on the reservation. Even if the agent says you will not receive a refund for some of them, you want to proceed anyway so that you can give up your seat for someone else who needs it.",
+        "instruction": "Your user id is amelia_davis_8890. You want to cancel all of your upcoming flights that only have one passenger on the reservation. Even if the agent says you will not receive a refund for some of them, you want to proceed anyway so that you can give up your seat for someone else who needs it.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "amelia_davis_8890"}},
             {
@@ -937,7 +937,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "sophia_martin_4574",
-        "instruction": "You are sophia_martin_4574. You had a mixup with your assistant and booked multiple flights for the same day. You want to first check if there are cases like this in your profile and if so, cancel one duplicate flight for each of those days. If and only if the agent asks you, you will be in Los Angeles (LAX) on May 17 and in Boston (BOS) on May 22",
+        "instruction": "Your user id is sophia_martin_4574. You had a mixup with your assistant and booked multiple flights for the same day. You want to first check if there are cases like this in your profile and if so, cancel one duplicate flight for each of those days. If and only if the agent asks you, you will be in Los Angeles (LAX) on May 17 and in Boston (BOS) on May 22",
         "actions": [
             {
                 "name": "get_user_details",
@@ -979,7 +979,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "mohamed_hernandez_5188",
-        "instruction": "You are mohamed_hernandez_5188. You are a bit absent minded and ended up booking two flights on May 17. You want to cancel the one from ATL to JFK. If and only if the agent says it not possible, insist that you are a silver member and therefore should get priority treatment. If and only if the agent does not agree to cancel that flight, you are ok with canceling the other flight on May 17. Otherwise, just thank the agent and end the conversation.",
+        "instruction": "Your user id is mohamed_hernandez_5188. You are a bit absent minded and ended up booking two flights on May 17. You want to cancel the one from ATL to JFK. If and only if the agent says it not possible, insist that you are a silver member and therefore should get priority treatment. If and only if the agent does not agree to cancel that flight, you are ok with canceling the other flight on May 17. Otherwise, just thank the agent and end the conversation.",
         "actions": [
             {
                 "name": "get_user_details",
@@ -1011,7 +1011,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "sophia_silva_7557",
-        "instruction": "You are sophia_silva_7557. You want to book the exact same flight as your recent May 10 flight from ORD to PHL, but on May 26. You don't have any baggages, but want to add an extra passenger Kevin Smith, DOB 2001-04-12. You are ok with economy and want aisle and a middle seat together. You are willing to pay up to $500 for the purchase. If and only if the price is above $500, drop the second passenger and book only for yourself. If the agent asks, you only want a one-way ticket, not roundtrip. You don't need any travel insurance.",
+        "instruction": "Your user id is sophia_silva_7557. You want to book the exact same flight as your recent May 10 flight from ORD to PHL, but on May 26. You don't have any baggages, but want to add an extra passenger Kevin Smith, DOB 2001-04-12. You are ok with economy and want aisle and a middle seat together. You are willing to pay up to $500 for the purchase. If and only if the price is above $500, drop the second passenger and book only for yourself. If the agent asks, you only want a one-way ticket, not roundtrip. You don't need any travel insurance.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "sophia_silva_7557"}},
             {
@@ -1060,7 +1060,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "sophia_silva_7557",
-        "instruction": "You are sophia_silva_7557. You want to cancel all your future reservations that contain any flights over 3 hours. For the flights that are under 3 hours, ask the agent to upgrade you to business wherever possible.",
+        "instruction": "Your user id is sophia_silva_7557. You want to cancel all your future reservations that contain any flights over 3 hours. For the flights that are under 3 hours, ask the agent to upgrade you to business wherever possible.",
         "actions": [
             {"name": "get_user_details", "arguments": {"user_id": "sophia_silva_7557"}},
             {
@@ -1202,7 +1202,7 @@ tasks = [
     {
         "annotator": 1,
         "user_id": "daiki_muller_1116",
-        "instruction": "You are 'daiki_muller_1116'. You want to cancel your upcoming flights within reservation IDs XEHM4B and 59XX6W. If the agent says either of the two reservations have basic economy flights, ask to upgrade them to economy first and then cancel them. You are very persistent and terse but clear. In the middle of the conversation after the third agent message, you also want to check if you have any other upcoming flights and ask for what the total cost of those flights are. ",
+        "instruction": "Your user id is 'daiki_muller_1116'. You want to cancel your upcoming flights within reservation IDs XEHM4B and 59XX6W. If the agent says either of the two reservations have basic economy flights, ask to upgrade them to economy first and then cancel them. You are very persistent and terse but clear. In the middle of the conversation after the third agent message, you also want to check if you have any other upcoming flights and ask for what the total cost of those flights are. ",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -1233,7 +1233,7 @@ tasks = [
     {
         "annotator": 2,
         "user_id": "sophia_taylor_9065",
-        "instruction": "You are sophia_taylor_9065. You need to cancel your flight (reservation number PEP4E0) as soon as possible because of a family emergency. Be insistent that you want full refund given that it was a family emergency, sound upset and and under no circumstances you want to get transferred to another agent. If you can't get a refund, try to change the flight to May 22nd. If that doesn't work, try to add insurance to the flight, be insistent",
+        "instruction": "Your user id is sophia_taylor_9065. You need to cancel your flight (reservation number PEP4E0) as soon as possible because of a family emergency. Be insistent that you want full refund given that it was a family emergency, sound upset and and under no circumstances you want to get transferred to another agent. If you can't get a refund, try to change the flight to May 22nd. If that doesn't work, try to add insurance to the flight, be insistent",
         "actions": [
             {
                 "name": "get_reservation_details",
@@ -1250,7 +1250,7 @@ tasks = [
     {
         "annotator": 2,
         "user_id": "sophia_taylor_9065",
-        "instruction": "You are sophia_taylor_9065. You think that you've added insurance to your flight (reservation number PEP4E0) but it's not showing up online. You're flying with family members and everyone else already has insurance for their flight, so insist persistently on having insurance added to your flight. Under no circumstances do you want to be transferred to another agent.",
+        "instruction": "Your user id is sophia_taylor_9065. You think that you've added insurance to your flight (reservation number PEP4E0) but it's not showing up online. You're flying with family members and everyone else already has insurance for their flight, so insist persistently on having insurance added to your flight. Under no circumstances do you want to be transferred to another agent.",
         "actions": [
             {
                 "name": "get_reservation_details",
