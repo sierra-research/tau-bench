@@ -11,7 +11,7 @@ class GetReservationDetails(Tool):
         reservations = data["reservations"]
         if reservation_id in reservations:
             return json.dumps(reservations[reservation_id])
-        return "Error: user not found"
+        return "Error: reservation not found"
 
     @staticmethod
     def get_info() -> Dict[str, Any]:
