@@ -127,6 +127,10 @@ class Env(object):
         actions = [
             action for action in self.task.actions if action.name != RESPOND_ACTION_NAME
         ]
+        
+        # if no actions were taken, then the reward is 0
+        if len(self.actions) == 0:
+            reward = 0.0
 
         # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
         # TODO: cache gt_data_hash in tasks.py (low priority)
@@ -138,6 +142,10 @@ class Env(object):
         info = RewardActionInfo(
             r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash
         )
+        
+        # remove gt actions added in the loop above such that we can call calculate_reward() again without side effects
+        self.actions = self.actions[:-len(self.task.actions)]
+        
         if not info.r_actions:
             reward = 0.0
 
@@ -147,6 +155,7 @@ class Env(object):
             outputs = {}
             for output in self.task.outputs:
                 found = False
+                
                 for action in self.actions:
                     if (
                         action.name == RESPOND_ACTION_NAME
@@ -155,6 +164,7 @@ class Env(object):
                     ):
                         found = True
                         break
+                
                 outputs[output] = found
                 if not found:
                     r_outputs = 0.0
