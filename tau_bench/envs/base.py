@@ -74,6 +74,7 @@ class Env(object):
             user_strategy=user_strategy, model=user_model, provider=user_provider
         )
         self.actions: List[Action] = []
+        self.done = False
 
     def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
         if task_index is None:
@@ -92,11 +93,11 @@ class Env(object):
 
         info = EnvInfo(task=self.task)
         reward = 0
-        done = False
+        self.done = False
         if action.name == RESPOND_ACTION_NAME:
             observation = self.user.step(action.kwargs["content"])
             info.source = "user"
-            done = "###STOP###" in observation
+            self.done = "###STOP###" in observation
         elif action.name in self.tools_map:
             try:
                 observation = self.tools_map[action.name].invoke(
@@ -106,17 +107,17 @@ class Env(object):
                 observation = f"Error: {e}"
             info.source = action.name
             if action.name in self.terminate_tools:
-                done = True
+                self.done = True
         else:
             observation = f"Unknown action {action.name}"
             info.source = action.name
 
-        if done:
+        if self.done:
             reward_res = self.calculate_reward()
             reward = reward_res.reward
             info.reward_info = reward_res
             info.user_cost = self.user.get_total_cost()
-        return EnvResponse(observation=observation, reward=reward, done=done, info=info)
+        return EnvResponse(observation=observation, reward=reward, done=self.done, info=info)
 
     def get_data_hash(self) -> str:
         return consistent_hash(to_hashable(self.data))
@@ -127,10 +128,13 @@ class Env(object):
         actions = [
             action for action in self.task.actions if action.name != RESPOND_ACTION_NAME
         ]
-        
-        # if no actions were taken, then the reward is 0
-        if len(self.actions) == 0:
+            
+        # Check if user has stopped interaction or terminate action was called
+        if not self.done:
+            print("NOT DONE")
             reward = 0.0
+        else:
+            print("DONE")   
 
         # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
         # TODO: cache gt_data_hash in tasks.py (low priority)
@@ -171,4 +175,4 @@ class Env(object):
                     reward = 0.0
             info = RewardOutputInfo(r_outputs=r_outputs, outputs=outputs)
             
-        return RewardResult(reward=reward, info=info, actions=actions)
+        return RewardResult(reward=reward, info=info, actions=actions, taken_actions=self.actions)
