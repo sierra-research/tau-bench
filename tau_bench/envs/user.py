@@ -319,7 +319,7 @@ class UserStrategy(enum.Enum):
 
 def load_user(
     user_strategy: Union[str, UserStrategy],
-    model: Optional[str] = "gpt-4o",
+    model: Optional[str] = "gpt-4o-2024-08-06",
     provider: Optional[str] = None,
 ) -> BaseUserSimulationEnv:
     if isinstance(user_strategy, str):
