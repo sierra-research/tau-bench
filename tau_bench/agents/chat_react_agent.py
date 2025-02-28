@@ -1,8 +1,7 @@
 # Copyright Sierra
 
 import json
-from litellm import completion
-
+import logging
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import (
@@ -11,8 +10,12 @@ from tau_bench.types import (
     RESPOND_ACTION_NAME,
     RESPOND_ACTION_FIELD_NAME,
 )
+from tau_bench.utils import completion_w_retry
 from typing import Optional, List, Dict, Any, Tuple
 
+# Setup logging
+logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ChatReActAgent(Agent):
     def __init__(
@@ -33,11 +36,13 @@ class ChatReActAgent(Agent):
         self.temperature = temperature
         self.use_reasoning = use_reasoning
         self.tools_info = tools_info
+        logger.info(f"ChatReActAgent, model={model}, provider={provider}, temperature={temperature}, use_reasoning={use_reasoning}")
 
     def generate_next_step(
         self, messages: List[Dict[str, Any]]
     ) -> Tuple[Dict[str, Any], Action, float]:
-        res = completion(
+        logger.info(f"generate_next_step")
+        res = completion_w_retry(
             model=self.model,
             custom_llm_provider=self.provider,
             messages=messages,
@@ -69,7 +74,8 @@ class ChatReActAgent(Agent):
         ]
         total_cost = 0.0
         info = {}
-        for _ in range(max_num_steps):
+        for i in range(max_num_steps):
+            logger.info(f"solve, i={i}")
             message, action, cost = self.generate_next_step(messages)
             response = env.step(action)
             obs = response.observation

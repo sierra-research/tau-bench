@@ -2,8 +2,7 @@
 
 import abc
 import enum
-from litellm import completion
-
+from tau_bench.utils import completion_w_retry
 from typing import Optional, List, Dict, Any, Union
 
 
@@ -44,7 +43,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
-        res = completion(
+        res = completion_w_retry(
             model=self.model, custom_llm_provider=self.provider, messages=messages
         )
         message = res.choices[0].message
@@ -115,7 +114,7 @@ User Response:
 <the user response (this will be parsed and sent to the agent)>"""
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
-        res = completion(
+        res = completion_w_retry(
             model=self.model, custom_llm_provider=self.provider, messages=messages
         )
         message = res.choices[0].message
@@ -164,7 +163,7 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         attempts = 0
         cur_message = None
         while attempts < self.max_attempts:
-            res = completion(
+            res = completion_w_retry(
                 model=self.model, custom_llm_provider=self.provider, messages=messages
             )
             cur_message = res.choices[0].message
@@ -224,7 +223,7 @@ Your answer will be parsed, so do not include any other text than the classifica
 -----
 
 Classification:"""
-    res = completion(
+    res = completion_w_retry(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
@@ -258,7 +257,7 @@ Reflection:
 
 Response:
 <the response (this will be parsed and sent to the agent)>"""
-    res = completion(
+    res = completion_w_retry(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
