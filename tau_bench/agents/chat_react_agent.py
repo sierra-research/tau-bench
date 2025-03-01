@@ -91,6 +91,7 @@ class ChatReActAgent(Agent):
             )
             total_cost += cost
             if response.done:
+                logger.info(f"solve, task_index={task_index}, done at i={i}/{max_num_steps}")
                 break
         return SolveResult(
             messages=messages,

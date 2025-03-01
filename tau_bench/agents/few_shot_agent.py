@@ -88,7 +88,7 @@ class FewShotToolCallingAgent(Agent):
                     ]
                 )
             if env_response.done:
-                logger.info(f"solve, done at i={i}/{max_num_steps}")
+                logger.info(f"solve, task_index={task_index}, done at i={i}/{max_num_steps}")
                 break
         return SolveResult(
             reward=reward,

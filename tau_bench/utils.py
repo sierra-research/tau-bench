@@ -20,7 +20,8 @@ def retry_with_exponential_backoff(
         httpx.HTTPStatusError,  # Retry on HTTP errors
         litellm.llms.bedrock.common_utils.BedrockError,  # Retry on AWS Bedrock specific errors
         litellm.ServiceUnavailableError,  # Retry when service is unavailable
-        litellm.exceptions.APIConnectionError  # Retry on connection issues
+        litellm.exceptions.APIConnectionError,  # Retry on connection issues
+        litellm.exceptions.BadRequestError # Retry on incorrectly formatted requests (because they could themselves be LLM generated)
     )
 ):
     """
