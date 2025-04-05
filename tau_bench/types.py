@@ -1,9 +1,9 @@
 # Copyright Sierra
 
 from pydantic import BaseModel, model_validator
-from typing import List, Dict, Any, Optional, Union, Type
-
-from tau_bench.agents.tool_calling_agent import ToolCallingAgent
+from typing import List, Dict, Any, Optional, Union, Type, TYPE_CHECKING
+if TYPE_CHECKING:
+    from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
@@ -80,7 +80,7 @@ class RunConfig(BaseModel):
     num_trials: int = 1
     env: str = "retail"
     agent_strategy: Optional[str] = "tool-calling"
-    custom_agent: Optional[Type[ToolCallingAgent]] = None
+    custom_agent: Optional[Type["ToolCallingAgent"]] = None
     temperature: float = 0.0
     task_split: str = "test"
     start_index: int = 0
