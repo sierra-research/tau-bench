@@ -8,6 +8,7 @@ from .get_user_details import GetUserDetails
 from .list_all_airports import ListAllAirports
 from .search_direct_flight import SearchDirectFlight
 from .search_onestop_flight import SearchOnestopFlight
+from .sort_flights import SortFlights
 from .send_certificate import SendCertificate
 from .think import Think
 from .transfer_to_human_agents import TransferToHumanAgents
@@ -24,6 +25,7 @@ ALL_TOOLS = [
     ListAllAirports,
     SearchDirectFlight,
     SearchOnestopFlight,
+    SortFlights,
     SendCertificate,
     Think,
     TransferToHumanAgents,

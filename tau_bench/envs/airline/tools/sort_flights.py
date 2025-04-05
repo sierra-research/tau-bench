@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from enum import StrEnum
 from typing import List, Union, Any, Dict
 from tau_bench.envs.tool import Tool
+import json
 
 class SortAttribute(StrEnum):
     PRICE = "price_any_class"
@@ -198,9 +199,10 @@ class SortFlights(Tool):
         flight_trips: List[Dict[str, Any]],
         sort_by: SortAttribute,
     ) -> str:
-        return sorted(
+        sorted_flights = sorted(
             flight_trips, key=lambda x: get_attribute(x, sort_by, get_dict_value_by_key_path)
         )
+        return json.dumps(sorted_flights)
 
     @staticmethod
     def get_info() -> Dict[str, Any]:
