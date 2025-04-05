@@ -199,7 +199,7 @@ class SortFlights(Tool):
         sort_by: SortAttribute,
     ) -> str:
         return sorted(
-            flight_trips, key=lambda x: get_attribute(x, sort_by, get_attr_by_key_path)
+            flight_trips, key=lambda x: get_attribute(x, sort_by, get_dict_value_by_key_path)
         )
 
     @staticmethod
