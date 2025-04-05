@@ -1,7 +1,7 @@
 # Copyright Sierra
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from tau_bench.envs.tool import Tool
 
 
@@ -12,7 +12,7 @@ class UpdateReservationBaggages(Tool):
         reservation_id: str,
         total_baggages: int,
         nonfree_baggages: int,
-        payment_id: str,
+        payment_id: Optional[str] = None,
     ) -> str:
         users, reservations = data["users"], data["reservations"]
         if reservation_id not in reservations:
@@ -20,6 +20,17 @@ class UpdateReservationBaggages(Tool):
         reservation = reservations[reservation_id]
 
         total_price = 50 * max(0, nonfree_baggages - reservation["nonfree_baggages"])
+
+        # TODO: this needs to be handled differently. I shouldnt fake an id here. The rest of the logic should just handle a null payment_id.
+        if payment_id is None:
+            payment_id = next(
+                payment_id
+                for payment_id in users[reservation["user_id"]][
+                    "payment_methods"
+                ].keys()
+                if not payment_id.startswith("certificate_")
+            )
+
         if payment_id not in users[reservation["user_id"]]["payment_methods"]:
             return "Error: payment method not found"
         payment_method = users[reservation["user_id"]]["payment_methods"][payment_id]
@@ -69,8 +80,13 @@ class UpdateReservationBaggages(Tool):
                             "description": "The updated number of non-free baggage items included in the reservation.",
                         },
                         "payment_id": {
-                            "type": "string",
-                            "description": "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "description": "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+                                },
+                                {"type": "null"},
+                            ]
                         },
                     },
                     "required": [

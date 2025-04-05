@@ -2,10 +2,61 @@
 
 import json
 from typing import Any, Dict
+from tau_bench.envs.airline.tools.sort_flights import (
+    SORT_STRING_VALUES,
+    sort_flights_dict,
+)
 from tau_bench.envs.tool import Tool
 
 
 class SearchDirectFlight(Tool):
+    @staticmethod
+    def invoke(
+        data: Dict[str, Any],
+        origin: str,
+        destination: str,
+        date: str,
+        sort_by: str = "price",
+    ) -> str:
+        output = SearchDirectFlightWithSort.invoke(
+            data, origin, destination, date, sort_by
+        )
+        return json.dumps(output)
+
+    @staticmethod
+    def get_info() -> Dict[str, Any]:
+        return SearchDirectFlightWithSort.get_info()
+
+
+class SearchDirectFlightWithSort:
+    @staticmethod
+    def invoke(
+        data: Dict[str, Any],
+        origin: str,
+        destination: str,
+        date: str,
+        sort_by: str = "price",
+    ) -> str:
+        results = SearchDirectFlightWithoutSort.invoke(data, origin, destination, date)
+        results = sort_flights_dict(results, sort_by)
+        return results
+
+    @staticmethod
+    def get_info() -> Dict[str, Any]:
+        info = SearchDirectFlightWithoutSort.get_info()
+        info["function"]["parameters"]["properties"]["sort_by"] = {
+            "type": "string",
+            "description": "The attribute to sort the flights by. The default is 'price'.",
+            "enum": SORT_STRING_VALUES,
+        }
+        info["function"]["parameters"]["required"].append("sort_by")
+        info["function"][
+            "description"
+        ] = "Search direct flights between two cities on a specific date"
+        return info
+
+
+class SearchDirectFlightWithoutSort:
     @staticmethod
     def invoke(data: Dict[str, Any], origin: str, destination: str, date: str) -> str:
         flights = data["flights"]
@@ -19,7 +70,8 @@ class SearchDirectFlight(Tool):
                     # results add flight except dates, but add flight["datas"][date]
                     results.append({k: v for k, v in flight.items() if k != "dates"})
                     results[-1].update(flight["dates"][date])
-        return json.dumps(results)
+                    results[-1]["date"] = date
+        return results
 
     @staticmethod
     def get_info() -> Dict[str, Any]:
@@ -27,7 +79,7 @@ class SearchDirectFlight(Tool):
             "type": "function",
             "function": {
                 "name": "search_direct_flight",
-                "description": "Search direct flights between two cities on a specific date.",
+                "description": "Search direct flights between two cities on a specific date. The results won't be sorted in any way.",
                 "parameters": {
                     "type": "object",
                     "properties": {

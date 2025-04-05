@@ -2,10 +2,61 @@
 
 import json
 from typing import Any, Dict
+from tau_bench.envs.airline.tools.sort_flights import (
+    SORT_STRING_VALUES,
+    sort_flights_dict,
+)
 from tau_bench.envs.tool import Tool
 
 
 class SearchOnestopFlight(Tool):
+    @staticmethod
+    def invoke(
+        data: Dict[str, Any],
+        origin: str,
+        destination: str,
+        date: str,
+        sort_by: str = "price",
+    ) -> str:
+        output = SearchOnestopFlightWithSort.invoke(
+            data, origin, destination, date, sort_by
+        )
+        return json.dumps(output)
+
+    @staticmethod
+    def get_info() -> Dict[str, Any]:
+        return SearchOnestopFlightWithSort.get_info()
+
+
+class SearchOnestopFlightWithSort:
+    @staticmethod
+    def invoke(
+        data: Dict[str, Any],
+        origin: str,
+        destination: str,
+        date: str,
+        sort_by: str = "price",
+    ) -> str:
+        results = SearchOnestopFlightWithoutSort.invoke(data, origin, destination, date)
+        results = sort_flights_dict(results, sort_by)
+        return results
+
+    @staticmethod
+    def get_info() -> Dict[str, Any]:
+        info = SearchOnestopFlightWithoutSort.get_info()
+        info["function"]["parameters"]["properties"]["sort_by"] = {
+            "type": "string",
+            "description": "The attribute to sort the flights by. The default is 'price'.",
+            "enum": SORT_STRING_VALUES,
+        }
+        info["function"]["parameters"]["required"].append("sort_by")
+        info["function"][
+            "description"
+        ] = "Search onestop flights between two cities on a specific date"
+        return info
+
+
+class SearchOnestopFlightWithoutSort:
     @staticmethod
     def invoke(data: Dict[str, Any], origin: str, destination: str, date: str) -> str:
         flights = data["flights"]
@@ -43,7 +94,7 @@ class SearchOnestopFlight(Tool):
                                 result2.update(flight2["dates"][date])
                                 result2["date"] = date2
                                 results.append([result1, result2])
-        return json.dumps(results)
+        return results
 
     @staticmethod
     def get_info() -> Dict[str, Any]:
@@ -51,7 +102,7 @@ class SearchOnestopFlight(Tool):
             "type": "function",
             "function": {
                 "name": "search_onestop_flight",
-                "description": "Search direct flights between two cities on a specific date.",
+                "description": "Search onestop flights between two cities on a specific date. The results won't be sorted in any way.",
                 "parameters": {
                     "type": "object",
                     "properties": {

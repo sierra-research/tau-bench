@@ -84,6 +84,8 @@ class UpdateReservationFlights(Tool):
                     "amount": total_price,
                 }
             )
+        reservation["cabin"] = cabin
+
         # do not make flight database update here, assume it takes time to be updated
         return json.dumps(reservation)
 
