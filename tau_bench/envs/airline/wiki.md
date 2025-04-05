@@ -41,9 +41,7 @@ As an airline agent, you can help users book, modify, or cancel flight reservati
 
 - The agent must first obtain the user id and the reservation id.
 
-- Change flights: Basic economy flights cannot be modified. Other reservations can be modified without changing the origin, destination, and trip type. Some flight segments can be kept, but their prices will not be updated based on the current price. The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!
-
-- Change cabin: all reservations, including basic economy, can change cabin without changing the flights. Cabin changes require the user to pay for the difference between their current cabin and the new cabin class. Cabin class must be the same across all the flights in the same reservation; changing cabin for just one flight segment is not possible.
+- Change flights: All reservations, including basic economy, can change cabin, and the cabin change must apply to all flight segments and all passengers in the reservation. Besides cabin changes, non-basic economy flights can be modified without changing the origin and trip type (i.e. roundtrip vs oneway). In other words, the individual flight segments can be changed as long as these constraints are met. Besides cabin changes, basic economy flights cannot be changed any further. However, if the customer is willing to upgrade to non-basic economy, then it can be changed like non-basic economy flights. All allowed changes are free of charge. If there are fare differences, the customer will be charged/refunded the difference. The API does not check these for the agent, so the agent must make sure the rules apply before calling the API!
 
 - Change baggage and insurance: The user can add but not remove checked bags. The user cannot add insurance after initial booking.
 
