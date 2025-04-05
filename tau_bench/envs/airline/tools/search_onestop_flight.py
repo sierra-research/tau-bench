@@ -2,7 +2,7 @@
 
 import json
 from typing import Any, Dict
-from tau_bench.agents.custom_tool_call_data.sort_by_general import (
+from tau_bench.envs.airline.tools.sort_flights import (
     SORT_STRING_VALUES,
     sort_flights_dict,
 )

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from enum import StrEnum
 from typing import List, Union, Any, Dict
 from tau_bench.envs.tool import Tool
@@ -183,6 +183,14 @@ def sort_flights_dict(flight_trips, sort_by: SortAttribute):
     )
 
 
+class SortFlightSchema(BaseModel):
+    flight_trips: List[FlightTrip] = Field(description="flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.")
+    sort_by: SortAttribute = Field(description="attribute to sort by")
+
+
+json_schema = SortFlightSchema.model_json_schema()
+json_schema.pop('title')
+
 class SortFlights(Tool):
     @staticmethod
     def invoke(
@@ -201,20 +209,6 @@ class SortFlights(Tool):
             "function": {
                 "name": "sort_flights",
                 "description": "Sorts flights by the sort attribute in ascending order",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "flight_trips": {
-                            "type": "string",
-                            "description": "flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.",
-                        },
-                        "sort_by": {
-                            "type": "string",
-                            "description": "attribute to sort by",
-                            "enum": SORT_STRING_VALUES,
-                        },
-                    },
-                    "required": ["flight_trips", "sort_by"],
-                },
+                "parameters": json_schema
             },
         }
