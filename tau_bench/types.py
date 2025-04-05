@@ -1,7 +1,9 @@
 # Copyright Sierra
 
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional, Union
+from pydantic import BaseModel, model_validator
+from typing import List, Dict, Any, Optional, Union, Type
+
+from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
@@ -77,7 +79,8 @@ class RunConfig(BaseModel):
     user_model: str = "gpt-4o"
     num_trials: int = 1
     env: str = "retail"
-    agent_strategy: str = "tool-calling"
+    agent_strategy: Optional[str] = "tool-calling"
+    custom_agent: Optional[Type[ToolCallingAgent]] = None
     temperature: float = 0.0
     task_split: str = "test"
     start_index: int = 0
@@ -89,3 +92,10 @@ class RunConfig(BaseModel):
     shuffle: int = 0
     user_strategy: str = "llm"
     few_shot_displays_path: Optional[str] = None
+
+
+    @model_validator(mode="after")
+    def validate_agent(self):
+        if not ((self.agent_strategy is None) ^ (self.custom_agent is None)):
+            raise ValueError("Exactly one of agent_strategy or custom_agent must be provided")
+        return self
