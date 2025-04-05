@@ -1,4 +1,5 @@
 .python-version
+.env
 
 #Run result artifacts
 results/**
