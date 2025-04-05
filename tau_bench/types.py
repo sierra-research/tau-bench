@@ -13,6 +13,7 @@ class Action(BaseModel):
 
 
 class Task(BaseModel):
+    id: Optional[int] = None
     user_id: str
     actions: List[Action]
     instruction: str
