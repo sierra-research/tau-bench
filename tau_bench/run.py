@@ -22,7 +22,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.model_provider in provider_list, "Invalid model provider"
     assert config.user_model_provider in provider_list, "Invalid user model provider"
     assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
-    assert config.task_split in ["train", "test", "dev"], "Invalid task split"
+    assert config.task_split in ["train", "test", "dev", "revised_test"], "Invalid task split"
     assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
 
     random.seed(config.seed)
