@@ -35,6 +35,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     print(f"Loading user with strategy: {config.user_strategy}")
     env = get_env(
         config.env,
+        custom_env=config.custom_env,
         user_strategy=config.user_strategy,
         user_model=config.user_model,
         user_provider=config.user_model_provider,
@@ -67,6 +68,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
         def _run(idx: int) -> EnvRunResult:
             isolated_env = get_env(
                 config.env,
+                custom_env=config.custom_env,
                 user_strategy=config.user_strategy,
                 user_model=config.user_model,
                 task_split=config.task_split,
