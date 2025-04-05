@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from enum import StrEnum
-from typing import List, Union
-
+from typing import List, Union, Any, Dict
+from tau_bench.envs.tool import Tool
 
 class SortAttribute(StrEnum):
     PRICE = "price_any_class"
@@ -181,3 +181,40 @@ def sort_flights_dict(flight_trips, sort_by: SortAttribute):
         flight_trips,
         key=lambda x: get_attribute(x, sort_by, get_dict_value_by_key_path),
     )
+
+
+class SortFlights(Tool):
+    @staticmethod
+    def invoke(
+        data: Dict[str, Any],
+        flight_trips: List[Dict[str, Any]],
+        sort_by: SortAttribute,
+    ) -> str:
+        return sorted(
+            flight_trips, key=lambda x: get_attribute(x, sort_by, get_attr_by_key_path)
+        )
+
+    @staticmethod
+    def get_info() -> Dict[str, Any]:
+        return {
+            "type": "function",
+            "function": {
+                "name": "sort_flights",
+                "description": "Sorts flights by the sort attribute in ascending order",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "flight_trips": {
+                            "type": "string",
+                            "description": "flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.",
+                        },
+                        "sort_by": {
+                            "type": "string",
+                            "description": "attribute to sort by",
+                            "enum": SORT_STRING_VALUES,
+                        },
+                    },
+                    "required": ["flight_trips", "sort_by"],
+                },
+            },
+        }
