@@ -21,6 +21,7 @@ class UpdateReservationBaggages(Tool):
 
         total_price = 50 * max(0, nonfree_baggages - reservation["nonfree_baggages"])
 
+        # TODO: this needs to be handled differently. I shouldnt fake an id here. The rest of the logic should just handle a null payment_id.
         if payment_id is None:
             payment_id = next(
                 payment_id
