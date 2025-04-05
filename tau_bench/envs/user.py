@@ -3,7 +3,7 @@
 import abc
 import enum
 from litellm import completion
-
+import logfire
 from typing import Optional, List, Dict, Any, Union
 
 
@@ -41,33 +41,69 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.model = model
         self.provider = provider
         self.total_cost = 0.0
-        self.reset()
+        self.reset_messages()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
-        res = completion(
-            model=self.model, custom_llm_provider=self.provider, messages=messages
+        # Sometimes, the model inexplicably returns an empty message.
+        message_content = ""
+        tries = 3
+        copied_messages = messages.copy()
+        while not message_content and tries > 0:
+            res = completion(
+                model=self.model,
+                custom_llm_provider=self.provider,
+                messages=copied_messages,
+            )
+            message = res.choices[0].message
+            message_content = message.content
+            tries -= 1
+            if not message_content:
+                copied_messages.append({"role": "assistant", "content": ""})
+                copied_messages.append(
+                    {
+                        "role": "user",
+                        "content": "You returned an empty response, which is disallowed. Please try again.",
+                    }
+                )
+
+        if tries == 0 and not message_content:
+            raise ValueError("Failed to generate a non-empty user message")
+
+        logfire.info(
+            "Customer msg: {msg}",
+            msg=message_content,
+            messages=copied_messages,
+            completion=res,
+            _tags=["CustomerLLM"],
         )
-        message = res.choices[0].message
         self.messages.append(message.model_dump())
         self.total_cost = res._hidden_params["response_cost"]
         return message.content
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
         instruction_display = (
-            ("\n\nInstruction: " + instruction + "\n")
+            ("<instructions>\n" f"{instruction}\n" "</instructions>\n")
             if instruction is not None
             else ""
         )
-        return f"""You are a user interacting with an agent.{instruction_display}
-Rules:
-- Just generate one line at a time to simulate the user's message.
-- Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
-- Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.
-- If the instruction goal is satisified, generate '###STOP###' as a standalone message without anything else to end the conversation.
-- Do not repeat the exact instruction in the conversation. Instead, use your own words to convey the same information.
-- Try to make the conversation as natural as possible, and stick to the personalities in the instruction."""
+        return (
+            "You are a user interacting with an agent. Your job is to follow the instructions in <instructions> while adhering to the rules in <rules>.\n\n"
+            f"{instruction_display}"
+            "<rules>\n"
+            "- Just generate one line at a time to simulate the user's message.\n"
+            "- Do not give away all the instruction at once. Only provide the information that is necessary for the current step.\n"
+            "- Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.\n"
+            "- End the conversation by generating '###STOP###' as a standalone message without anything else. You can only generate '###STOP###' when one of two conditions is met. "
+            "1) If the instruction goal is satisified. "
+            "The goal is satisfied if and only if the agent explicitly confirms that the goal is satisfied. Explicit confirmation is very important. For instance, if the agent asks a confirmatory question, you must wait for the agent's explicit acknowledgement of your response before even considering generating '###STOP###'. "
+            "2) If the agent refuses to or can't help you with the instruction goal. For this to be met, you can only generate '###STOP###' after you attempted and were refused/unhelped for 4 times. "
+            "For either 1) or 2), when in doubt, YOU MUST clarify with the agent before generating '###STOP###'. DO NOT rush with generating '###STOP###'.\n"
+            "- Do not repeat the exact instruction in the conversation. Instead, use your own words to convey the same information.\n"
+            "- Try to make the conversation as natural as possible, and stick to the personalities in the instruction.\n"
+            "</rules>"
+        )
 
-    def reset(self, instruction: Optional[str] = None) -> str:
+    def reset_messages(self, instruction: Optional[str] = None) -> None:
         self.messages = [
             {
                 "role": "system",
@@ -75,6 +111,9 @@ Rules:
             },
             {"role": "user", "content": "Hi! How can I help you today?"},
         ]
+
+    def reset(self, instruction: Optional[str] = None) -> str:
+        self.reset_messages(instruction)
         return self.generate_next_message(self.messages)
 
     def step(self, content: str) -> str:
