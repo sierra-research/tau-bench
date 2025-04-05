@@ -18,5 +18,7 @@ setup(
         "termcolor>=2.4.0",
         "numpy>=1.26.4",
         "litellm>=1.41.0",
+        "pydantic>=2.11.2",
+        "logfire>=3.12.0",
     ],
 )
