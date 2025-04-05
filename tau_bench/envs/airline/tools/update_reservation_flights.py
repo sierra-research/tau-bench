@@ -85,6 +85,7 @@ class UpdateReservationFlights(Tool):
                 }
             )
         # do not make flight database update here, assume it takes time to be updated
+        reservation["cabin"] = cabin
         return json.dumps(reservation)
 
     @staticmethod

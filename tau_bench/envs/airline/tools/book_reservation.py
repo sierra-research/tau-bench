@@ -27,6 +27,8 @@ class BookReservation(Tool):
             return "Error: user not found"
         user = users[user_id]
 
+        payment_methods = sorted(payment_methods, key=lambda x: x["payment_id"])
+
         # assume each task makes at most 3 reservations
         reservation_id = "HATHAT"
         if reservation_id in reservations:

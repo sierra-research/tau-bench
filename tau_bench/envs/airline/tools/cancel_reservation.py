@@ -15,6 +15,8 @@ class CancelReservation(Tool):
         if reservation_id not in reservations:
             return "Error: reservation not found"
         reservation = reservations[reservation_id]
+        if reservation.get("status", None) == "cancelled":
+            return "Error: reservation already cancelled"
 
         # reverse the payment
         refunds = []
