@@ -46,9 +46,9 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
     def _generate_message(self, messages: List[Dict[str, Any]]) -> str:
         # Sometimes, the model inexplicably returns an empty message.
         message_content = ""
-        tries = 3
+        retries = 3
         copied_messages = messages.copy()
-        while not message_content and tries > 0:
+        while not message_content and retries > 0:
             res = completion(
                 model=self.model,
                 custom_llm_provider=self.provider,
@@ -56,7 +56,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
             )
             message = res.choices[0].message
             message_content = message.content
-            tries -= 1
+            retries -= 1
             if not message_content:
                 copied_messages.append({"role": "assistant", "content": ""})
                 copied_messages.append(
@@ -66,7 +66,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
                     }
                 )
 
-        if tries == 0 and not message_content:
+        if retries == 0 and not message_content:
             raise ValueError("Failed to generate a non-empty user message")
 
         logfire.info(
