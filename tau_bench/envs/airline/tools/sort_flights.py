@@ -15,7 +15,7 @@ class SortAttribute(StrEnum):
     TOTAL_FLIGHT_DURATION_INCL_LAYOVER = "total_flight_duration_incl_layover"
 
 
-SORT_STRING_VALUES = [attr.value for attr in SortAttribute]
+SORT_ATTRIBUTE_STRING_VALUES = [attr.value for attr in SortAttribute]
 
 SORT_ATTRIBUTE_TO_KEY_PATH = {
     SortAttribute.PRICE_BASIC_ECONOMY: "prices.basic_economy",
@@ -50,6 +50,7 @@ class FlightSegment(BaseModel):
     date: str
 
 
+# This class is intentionally mispelled FlightSgment to differ from FlightSegment
 # Currently, if an Union type references the same subtype twice,
 # pydantic struggles to create a json schema via model_json_schema.
 # Therefore, this is a workaround to fool pydantic into thinking that
@@ -61,13 +62,8 @@ class FlightSgment(FlightSegment):
 FlightTrip = Union[FlightSgment, List[FlightSegment]]
 
 
-def get_attr_by_key_path(obj, key_path):
-    for key in key_path.split("."):
-        obj = getattr(obj, key)
-    return obj
-
-
-def get_dict_value_by_key_path(obj, key_path):
+def get_dict_value_by_sort_by(obj, sort_by):
+    key_path = SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
     for key in key_path.split("."):
         obj = obj[key]
     return obj
@@ -89,8 +85,8 @@ def time_difference_seconds(time1, time2):
     return seconds1 - seconds2
 
 
-def get_attribute(
-    flight_trip: FlightTrip, sort_by: SortAttribute, get_attr_by_key_path_fn
+def get_sort_value(
+    flight_trip: FlightTrip, sort_by: SortAttribute
 ):
     if type(flight_trip) is not list:
         if sort_by in [
@@ -98,29 +94,29 @@ def get_attribute(
             SortAttribute.TOTAL_FLIGHT_DURATION_INCL_LAYOVER,
         ]:
             return time_difference_seconds(
-                get_attr_by_key_path_fn(
-                    flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME]
+                get_dict_value_by_sort_by(
+                    flight_trip, SortAttribute.ARRIVAL_TIME
                 ),
-                get_attr_by_key_path_fn(
+                get_dict_value_by_sort_by(
                     flight_trip,
-                    SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                    SortAttribute.DEPARTURE_TIME,
                 ),
             )
         elif sort_by == SortAttribute.PRICE:
-            price_basic_economy = get_attr_by_key_path_fn(
+            price_basic_economy = get_dict_value_by_sort_by(
                 flight_trip,
-                SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BASIC_ECONOMY],
+                SortAttribute.PRICE_BASIC_ECONOMY,
             )
-            price_economy = get_attr_by_key_path_fn(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_ECONOMY]
+            price_economy = get_dict_value_by_sort_by(
+                flight_trip, SortAttribute.PRICE_ECONOMY
             )
-            price_business = get_attr_by_key_path_fn(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BUSINESS]
+            price_business = get_dict_value_by_sort_by(
+                flight_trip, SortAttribute.PRICE_BUSINESS
             )
             return min(price_basic_economy, price_economy, price_business)
         else:
-            return get_attr_by_key_path_fn(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+            return get_dict_value_by_sort_by(
+                flight_trip, sort_by
             )
     else:
         if sort_by in [
@@ -130,67 +126,67 @@ def get_attribute(
             SortAttribute.PRICE,
         ]:
             return sum(
-                get_attribute(segment, sort_by, get_attr_by_key_path_fn)
+                get_sort_value(segment, sort_by)
                 for segment in flight_trip
             )
         else:
             sorted_flight_trip = sorted(
                 flight_trip,
-                key=lambda x: get_attribute(
-                    x, SortAttribute.DEPARTURE_TIME, get_attr_by_key_path_fn
+                key=lambda x: get_sort_value(
+                    x, SortAttribute.DEPARTURE_TIME
                 ),
             )
             if sort_by == SortAttribute.DEPARTURE_TIME:
-                return get_attr_by_key_path_fn(
-                    sorted_flight_trip[0], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+                return get_dict_value_by_sort_by(
+                    sorted_flight_trip[0], sort_by
                 )
             elif sort_by == SortAttribute.ARRIVAL_TIME:
-                return get_attr_by_key_path_fn(
-                    sorted_flight_trip[-1], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+                return get_dict_value_by_sort_by(
+                    sorted_flight_trip[-1], sort_by
                 )
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_EXCL_LAYOVER:
                 duration = 0
                 for segment in sorted_flight_trip:
                     duration += time_difference_seconds(
-                        get_attr_by_key_path_fn(
+                        get_dict_value_by_sort_by(
                             segment,
-                            SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
+                            SortAttribute.ARRIVAL_TIME,
                         ),
-                        get_attr_by_key_path_fn(
+                        get_dict_value_by_sort_by(
                             segment,
-                            SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                            SortAttribute.DEPARTURE_TIME,
                         ),
                     )
                 return duration
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_INCL_LAYOVER:
                 return time_difference_seconds(
-                    get_attr_by_key_path_fn(
+                    get_dict_value_by_sort_by(
                         sorted_flight_trip[-1],
-                        SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
+                        SortAttribute.ARRIVAL_TIME,
                     ),
-                    get_attr_by_key_path_fn(
+                    get_dict_value_by_sort_by(
                         sorted_flight_trip[0],
-                        SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                        SortAttribute.DEPARTURE_TIME,
                     ),
                 )
             else:
                 raise ValueError(f"Invalid sort attribute: {sort_by}")
+            
 
-
-def sort_flights_dict(flight_trips, sort_by: SortAttribute):
+def sort_flights(flight_trips, sort_by: SortAttribute):
     return sorted(
         flight_trips,
-        key=lambda x: get_attribute(x, sort_by, get_dict_value_by_key_path),
+        key=lambda x: get_sort_value(x, sort_by),
     )
 
 
-class SortFlightSchema(BaseModel):
+class SortFlightToolSchema(BaseModel):
     flight_trips: List[FlightTrip] = Field(description="flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.")
     sort_by: SortAttribute = Field(description="attribute to sort by")
 
 
-json_schema = SortFlightSchema.model_json_schema()
-json_schema.pop('title')
+sort_flight_tool_json_schema = SortFlightToolSchema.model_json_schema()
+sort_flight_tool_json_schema.pop('title')
 
 class SortFlights(Tool):
     @staticmethod
@@ -199,9 +195,7 @@ class SortFlights(Tool):
         flight_trips: List[Dict[str, Any]],
         sort_by: SortAttribute,
     ) -> str:
-        sorted_flights = sorted(
-            flight_trips, key=lambda x: get_attribute(x, sort_by, get_dict_value_by_key_path)
-        )
+        sorted_flights = sort_flights(flight_trips, sort_by)
         return json.dumps(sorted_flights)
 
     @staticmethod
@@ -211,6 +205,6 @@ class SortFlights(Tool):
             "function": {
                 "name": "sort_flights",
                 "description": "Sorts flights by the sort attribute in ascending order",
-                "parameters": json_schema
+                "parameters": sort_flight_tool_json_schema
             },
         }
