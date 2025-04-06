@@ -132,7 +132,7 @@ def get_sort_attribute(
             sorted_flight_trip = sorted(
                 flight_trip,
                 key=lambda x: get_sort_attribute(
-                    x, SortAttribute.DEPARTURE_TIME, get_value_by_dict_key_path
+                    x, SortAttribute.DEPARTURE_TIME
                 ),
             )
             if sort_by == SortAttribute.DEPARTURE_TIME:
