@@ -3,6 +3,7 @@
 import argparse
 from tau_bench.types import RunConfig
 from tau_bench.agents.tool_calling_agent import *
+from tau_bench.envs.base import *
 from tau_bench.run import run
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
