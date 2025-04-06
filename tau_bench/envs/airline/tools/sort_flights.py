@@ -62,7 +62,8 @@ class FlightSgment(FlightSegment):
 FlightTrip = Union[FlightSgment, List[FlightSegment]]
 
 
-def get_value_by_dict_key_path(obj, key_path):
+def get_value_by_dict_key_path(obj, sort_by):
+    key_path = SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
     for key in key_path.split("."):
         obj = obj[key]
     return obj
@@ -94,28 +95,28 @@ def get_sort_attribute(
         ]:
             return time_difference_seconds(
                 get_value_by_dict_key_path(
-                    flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME]
+                    flight_trip, SortAttribute.ARRIVAL_TIME
                 ),
                 get_value_by_dict_key_path(
                     flight_trip,
-                    SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                    SortAttribute.DEPARTURE_TIME,
                 ),
             )
         elif sort_by == SortAttribute.PRICE:
             price_basic_economy = get_value_by_dict_key_path(
                 flight_trip,
-                SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BASIC_ECONOMY],
+                SortAttribute.PRICE_BASIC_ECONOMY,
             )
             price_economy = get_value_by_dict_key_path(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_ECONOMY]
+                flight_trip, SortAttribute.PRICE_ECONOMY
             )
             price_business = get_value_by_dict_key_path(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BUSINESS]
+                flight_trip, SortAttribute.PRICE_BUSINESS
             )
             return min(price_basic_economy, price_economy, price_business)
         else:
             return get_value_by_dict_key_path(
-                flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+                flight_trip, sort_by
             )
     else:
         if sort_by in [
@@ -137,11 +138,11 @@ def get_sort_attribute(
             )
             if sort_by == SortAttribute.DEPARTURE_TIME:
                 return get_value_by_dict_key_path(
-                    sorted_flight_trip[0], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+                    sorted_flight_trip[0], sort_by
                 )
             elif sort_by == SortAttribute.ARRIVAL_TIME:
                 return get_value_by_dict_key_path(
-                    sorted_flight_trip[-1], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
+                    sorted_flight_trip[-1], sort_by
                 )
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_EXCL_LAYOVER:
                 duration = 0
@@ -149,11 +150,11 @@ def get_sort_attribute(
                     duration += time_difference_seconds(
                         get_value_by_dict_key_path(
                             segment,
-                            SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
+                            SortAttribute.ARRIVAL_TIME,
                         ),
                         get_value_by_dict_key_path(
                             segment,
-                            SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                            SortAttribute.DEPARTURE_TIME,
                         ),
                     )
                 return duration
@@ -161,11 +162,11 @@ def get_sort_attribute(
                 return time_difference_seconds(
                     get_value_by_dict_key_path(
                         sorted_flight_trip[-1],
-                        SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
+                        SortAttribute.ARRIVAL_TIME,
                     ),
                     get_value_by_dict_key_path(
                         sorted_flight_trip[0],
-                        SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
+                        SortAttribute.DEPARTURE_TIME,
                     ),
                 )
             else:
