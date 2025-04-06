@@ -178,13 +178,13 @@ def get_sort_attribute(
                 raise ValueError(f"Invalid sort attribute: {sort_by}")
 
 
-class SortFlightSchema(BaseModel):
+class SortFlightToolSchema(BaseModel):
     flight_trips: List[FlightTrip] = Field(description="flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.")
     sort_by: SortAttribute = Field(description="attribute to sort by")
 
 
-json_schema = SortFlightSchema.model_json_schema()
-json_schema.pop('title')
+sort_flight_tool_json_schema = SortFlightToolSchema.model_json_schema()
+sort_flight_tool_json_schema.pop('title')
 
 class SortFlights(Tool):
     @staticmethod
@@ -205,6 +205,6 @@ class SortFlights(Tool):
             "function": {
                 "name": "sort_flights",
                 "description": "Sorts flights by the sort attribute in ascending order",
-                "parameters": json_schema
+                "parameters": sort_flight_tool_json_schema
             },
         }
