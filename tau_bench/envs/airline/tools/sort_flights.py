@@ -125,7 +125,7 @@ def get_sort_attribute(
             SortAttribute.PRICE,
         ]:
             return sum(
-                get_sort_attribute(segment, sort_by, get_value_by_dict_key_path)
+                get_sort_attribute(segment, sort_by)
                 for segment in flight_trip
             )
         else:
