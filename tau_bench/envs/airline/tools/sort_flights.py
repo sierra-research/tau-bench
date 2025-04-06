@@ -4,6 +4,7 @@ from typing import List, Union, Any, Dict
 from tau_bench.envs.tool import Tool
 import json
 
+
 class SortAttribute(StrEnum):
     PRICE = "price_any_class"
     PRICE_BASIC_ECONOMY = "price_basic_economy"
@@ -85,18 +86,14 @@ def time_difference_seconds(time1, time2):
     return seconds1 - seconds2
 
 
-def get_sort_value(
-    flight_trip: FlightTrip, sort_by: SortAttribute
-):
+def get_sort_value(flight_trip: FlightTrip, sort_by: SortAttribute):
     if type(flight_trip) is not list:
         if sort_by in [
             SortAttribute.TOTAL_FLIGHT_DURATION_EXCL_LAYOVER,
             SortAttribute.TOTAL_FLIGHT_DURATION_INCL_LAYOVER,
         ]:
             return time_difference_seconds(
-                get_dict_value_by_sort_by(
-                    flight_trip, SortAttribute.ARRIVAL_TIME
-                ),
+                get_dict_value_by_sort_by(flight_trip, SortAttribute.ARRIVAL_TIME),
                 get_dict_value_by_sort_by(
                     flight_trip,
                     SortAttribute.DEPARTURE_TIME,
@@ -115,9 +112,7 @@ def get_sort_value(
             )
             return min(price_basic_economy, price_economy, price_business)
         else:
-            return get_dict_value_by_sort_by(
-                flight_trip, sort_by
-            )
+            return get_dict_value_by_sort_by(flight_trip, sort_by)
     else:
         if sort_by in [
             SortAttribute.PRICE_BASIC_ECONOMY,
@@ -125,25 +120,16 @@ def get_sort_value(
             SortAttribute.PRICE_BUSINESS,
             SortAttribute.PRICE,
         ]:
-            return sum(
-                get_sort_value(segment, sort_by)
-                for segment in flight_trip
-            )
+            return sum(get_sort_value(segment, sort_by) for segment in flight_trip)
         else:
             sorted_flight_trip = sorted(
                 flight_trip,
-                key=lambda x: get_sort_value(
-                    x, SortAttribute.DEPARTURE_TIME
-                ),
+                key=lambda x: get_sort_value(x, SortAttribute.DEPARTURE_TIME),
             )
             if sort_by == SortAttribute.DEPARTURE_TIME:
-                return get_dict_value_by_sort_by(
-                    sorted_flight_trip[0], sort_by
-                )
+                return get_dict_value_by_sort_by(sorted_flight_trip[0], sort_by)
             elif sort_by == SortAttribute.ARRIVAL_TIME:
-                return get_dict_value_by_sort_by(
-                    sorted_flight_trip[-1], sort_by
-                )
+                return get_dict_value_by_sort_by(sorted_flight_trip[-1], sort_by)
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_EXCL_LAYOVER:
                 duration = 0
                 for segment in sorted_flight_trip:
@@ -171,7 +157,7 @@ def get_sort_value(
                 )
             else:
                 raise ValueError(f"Invalid sort attribute: {sort_by}")
-            
+
 
 def sort_flights(flight_trips, sort_by: SortAttribute):
     return sorted(
@@ -181,12 +167,15 @@ def sort_flights(flight_trips, sort_by: SortAttribute):
 
 
 class SortFlightToolSchema(BaseModel):
-    flight_trips: List[FlightTrip] = Field(description="flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.")
+    flight_trips: List[FlightTrip] = Field(
+        description='flights to sort. A single "flight" can be either a single FlightSegment or a list of FlightSegments.'
+    )
     sort_by: SortAttribute = Field(description="attribute to sort by")
 
 
 sort_flight_tool_json_schema = SortFlightToolSchema.model_json_schema()
-sort_flight_tool_json_schema.pop('title')
+sort_flight_tool_json_schema.pop("title")
+
 
 class SortFlights(Tool):
     @staticmethod
@@ -205,6 +194,6 @@ class SortFlights(Tool):
             "function": {
                 "name": "sort_flights",
                 "description": "Sorts flights by the sort attribute in ascending order",
-                "parameters": sort_flight_tool_json_schema
+                "parameters": sort_flight_tool_json_schema,
             },
         }
