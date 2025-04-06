@@ -16,7 +16,7 @@ class SearchOnestopFlight(Tool):
         origin: str,
         destination: str,
         date: str,
-        sort_by: str = "price",
+        sort_by: str = "price_any_class",
     ) -> str:
         output = SearchOnestopFlightWithSort.invoke(
             data, origin, destination, date, sort_by
@@ -35,7 +35,7 @@ class SearchOnestopFlightWithSort:
         origin: str,
         destination: str,
         date: str,
-        sort_by: str = "price",
+        sort_by: str = "price_any_class",
     ) -> str:
         results = SearchOnestopFlightWithoutSort.invoke(data, origin, destination, date)
         results = sort_flights_dict(results, sort_by)
@@ -46,7 +46,7 @@ class SearchOnestopFlightWithSort:
         info = SearchOnestopFlightWithoutSort.get_info()
         info["function"]["parameters"]["properties"]["sort_by"] = {
             "type": "string",
-            "description": "The attribute to sort the flights by. The default is 'price'.",
+            "description": "The attribute to sort the flights by. The default is 'price_any_class'.",
             "enum": SORT_STRING_VALUES,
         }
         info["function"]["parameters"]["required"].append("sort_by")
