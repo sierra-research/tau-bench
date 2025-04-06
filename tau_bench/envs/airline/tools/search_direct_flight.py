@@ -3,7 +3,7 @@
 import json
 from typing import Any, Dict
 from tau_bench.envs.airline.tools.sort_flights import (
-    SORT_STRING_VALUES,
+    SORT_ATTRIBUTE_STRING_VALUES,
     sort_flights_dict,
 )
 from tau_bench.envs.tool import Tool
@@ -47,7 +47,7 @@ class SearchDirectFlightWithSort:
         info["function"]["parameters"]["properties"]["sort_by"] = {
             "type": "string",
             "description": "The attribute to sort the flights by. The default is 'price_any_class'.",
-            "enum": SORT_STRING_VALUES,
+            "enum": SORT_ATTRIBUTE_STRING_VALUES,
         }
         info["function"]["parameters"]["required"].append("sort_by")
         info["function"][

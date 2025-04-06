@@ -15,7 +15,7 @@ class SortAttribute(StrEnum):
     TOTAL_FLIGHT_DURATION_INCL_LAYOVER = "total_flight_duration_incl_layover"
 
 
-SORT_STRING_VALUES = [attr.value for attr in SortAttribute]
+SORT_ATTRIBUTE_STRING_VALUES = [attr.value for attr in SortAttribute]
 
 SORT_ATTRIBUTE_TO_KEY_PATH = {
     SortAttribute.PRICE_BASIC_ECONOMY: "prices.basic_economy",
