@@ -66,7 +66,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
                     }
                 )
 
-        if retries == 0 and not message_content:
+        if not message_content:
             raise ValueError("Failed to generate a non-empty user message")
 
         logfire.info(
