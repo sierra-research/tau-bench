@@ -91,7 +91,7 @@ def time_difference_seconds(time1, time2):
 
 
 def get_sort_attribute(
-    flight_trip: FlightTrip, sort_by: SortAttribute, get_attr_by_key_path_fn
+    flight_trip: FlightTrip, sort_by: SortAttribute, get_attr_from_flight_fn
 ):
     if type(flight_trip) is not list:
         if sort_by in [
@@ -99,28 +99,28 @@ def get_sort_attribute(
             SortAttribute.TOTAL_FLIGHT_DURATION_INCL_LAYOVER,
         ]:
             return time_difference_seconds(
-                get_attr_by_key_path_fn(
+                get_attr_from_flight_fn(
                     flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME]
                 ),
-                get_attr_by_key_path_fn(
+                get_attr_from_flight_fn(
                     flight_trip,
                     SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
                 ),
             )
         elif sort_by == SortAttribute.PRICE:
-            price_basic_economy = get_attr_by_key_path_fn(
+            price_basic_economy = get_attr_from_flight_fn(
                 flight_trip,
                 SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BASIC_ECONOMY],
             )
-            price_economy = get_attr_by_key_path_fn(
+            price_economy = get_attr_from_flight_fn(
                 flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_ECONOMY]
             )
-            price_business = get_attr_by_key_path_fn(
+            price_business = get_attr_from_flight_fn(
                 flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.PRICE_BUSINESS]
             )
             return min(price_basic_economy, price_economy, price_business)
         else:
-            return get_attr_by_key_path_fn(
+            return get_attr_from_flight_fn(
                 flight_trip, SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
             )
     else:
@@ -131,33 +131,33 @@ def get_sort_attribute(
             SortAttribute.PRICE,
         ]:
             return sum(
-                get_sort_attribute(segment, sort_by, get_attr_by_key_path_fn)
+                get_sort_attribute(segment, sort_by, get_attr_from_flight_fn)
                 for segment in flight_trip
             )
         else:
             sorted_flight_trip = sorted(
                 flight_trip,
                 key=lambda x: get_sort_attribute(
-                    x, SortAttribute.DEPARTURE_TIME, get_attr_by_key_path_fn
+                    x, SortAttribute.DEPARTURE_TIME, get_attr_from_flight_fn
                 ),
             )
             if sort_by == SortAttribute.DEPARTURE_TIME:
-                return get_attr_by_key_path_fn(
+                return get_attr_from_flight_fn(
                     sorted_flight_trip[0], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
                 )
             elif sort_by == SortAttribute.ARRIVAL_TIME:
-                return get_attr_by_key_path_fn(
+                return get_attr_from_flight_fn(
                     sorted_flight_trip[-1], SORT_ATTRIBUTE_TO_KEY_PATH[sort_by]
                 )
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_EXCL_LAYOVER:
                 duration = 0
                 for segment in sorted_flight_trip:
                     duration += time_difference_seconds(
-                        get_attr_by_key_path_fn(
+                        get_attr_from_flight_fn(
                             segment,
                             SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
                         ),
-                        get_attr_by_key_path_fn(
+                        get_attr_from_flight_fn(
                             segment,
                             SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
                         ),
@@ -165,11 +165,11 @@ def get_sort_attribute(
                 return duration
             elif sort_by == SortAttribute.TOTAL_FLIGHT_DURATION_INCL_LAYOVER:
                 return time_difference_seconds(
-                    get_attr_by_key_path_fn(
+                    get_attr_from_flight_fn(
                         sorted_flight_trip[-1],
                         SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.ARRIVAL_TIME],
                     ),
-                    get_attr_by_key_path_fn(
+                    get_attr_from_flight_fn(
                         sorted_flight_trip[0],
                         SORT_ATTRIBUTE_TO_KEY_PATH[SortAttribute.DEPARTURE_TIME],
                     ),
