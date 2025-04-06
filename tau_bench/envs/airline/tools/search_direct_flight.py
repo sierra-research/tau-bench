@@ -4,7 +4,7 @@ import json
 from typing import Any, Dict
 from tau_bench.envs.airline.tools.sort_flights import (
     SORT_ATTRIBUTE_STRING_VALUES,
-    sort_flights_dict,
+    sort_flights,
 )
 from tau_bench.envs.tool import Tool
 
@@ -38,7 +38,7 @@ class SearchDirectFlightWithSort:
         sort_by: str = "price_any_class",
     ) -> str:
         results = SearchDirectFlightWithoutSort.invoke(data, origin, destination, date)
-        results = sort_flights_dict(results, sort_by)
+        results = sort_flights(results, sort_by)
         return results
 
     @staticmethod

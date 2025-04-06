@@ -176,6 +176,13 @@ def get_sort_attribute(
                 )
             else:
                 raise ValueError(f"Invalid sort attribute: {sort_by}")
+            
+
+def sort_flights(flight_trips, sort_by: SortAttribute):
+    return sorted(
+        flight_trips,
+        key=lambda x: get_sort_attribute(x, sort_by, get_dict_value_by_key_path),
+    )
 
 
 class SortFlightToolSchema(BaseModel):
@@ -193,9 +200,7 @@ class SortFlights(Tool):
         flight_trips: List[Dict[str, Any]],
         sort_by: SortAttribute,
     ) -> str:
-        sorted_flights = sorted(
-            flight_trips, key=lambda x: get_sort_attribute(x, sort_by, get_dict_value_by_key_path)
-        )
+        sorted_flights = sort_flights(flight_trips, sort_by)
         return json.dumps(sorted_flights)
 
     @staticmethod
