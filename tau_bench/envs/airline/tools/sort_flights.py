@@ -62,12 +62,6 @@ class FlightSgment(FlightSegment):
 FlightTrip = Union[FlightSgment, List[FlightSegment]]
 
 
-def get_attr_by_key_path(obj, key_path):
-    for key in key_path.split("."):
-        obj = getattr(obj, key)
-    return obj
-
-
 def get_dict_value_by_key_path(obj, key_path):
     for key in key_path.split("."):
         obj = obj[key]
