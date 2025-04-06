@@ -43,7 +43,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.total_cost = 0.0
         self.reset_messages()
 
-    def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
+    def _generate_message(self, messages: List[Dict[str, Any]]) -> str:
         # Sometimes, the model inexplicably returns an empty message.
         message_content = ""
         tries = 3
@@ -76,6 +76,10 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
             completion=res,
             _tags=["CustomerLLM"],
         )
+        return res, message
+
+    def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
+        res, message = self._generate_message(messages)
         self.messages.append(message.model_dump())
         self.total_cost = res._hidden_params["response_cost"]
         return message.content
