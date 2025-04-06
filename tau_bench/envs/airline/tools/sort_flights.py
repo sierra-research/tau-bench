@@ -178,13 +178,6 @@ def get_sort_attribute(
                 raise ValueError(f"Invalid sort attribute: {sort_by}")
 
 
-def sort_flights_dict(flight_trips, sort_by: SortAttribute):
-    return sorted(
-        flight_trips,
-        key=lambda x: get_sort_attribute(x, sort_by, get_dict_value_by_key_path),
-    )
-
-
 class SortFlightSchema(BaseModel):
     flight_trips: List[FlightTrip] = Field(description="flights to sort. A single \"flight\" can be either a single FlightSegment or a list of FlightSegments.")
     sort_by: SortAttribute = Field(description="attribute to sort by")
