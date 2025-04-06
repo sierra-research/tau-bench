@@ -85,7 +85,7 @@ def time_difference_seconds(time1, time2):
     return seconds1 - seconds2
 
 
-def get_sort_attribute(
+def get_sort_value(
     flight_trip: FlightTrip, sort_by: SortAttribute
 ):
     if type(flight_trip) is not list:
@@ -126,13 +126,13 @@ def get_sort_attribute(
             SortAttribute.PRICE,
         ]:
             return sum(
-                get_sort_attribute(segment, sort_by)
+                get_sort_value(segment, sort_by)
                 for segment in flight_trip
             )
         else:
             sorted_flight_trip = sorted(
                 flight_trip,
-                key=lambda x: get_sort_attribute(
+                key=lambda x: get_sort_value(
                     x, SortAttribute.DEPARTURE_TIME
                 ),
             )
@@ -176,7 +176,7 @@ def get_sort_attribute(
 def sort_flights(flight_trips, sort_by: SortAttribute):
     return sorted(
         flight_trips,
-        key=lambda x: get_sort_attribute(x, sort_by),
+        key=lambda x: get_sort_value(x, sort_by),
     )
 
 
