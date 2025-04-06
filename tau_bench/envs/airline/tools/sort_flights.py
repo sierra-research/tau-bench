@@ -62,7 +62,7 @@ class FlightSgment(FlightSegment):
 FlightTrip = Union[FlightSgment, List[FlightSegment]]
 
 
-def get_dict_value_by_key_path(obj, key_path):
+def get_value_by_dict_key_path(obj, key_path):
     for key in key_path.split("."):
         obj = obj[key]
     return obj
@@ -175,7 +175,7 @@ def get_sort_attribute(
 def sort_flights(flight_trips, sort_by: SortAttribute):
     return sorted(
         flight_trips,
-        key=lambda x: get_sort_attribute(x, sort_by, get_dict_value_by_key_path),
+        key=lambda x: get_sort_attribute(x, sort_by, get_value_by_dict_key_path),
     )
 
 
