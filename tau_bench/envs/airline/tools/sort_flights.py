@@ -50,6 +50,7 @@ class FlightSegment(BaseModel):
     date: str
 
 
+# This class is intentionally mispelled FlightSgment to differ from FlightSegment
 # Currently, if an Union type references the same subtype twice,
 # pydantic struggles to create a json schema via model_json_schema.
 # Therefore, this is a workaround to fool pydantic into thinking that
