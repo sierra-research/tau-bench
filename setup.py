@@ -17,7 +17,10 @@ setup(
         "tenacity>=8.3.0",
         "termcolor>=2.4.0",
         "numpy>=1.26.4",
-        "litellm>=1.41.0",
+        "litellm[proxy]>=1.41.0",
         "logfire>=3.12.0",
+        "opentelemetry-api>=1.25.0",
+        "opentelemetry-sdk>=1.25.0",
+        "opentelemetry-exporter-otlp>=1.25.0",
     ],
 )
