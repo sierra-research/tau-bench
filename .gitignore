@@ -5,3 +5,12 @@ results/**
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+# Virtual environment
+.venv/
+
+# Logfire
+.logfire/
+
+# Environment variables
+.env

@@ -1,11 +1,19 @@
 # Copyright Sierra
-
 import argparse
-from tau_bench.types import RunConfig
-from tau_bench.run import run
-from litellm import provider_list
-from tau_bench.envs.user import UserStrategy
+import os
 
+import litellm
+import logfire
+from dotenv import load_dotenv
+from litellm import provider_list
+
+from tau_bench.envs.user import UserStrategy
+from tau_bench.run import run
+from tau_bench.types import RunConfig
+
+load_dotenv()
+logfire.configure(service_name=os.getenv("USER_ID", "unknown-user"), scrubbing=False)
+litellm.callbacks = ["logfire"]
 
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser()
