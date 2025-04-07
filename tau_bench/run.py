@@ -1,21 +1,24 @@
 # Copyright Sierra
 
-import os
 import json
+import multiprocessing
+import os
 import random
 import traceback
-from math import comb
-import multiprocessing
-from typing import List, Dict, Any
-from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
+from math import comb
+from typing import Any, Dict, List
 
-from tau_bench.envs import get_env
-from tau_bench.agents.base import Agent
-from tau_bench.types import EnvRunResult, RunConfig
+import logfire
 from litellm import provider_list
-from tau_bench.envs.user import UserStrategy
 
+from tau_bench.agents.base import Agent
+from tau_bench.envs import get_env
+from tau_bench.envs.user import UserStrategy
+from tau_bench.types import EnvRunResult, RunConfig
+
+logfire.configure(scrubbing=False)
 
 def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
@@ -28,90 +31,92 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
     ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.split('/')[-1]}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
-    if not os.path.exists(config.log_dir):
-        os.makedirs(config.log_dir)
+    with logfire.span(ckpt_path):
+        if not os.path.exists(config.log_dir):
+            os.makedirs(config.log_dir)
 
-    print(f"Loading user with strategy: {config.user_strategy}")
-    env = get_env(
-        config.env,
-        user_strategy=config.user_strategy,
-        user_model=config.user_model,
-        user_provider=config.user_model_provider,
-        task_split=config.task_split,
-    )
-    agent = agent_factory(
-        tools_info=env.tools_info,
-        wiki=env.wiki,
-        config=config,
-    )
-    end_index = (
-        len(env.tasks) if config.end_index == -1 else min(config.end_index, len(env.tasks))
-    )
-    results: List[EnvRunResult] = []
-    lock = multiprocessing.Lock()
-    if config.task_ids and len(config.task_ids) > 0:
-        print(f"Running tasks {config.task_ids} (checkpoint path: {ckpt_path})")
-    else:
-        print(
-            f"Running tasks {config.start_index} to {end_index} (checkpoint path: {ckpt_path})"
-    )
-    for i in range(config.num_trials):
+        print(f"Loading user with strategy: {config.user_strategy}")
+        env = get_env(
+            config.env,
+            user_strategy=config.user_strategy,
+            user_model=config.user_model,
+            user_provider=config.user_model_provider,
+            task_split=config.task_split,
+        )
+        agent = agent_factory(
+            tools_info=env.tools_info,
+            wiki=env.wiki,
+            config=config,
+        )
+        end_index = (
+            len(env.tasks) if config.end_index == -1 else min(config.end_index, len(env.tasks))
+        )
+        results: List[EnvRunResult] = []
+        lock = multiprocessing.Lock()
         if config.task_ids and len(config.task_ids) > 0:
-            idxs = config.task_ids
+            print(f"Running tasks {config.task_ids} (checkpoint path: {ckpt_path})")
         else:
-            idxs = list(range(config.start_index, end_index))
-        if config.shuffle:
-            random.shuffle(idxs)
+            print(
+                f"Running tasks {config.start_index} to {end_index} (checkpoint path: {ckpt_path})"
+        )
+        for i in range(config.num_trials):
+            if config.task_ids and len(config.task_ids) > 0:
+                idxs = config.task_ids
+            else:
+                idxs = list(range(config.start_index, end_index))
+            if config.shuffle:
+                random.shuffle(idxs)
 
-        def _run(idx: int) -> EnvRunResult:
-            isolated_env = get_env(
-                config.env,
-                user_strategy=config.user_strategy,
-                user_model=config.user_model,
-                task_split=config.task_split,
-                user_provider=config.user_model_provider,
-                task_index=idx,
-            )
-
-            print(f"Running task {idx}")
-            try:
-                res = agent.solve(
-                    env=isolated_env,
+            def _run(idx: int) -> EnvRunResult:
+                isolated_env = get_env(
+                    config.env,
+                    user_strategy=config.user_strategy,
+                    user_model=config.user_model,
+                    task_split=config.task_split,
+                    user_provider=config.user_model_provider,
                     task_index=idx,
                 )
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=res.reward,
-                    info=res.info,
-                    traj=res.messages,
-                    trial=i,
-                )
-            except Exception as e:
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
-                    traj=[],
-                    trial=i,
-                )
-            print(
-                "✅" if result.reward == 1 else "❌",
-                f"task_id={idx}",
-                result.info,
-            )
-            print("-----")
-            with lock:
-                data = []
-                if os.path.exists(ckpt_path):
-                    with open(ckpt_path, "r") as f:
-                        data = json.load(f)
-                with open(ckpt_path, "w") as f:
-                    json.dump(data + [result.model_dump()], f, indent=2)
-            return result
 
-        with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
-            res = list(executor.map(_run, idxs))
-            results.extend(res)
+                print(f"Running task {idx}")
+                try:
+                    with logfire.span(f"task_{idx}"):
+                        res = agent.solve(
+                            env=isolated_env,
+                            task_index=idx,
+                        )
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=res.reward,
+                        info=res.info,
+                        traj=res.messages,
+                        trial=i,
+                    )
+                except Exception as e:
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=0.0,
+                        info={"error": str(e), "traceback": traceback.format_exc()},
+                        traj=[],
+                        trial=i,
+                    )
+                print(
+                    "✅" if result.reward == 1 else "❌",
+                    f"task_id={idx}",
+                    result.info,
+                )
+                print("-----")
+                with lock:
+                    data = []
+                    if os.path.exists(ckpt_path):
+                        with open(ckpt_path, "r") as f:
+                            data = json.load(f)
+                    with open(ckpt_path, "w") as f:
+                        json.dump(data + [result.model_dump()], f, indent=2)
+                return result
+
+            with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
+                res = list(executor.map(_run, idxs))
+                results.extend(res)
 
     display_metrics(results)
 
