@@ -53,11 +53,17 @@ GOOGLE_API_KEY=...
 MISTRAL_API_KEY=...
 ```
 
-4. Create a [Logfire write token](https://logfire-eu.pydantic.dev/atla/atla-tau-bench/settings/setup) for the `atla-tau-bench` Logfire project and add it to the `.env` file.
+4. Add your user ID to the `.env` file.
+
+```bash
+USER_ID=my-name
+```
+
+5. Create a [Logfire write token](https://logfire-eu.pydantic.dev/atla/atla-tau-bench/settings/setup) for the `atla-tau-bench` Logfire project and add it to the `.env` file.
 
 > You can also set up your own Logfire project and use a write token for that project instead.
 
-5. Add your Logfire write token to the `.env` file.
+6. Add your Logfire write token to the `.env` file.
 
 ```bash
 LOGFIRE_WRITE_TOKEN=...

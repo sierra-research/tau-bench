@@ -1,6 +1,6 @@
 # Copyright Sierra
 import argparse
-import subprocess
+import os
 
 import litellm
 import logfire
@@ -11,28 +11,9 @@ from tau_bench.envs.user import UserStrategy
 from tau_bench.run import run
 from tau_bench.types import RunConfig
 
-# Set up Logfire / LiteLLM
-# https://docs.litellm.ai/docs/observability/logfire_integration
 load_dotenv()
-
-def get_git_user_name():
-    """Get the current git user's name."""
-    try:
-        result = subprocess.run(
-            ["git", "config", "user.email"], 
-            capture_output=True, 
-            text=True, 
-            check=True
-        )
-        return result.stdout.strip()
-    except (subprocess.SubprocessError, FileNotFoundError):
-        return "unknown-user"  # Fallback to default
-
-service_name = get_git_user_name()
-
-logfire.configure(service_name=service_name, scrubbing=False)
-litellm.success_callback = ["logfire"]
-
+logfire.configure(service_name=os.getenv("USER_ID", "unknown-user"), scrubbing=False)
+litellm.callbacks = ["logfire"]
 
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser()
