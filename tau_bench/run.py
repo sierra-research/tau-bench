@@ -6,36 +6,40 @@ import os
 import random
 import traceback
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
 from math import comb
 from typing import Any, Dict, List
 
 import logfire
 from litellm import provider_list
-
 from tau_bench.agents.base import Agent
 from tau_bench.envs import get_env
 from tau_bench.envs.user import UserStrategy
 from tau_bench.types import EnvRunResult, RunConfig
 
-logfire.configure(scrubbing=False)
 
+@logfire.instrument()
 def run(config: RunConfig) -> List[EnvRunResult]:
-    assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
+    assert config.env in ["retail", "airline"], (
+        "Only retail and airline envs are supported"
+    )
     assert config.model_provider in provider_list, "Invalid model provider"
     assert config.user_model_provider in provider_list, "Invalid user model provider"
-    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
+    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], (
+        "Invalid agent strategy"
+    )
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
-    assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
+    assert config.user_strategy in [item.value for item in UserStrategy], (
+        "Invalid user strategy"
+    )
 
     random.seed(config.seed)
-    time_str = datetime.now().strftime("%m%d%H%M%S")
-    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.split('/')[-1]}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
-    with logfire.span(ckpt_path):
-        if not os.path.exists(config.log_dir):
-            os.makedirs(config.log_dir)
+    ckpt_path = f"{config.log_dir}/{config.get_name_str()}.json"
+    if not os.path.exists(config.log_dir):
+        os.makedirs(config.log_dir)
 
-        print(f"Loading user with strategy: {config.user_strategy}")
+    # Note: this is all for initialization of the agent -- the actual tasks have their
+    # own environments.
+    with logfire.span("Initializing"):
         env = get_env(
             config.env,
             user_strategy=config.user_strategy,
@@ -49,74 +53,85 @@ def run(config: RunConfig) -> List[EnvRunResult]:
             config=config,
         )
         end_index = (
-            len(env.tasks) if config.end_index == -1 else min(config.end_index, len(env.tasks))
+            len(env.tasks)
+            if config.end_index == -1
+            else min(config.end_index, len(env.tasks))
         )
-        results: List[EnvRunResult] = []
-        lock = multiprocessing.Lock()
+    results: List[EnvRunResult] = []
+    lock = multiprocessing.Lock()
+    for i in range(config.num_trials):
         if config.task_ids and len(config.task_ids) > 0:
-            print(f"Running tasks {config.task_ids} (checkpoint path: {ckpt_path})")
+            idxs = config.task_ids
         else:
-            print(
-                f"Running tasks {config.start_index} to {end_index} (checkpoint path: {ckpt_path})"
-        )
-        for i in range(config.num_trials):
-            if config.task_ids and len(config.task_ids) > 0:
-                idxs = config.task_ids
-            else:
-                idxs = list(range(config.start_index, end_index))
-            if config.shuffle:
-                random.shuffle(idxs)
+            idxs = list(range(config.start_index, end_index))
+        if config.shuffle:
+            random.shuffle(idxs)
 
-            def _run(idx: int) -> EnvRunResult:
-                isolated_env = get_env(
-                    config.env,
-                    user_strategy=config.user_strategy,
-                    user_model=config.user_model,
-                    task_split=config.task_split,
-                    user_provider=config.user_model_provider,
+        @logfire.instrument("Running task_{idx}")
+        def _run(idx: int) -> EnvRunResult:
+            isolated_env = get_env(
+                config.env,
+                user_strategy=config.user_strategy,
+                user_model=config.user_model,
+                task_split=config.task_split,
+                user_provider=config.user_model_provider,
+                task_index=idx,
+            )
+            try:
+                res = agent.solve(
+                    env=isolated_env,
                     task_index=idx,
                 )
-
-                print(f"Running task {idx}")
-                try:
-                    with logfire.span(f"task_{idx}"):
-                        res = agent.solve(
-                            env=isolated_env,
-                            task_index=idx,
-                        )
-                    result = EnvRunResult(
-                        task_id=idx,
-                        reward=res.reward,
-                        info=res.info,
-                        traj=res.messages,
-                        trial=i,
-                    )
-                except Exception as e:
-                    result = EnvRunResult(
-                        task_id=idx,
-                        reward=0.0,
-                        info={"error": str(e), "traceback": traceback.format_exc()},
-                        traj=[],
-                        trial=i,
-                    )
-                print(
-                    "✅" if result.reward == 1 else "❌",
-                    f"task_id={idx}",
-                    result.info,
+                result = EnvRunResult(
+                    task_id=idx,
+                    reward=res.reward,
+                    info=res.info,
+                    traj=res.messages,
+                    trial=i,
                 )
-                print("-----")
-                with lock:
-                    data = []
-                    if os.path.exists(ckpt_path):
-                        with open(ckpt_path, "r") as f:
-                            data = json.load(f)
-                    with open(ckpt_path, "w") as f:
-                        json.dump(data + [result.model_dump()], f, indent=2)
-                return result
+            except Exception as e:
+                result = EnvRunResult(
+                    task_id=idx,
+                    reward=0.0,
+                    info={"error": str(e), "traceback": traceback.format_exc()},
+                    traj=[],
+                    trial=i,
+                )
 
-            with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
-                res = list(executor.map(_run, idxs))
-                results.extend(res)
+            # Log the task result in a few ways:
+            # 1. Add a log. By adding a "warning" for failures, we get a visual indication
+            # in the Logfire UI.
+            status = "success" if result.reward == 1 else "failure"
+            if status == "success":
+                logfire.info(
+                    f"Task {idx} succeeded",
+                    task_id=idx,
+                )
+            else:
+                logfire.warning(
+                    f"Task {idx} failed",
+                    task_id=idx,
+                )
+
+            # 2. Print to the console (legacy).
+            print(
+                "✅" if result.reward == 1 else "❌",
+                f"task_id={idx}",
+                result.info,
+            )
+            print("-----")
+            with lock:
+                data = []
+                if os.path.exists(ckpt_path):
+                    with open(ckpt_path, "r") as f:
+                        data = json.load(f)
+                with open(ckpt_path, "w") as f:
+                    json.dump(data + [result.model_dump()], f, indent=2)
+            return result
+
+        with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
+            res = list(executor.map(_run, idxs))
+            results.extend(res)
 
     display_metrics(results)
 
@@ -126,9 +141,10 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     return results
 
 
-def agent_factory(
-    tools_info: List[Dict[str, Any]], wiki, config: RunConfig
-) -> Agent:
+@logfire.instrument(
+    "Calling tau_bench.run.agent_factory ({config.agent_strategy}, {config.model}, {config.model_provider})"
+)
+def agent_factory(tools_info: List[Dict[str, Any]], wiki, config: RunConfig) -> Agent:
     if config.agent_strategy == "tool-calling":
         # native tool calling
         from tau_bench.agents.tool_calling_agent import ToolCallingAgent
@@ -166,7 +182,10 @@ def agent_factory(
         )
     elif config.agent_strategy == "few-shot":
         from tau_bench.agents.few_shot_agent import FewShotToolCallingAgent
-        assert config.few_shot_displays_path is not None, "Few shot displays path is required for few-shot agent strategy"
+
+        assert config.few_shot_displays_path is not None, (
+            "Few shot displays path is required for few-shot agent strategy"
+        )
         with open(config.few_shot_displays_path, "r") as f:
             few_shot_displays = [json.loads(line)["messages_display"] for line in f]
 

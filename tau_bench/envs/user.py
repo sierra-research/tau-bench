@@ -2,9 +2,10 @@
 
 import abc
 import enum
-from litellm import completion
+from typing import Any, Dict, List, Optional, Union
 
-from typing import Optional, List, Dict, Any, Union
+import logfire
+from litellm import completion
 
 
 class BaseUserSimulationEnv(abc.ABC):
@@ -317,6 +318,9 @@ class UserStrategy(enum.Enum):
     REFLECTION = "reflection"
 
 
+@logfire.instrument(
+    "Calling tau_bench.envs.user.load_user ({user_strategy}, {model}, {provider})"
+)
 def load_user(
     user_strategy: Union[str, UserStrategy],
     model: Optional[str] = "gpt-4o",
