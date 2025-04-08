@@ -2,6 +2,8 @@
 
 import random
 from hashlib import sha256
+
+import logfire
 from tau_bench.envs.tool import Tool
 from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
 
@@ -99,9 +101,10 @@ class Env(object):
             done = "###STOP###" in observation
         elif action.name in self.tools_map:
             try:
-                observation = self.tools_map[action.name].invoke(
-                    data=self.data, **action.kwargs
-                )
+                with logfire.span(f"Invoking tool {action.name}"):
+                    observation = self.tools_map[action.name].invoke(
+                        data=self.data, **action.kwargs
+                    )
             except Exception as e:
                 observation = f"Error: {e}"
             info.source = action.name
