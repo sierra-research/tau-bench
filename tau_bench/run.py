@@ -11,7 +11,6 @@ from typing import Any, Dict, List
 
 import logfire
 from litellm import provider_list
-
 from tau_bench.agents.base import Agent
 from tau_bench.envs import get_env
 from tau_bench.envs.user import UserStrategy
@@ -98,6 +97,23 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     traj=[],
                     trial=i,
                 )
+
+            # Log the task result in a few ways:
+            # 1. Add a log. By adding a "warning" for failures, we get a visual indication
+            # in the Logfire UI.
+            status = "success" if result.reward == 1 else "failure"
+            if status == "success":
+                logfire.info(
+                    f"Task {idx} succeeded",
+                    task_id=idx,
+                )
+            else:
+                logfire.warning(
+                    f"Task {idx} failed",
+                    task_id=idx,
+                )
+
+            # 2. Print to the console (legacy).
             print(
                 "✅" if result.reward == 1 else "❌",
                 f"task_id={idx}",
