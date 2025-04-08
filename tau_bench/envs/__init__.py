@@ -1,10 +1,16 @@
 # Copyright Sierra
 
 from typing import Optional, Union
+
+import logfire
+
 from tau_bench.envs.base import Env
 from tau_bench.envs.user import UserStrategy
 
 
+@logfire.instrument(
+    "Calling tau_bench.envs.get_env ({env_name}, {user_strategy}, {user_model}, {task_split})"
+)
 def get_env(
     env_name: str,
     user_strategy: Union[str, UserStrategy],
