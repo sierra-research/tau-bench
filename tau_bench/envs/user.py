@@ -44,6 +44,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.total_cost = 0.0
         self.reset()
 
+    @logfire.instrument("Generating user response")
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         res = completion(
             model=self.model, custom_llm_provider=self.provider, messages=messages
@@ -53,6 +54,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.total_cost = res._hidden_params["response_cost"]
         return message.content
 
+    @logfire.instrument("Building system prompt")
     def build_system_prompt(self, instruction: Optional[str]) -> str:
         instruction_display = (
             ("\n\nInstruction: " + instruction + "\n")
@@ -319,7 +321,7 @@ class UserStrategy(enum.Enum):
 
 
 @logfire.instrument(
-    "Calling tau_bench.envs.user.load_user ({user_strategy}, {model}, {provider})"
+    "Loading user ({user_strategy}, {model}, {provider})"
 )
 def load_user(
     user_strategy: Union[str, UserStrategy],
