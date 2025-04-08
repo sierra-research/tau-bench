@@ -3,12 +3,10 @@
 import json
 from litellm import completion
 from typing import List, Optional, Dict, Any
-
+from tau_bench.agents.judge_agent import evaluate_tool_call
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-
-
 class ToolCallingAgent(Agent):
     def __init__(
         self,
@@ -23,6 +21,9 @@ class ToolCallingAgent(Agent):
         self.model = model
         self.provider = provider
         self.temperature = temperature
+        # self.total_tool_calls = 0 # This is the kind of stuff I tried to log - but have to change things in a bunch of places
+        # self.failed_tool_calls = 0
+        # self.fixed_tool_calls = 0
 
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
@@ -52,6 +53,37 @@ class ToolCallingAgent(Agent):
             info = {**info, **env_response.info.model_dump()}
             if action.name != RESPOND_ACTION_NAME:
                 next_message["tool_calls"] = next_message["tool_calls"][:1]
+                tool_name = next_message["tool_calls"][0]["function"]["name"]
+                tool_description = [t for k,t in enumerate(self.tools_info) if t['function']['name'] == tool_name][0]
+                generated_tool_call = str(next_message["tool_calls"][0])
+                # Evaluate the tool call
+                evaluation_result = evaluate_tool_call(
+                    messages=[messages[0], messages[-1]],
+                    tool_description=tool_description,
+                    tool_call=generated_tool_call
+                )
+                if "**Result:** N" in evaluation_result:
+                    
+                    
+                    # Extract the **Reasoning** part of the evaluation result
+                    reasoning = evaluation_result.split("**Reasoning:**")[1].strip()
+                    # logger.warning(f"Tool call failed: {reasoning}\nGenerated tool call: {generated_tool_call}\nLast message: {messages[-1]}")
+                    
+                    # fix = f"Apologies, the tool call failed for the following reason: **Reason for failure:** {reasoning}"
+                    # # Regenerate the tool call and re-evaluate
+                    # messages.extend(
+                    #     [
+                    #         next_message,
+                    #         {
+                    #             "role": "assistant",
+                    #             "content": fix,
+                    #         },
+                    #     ]
+                    # )
+                #     self.failed_tool_calls += 1
+                            
+                # self.total_tool_calls += 1
+                
                 messages.extend(
                     [
                         next_message,
@@ -77,6 +109,9 @@ class ToolCallingAgent(Agent):
             info=info,
             messages=messages,
             total_cost=total_cost,
+            # total_tool_calls=self.total_tool_calls,
+            # failed_tool_calls=self.failed_tool_calls,
+            # fixed_tool_calls=self.fixed_tool_calls,
         )
 
 
