@@ -88,3 +88,7 @@ class RunConfig(BaseModel):
     shuffle: int = 0
     user_strategy: str = "llm"
     few_shot_displays_path: Optional[str] = None
+
+    def get_name_str(self) -> str:
+        # Adapted from original implementation. Excludes the .json extension and the log_dir prefix.
+        return f"{self.agent_strategy}-{self.model.split('/')[-1]}-{self.temperature}_range_{self.start_index}-{self.end_index}_user-{self.user_model}-{self.user_strategy}_{datetime.now().strftime('%m%d%H%M%S')}"
