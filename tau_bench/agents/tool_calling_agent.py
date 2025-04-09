@@ -9,7 +9,7 @@ import logfire
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-
+from tau_bench.agents.atla_orbit_tau_bench import AtlaOrbitTauBench
 
 class ToolCallingAgent(Agent):
     def __init__(
@@ -40,8 +40,14 @@ class ToolCallingAgent(Agent):
         ]
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
+                
                 with logfire.span("Getting assistant response"):
-                    res = completion(
+                    
+                    @AtlaOrbitTauBench(mode="evaluate", tools_info=self.tools_info)
+                    def completion_with_atla_orbit(*args, **kwargs):
+                        return completion(*args, **kwargs)
+    
+                    res, messages, eval_result = completion_with_atla_orbit(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
