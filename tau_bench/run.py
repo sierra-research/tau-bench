@@ -17,7 +17,7 @@ from tau_bench.envs.user import UserStrategy
 from tau_bench.types import EnvRunResult, RunConfig
 
 
-@logfire.instrument()
+@logfire.instrument("Running tau_bench")
 def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], (
         "Only retail and airline envs are supported"

@@ -9,7 +9,7 @@ from tau_bench.envs.user import UserStrategy
 
 
 @logfire.instrument(
-    "Calling tau_bench.envs.get_env ({env_name}, {user_strategy}, {user_model}, {task_split})"
+    "Creating environment ({env_name}, {user_strategy}, {user_model}, {task_split})"
 )
 def get_env(
     env_name: str,
