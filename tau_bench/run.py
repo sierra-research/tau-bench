@@ -15,7 +15,7 @@ from tau_bench.agents.base import Agent
 from tau_bench.envs import get_env
 from tau_bench.envs.user import UserStrategy
 from tau_bench.types import EnvRunResult, RunConfig
-
+from opentelemetry import trace, context
 
 @logfire.instrument("Running tau_bench")
 def run(config: RunConfig) -> List[EnvRunResult]:
@@ -67,67 +67,71 @@ def run(config: RunConfig) -> List[EnvRunResult]:
         if config.shuffle:
             random.shuffle(idxs)
 
-        @logfire.instrument("Running task_{idx}")
         def _run(idx: int) -> EnvRunResult:
-            isolated_env = get_env(
-                config.env,
-                user_strategy=config.user_strategy,
-                user_model=config.user_model,
-                task_split=config.task_split,
-                user_provider=config.user_model_provider,
-                task_index=idx,
-            )
-            try:
-                res = agent.solve(
-                    env=isolated_env,
+            with logfire.span(
+                f"Running task_{idx}", 
+                attributes={"task_idx": str(idx)}, 
+                _tags=[f"task_{idx}"],
+            ):
+                isolated_env = get_env(
+                    config.env,
+                    user_strategy=config.user_strategy,
+                    user_model=config.user_model,
+                    task_split=config.task_split,
+                    user_provider=config.user_model_provider,
                     task_index=idx,
                 )
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=res.reward,
-                    info=res.info,
-                    traj=res.messages,
-                    trial=i,
-                )
-            except Exception as e:
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
-                    traj=[],
-                    trial=i,
-                )
+                try:
+                    res = agent.solve(
+                        env=isolated_env,
+                        task_index=idx,
+                    )
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=res.reward,
+                        info=res.info,
+                        traj=res.messages,
+                        trial=i,
+                    )
+                except Exception as e:
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=0.0,
+                        info={"error": str(e), "traceback": traceback.format_exc()},
+                        traj=[],
+                        trial=i,
+                    )
 
-            # Log the task result in a few ways:
-            # 1. Add a log. By adding a "warning" for failures, we get a visual indication
-            # in the Logfire UI.
-            status = "success" if result.reward == 1 else "failure"
-            if status == "success":
-                logfire.info(
-                    f"Task {idx} succeeded",
-                    task_id=idx,
-                )
-            else:
-                logfire.warning(
-                    f"Task {idx} failed",
-                    task_id=idx,
-                )
+                # Log the task result in a few ways:
+                # 1. Add a log. By adding a "warning" for failures, we get a visual indication
+                # in the Logfire UI.
+                status = "success" if result.reward == 1 else "failure"
+                if status == "success":
+                    logfire.info(
+                        f"Task {idx} succeeded",
+                        task_id=idx,
+                    )
+                else:
+                    logfire.warning(
+                        f"Task {idx} failed",
+                        task_id=idx,
+                    )
 
-            # 2. Print to the console (legacy).
-            print(
-                "✅" if result.reward == 1 else "❌",
-                f"task_id={idx}",
-                result.info,
-            )
-            print("-----")
-            with lock:
-                data = []
-                if os.path.exists(ckpt_path):
-                    with open(ckpt_path, "r") as f:
-                        data = json.load(f)
-                with open(ckpt_path, "w") as f:
-                    json.dump(data + [result.model_dump()], f, indent=2)
-            return result
+                # 2. Print to the console (legacy).
+                print(
+                    "✅" if result.reward == 1 else "❌",
+                    f"task_id={idx}",
+                    result.info,
+                )
+                print("-----")
+                with lock:
+                    data = []
+                    if os.path.exists(ckpt_path):
+                        with open(ckpt_path, "r") as f:
+                            data = json.load(f)
+                    with open(ckpt_path, "w") as f:
+                        json.dump(data + [result.model_dump()], f, indent=2)
+                return result
 
         with ThreadPoolExecutor(max_workers=config.max_concurrency) as executor:
             res = list(executor.map(_run, idxs))
