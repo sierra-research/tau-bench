@@ -2,18 +2,18 @@
 
 import json
 from litellm import completion
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 
 import logfire
 
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-from tau_bench.agents.atla_orbit_tau_bench import AtlaOrbitTauBench
+from tau_bench.agents.satellite_agent import TauBenchSatellite
 
-@AtlaOrbitTauBench(mode="improve")
-def completion_with_atla_orbit(*args, **kwargs):
-    return completion(*args, **kwargs)
+evaluator = TauBenchSatellite(mode = "evaluate")    
+improver = TauBenchSatellite(mode = "improve")
+
 class ToolCallingAgent(Agent):
     def __init__(
         self,
@@ -46,13 +46,14 @@ class ToolCallingAgent(Agent):
                 
                 with logfire.span("Getting assistant response"):
     
-                    res, messages, eval_result = completion_with_atla_orbit(
+                    res, metadata = improver.orbit(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
+                messages = metadata["messages"] # includes the judge response
                 next_message = res.choices[0].message.model_dump()
                 total_cost += res._hidden_params["response_cost"]
                 action = message_to_action(next_message)
