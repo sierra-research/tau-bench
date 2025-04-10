@@ -90,6 +90,7 @@ class RunConfig(BaseModel):
     user_strategy: str = "llm"
     few_shot_displays_path: Optional[str] = None
 
-    def get_name_str(self) -> str:
+    def get_name_str(self, date_str: str) -> str:
         # Adapted from original implementation. Excludes the .json extension and the log_dir prefix.
-        return f"{self.agent_strategy}-{self.model.split('/')[-1]}-{self.temperature}_range_{self.start_index}-{self.end_index}_user-{self.user_model}-{self.user_strategy}_{datetime.now().strftime('%m%d%H%M%S')}"
+        # Also includes the date string.
+        return f"{self.agent_strategy}-{self.model.split('/')[-1]}-{self.temperature}_range_{self.start_index}-{self.end_index}_user-{self.user_model}-{self.user_strategy}_{date_str}"

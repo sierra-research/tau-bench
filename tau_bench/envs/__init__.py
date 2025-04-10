@@ -8,9 +8,9 @@ from tau_bench.envs.base import Env
 from tau_bench.envs.user import UserStrategy
 
 
-@logfire.instrument(
-    "Creating environment ({env_name}, {user_strategy}, {user_model}, {task_split})"
-)
+# @logfire.instrument(
+#     "Creating environment ({env_name}, {user_strategy}, {user_model}, {task_split})"
+# )
 def get_env(
     env_name: str,
     user_strategy: Union[str, UserStrategy],
