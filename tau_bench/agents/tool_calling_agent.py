@@ -43,7 +43,6 @@ class ToolCallingAgent(Agent):
         ]
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
-                
                 with logfire.span("Getting assistant response"):
     
                     res, metadata = improver.orbit(completion)(
