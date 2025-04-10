@@ -18,6 +18,7 @@ class AtlaOrbitBase(ABC):
         )
         logfire.instrument_openai(self.client)
 
+    # Method to call Selene Mini for evaluation
     def call_selene_mini(self, prompt: str) -> str:
         with logfire.span("Evaluating with Selene Mini", _tags=['judge']):
             response = self.client.chat.completions.create(
@@ -26,14 +27,17 @@ class AtlaOrbitBase(ABC):
             )
             return response.choices[0].message.content
 
+    # Abstract method for evaluating the response
     @abstractmethod
     def evaluate_response(self, func: Callable, *args, **kwargs) -> Tuple:
         pass
 
+    # Abstract method for improving the response
     @abstractmethod
     def improve_response(self, func: Callable, *args, **kwargs) -> Tuple:
         pass
 
+    # Wrapper around the LLM/agent call being decorated
     def __call__(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):

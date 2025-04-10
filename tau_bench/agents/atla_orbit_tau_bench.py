@@ -13,9 +13,10 @@ from tau_bench.agents.atla_orbit_tau_bench_prompts import AUTO_EVALUATOR_PROMPT
 class AtlaOrbitTauBench(AtlaOrbitBase):
     def __init__(self, mode: str, **kwargs):
         super().__init__(mode)
-        self.tools_info = kwargs.get('tools_info', [])
+        self.tools_info = kwargs.get('tools_info', []) # Extra context for the decorator
         self.kwargs = kwargs
 
+    # Function to evaluate the response
     def evaluate_response(self, func: Callable, *args, **kwargs) -> Tuple[Any, List[Dict[str, Any]], Dict[str, Any]]:
         """
         Execute the completion function, evaluate the response, and return the result along with the evaluation.
@@ -61,7 +62,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
             
             # LOG EVALUATION
             if not evaluation_result_parsed["score"]:
-                logfire.warn("Tool called failed check: {critique}", critique=evaluation_result_parsed["critique"])
+                logfire.warn("Tool called failed check: {critique}", critique=evaluation_result_parsed["critique"], _tags = [f"failed_{tool_name}"])
                 
             return result, messages, evaluation_result_parsed
     
@@ -69,6 +70,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
         else:    
           return result, messages, {"score": True, "critique": ""}
 
+    # Function to improve the response
     def improve_response(self, func: Callable, *args, **kwargs) -> Tuple[Any, List[Dict[str, Any]]]:
         max_attempts = kwargs.get('max_attempts', 3)
         
