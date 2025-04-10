@@ -13,7 +13,6 @@ from tau_bench.agents.atla_orbit_tau_bench_prompts import AUTO_EVALUATOR_PROMPT
 class AtlaOrbitTauBench(AtlaOrbitBase):
     def __init__(self, mode: str, **kwargs):
         super().__init__(mode)
-        self.tools_info = kwargs.get('tools_info', []) # Extra context for the decorator
         self.kwargs = kwargs
 
     # Function to evaluate the response
@@ -36,6 +35,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
 
         # Extract next message and action
         messages = kwargs.get('messages', [])
+        tools_info = kwargs.get('tools', [])
         next_message = result.choices[0].message.model_dump()
         action = message_to_action(next_message)
         
@@ -47,7 +47,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
             # EXTRACT STRUCTURED DATA
             prompt_inputs = {
                 "messages": messages,
-                "tool_description": [t for t in self.tools_info if t['function']['name'] == tool_name][0],
+                "tool_description": [t for t in tools_info if t['function']['name'] == tool_name][0],
                 "tool_call": str(next_message["tool_calls"][0])
             }
             
@@ -59,6 +59,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
                 "critique": evaluation_result.split("**Reasoning:**")[1].strip() if "**Reasoning:**" in evaluation_result else "",
                 "score": "**Result:** Y" in evaluation_result,
             }
+            logfire.log('info', "evaluation_result: {evaluation_result}", attributes={"evaluation_result": evaluation_result_parsed}, tags = [f"{tool_name}_eval"])
             
             # LOG EVALUATION
             if not evaluation_result_parsed["score"]:
