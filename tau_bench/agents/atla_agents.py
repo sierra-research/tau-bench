@@ -1,10 +1,10 @@
-from math import e
 import logfire
 import json
+import re
 from typing import List, Dict, Any, Tuple, Callable, TypeVar
 from atla.satellite_agent import AtlaSatelliteAgent
 from tau_bench.types import RESPOND_ACTION_NAME, Action
-from tau_bench.agents.atla_prompts import AUTO_EVALUATOR_PROMPT
+from tau_bench.agents.atla_prompts import AUTO_EVALUATOR_PROMPT, SELECTOR_PROMPT
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TAU Bench specific AtlaSatellite agent
@@ -20,7 +20,7 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
     # Function to evaluate the response
     def evaluate_response(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
         """
-        Execute the completion function, evaluate the response, and return the result along with the evaluation.
+        Execute the completion function, evaluate the response, and return the result along with metadata.
         
         Args:
            func (Callable): The completion function to be executed.
@@ -28,8 +28,8 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
            **kwargs: Arbitrary keyword arguments for the completion function.
            
         Returns:
-            Tuple[Any, List[Dict[str, Any]], Dict[str, Any]]: The result of the completion function, the list of messages, and the evaluation result.
-            The evaluation result is a dictionary containing the score and critique.
+            Tuple[Any, Dict[str, Any]]: The result of the completion function and the metadata.
+            The metadata is a dictionary containing the messages, evaluation score, critique, and mode.
         """
         result = func(*args, **kwargs)
 
@@ -76,8 +76,8 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
             **kwargs: Arbitrary keyword arguments for the completion function.
             
         Returns:
-            Tuple[T, Dict[str, Any]]: The result of the completion function and the evaluation result.
-            The evaluation result is a dictionary containing the score, critique, and number of retries.
+            Tuple[T, Dict[str, Any]]: The result of the completion function and metadata.
+            The metadata is a dictionary containing the original and final responses, evaluation score, critique, and number of retries.
         """
         max_attempts: int = kwargs.get('max_attempts', 3)
         
@@ -85,17 +85,67 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
             result, metadata = self.evaluate_response(func, *args, **kwargs)
             
             if metadata["score"]:
-                metadata["retries"] = attempt
+                metadata["retries"] = attempt + 1
+                if attempt > 0:
+                    logfire.info(f"Improved response after {attempt + 1} attempts")
                 return result, metadata
-            else:
-                logfire.warn(f"Retry attempt {attempt + 1}: Tool call failed check: {metadata['critique']}")
+            elif attempt < max_attempts - 1:
+                logfire.warn(f"Retry attempt {attempt + 1}: Tool call failed again: {metadata['critique']}")
                 metadata['messages'] = kwargs.get('messages', []) + [
-                    {"role": "user", "content": f"You didn't generate the tool call correctly, please try again: {metadata['critique']}"}
+                    {"role": "assistant", "content": f"{metadata['critique']}"}
                 ]
-                
-        logfire.warning(f"Failed to improve response after {max_attempts} attempts")
-        metadata["retries"] = max_attempts
+            else:
+                logfire.warning(f"Failed to improve response after {max_attempts} attempts")
         return result, metadata
+    
+    # Function to select the best response from multiple attempts
+    def select_response(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
+        """
+        Selects the best response from multiple attempts.
+        
+        Args:
+            func (Callable[..., T]): The completion function to be executed.
+            *args: Variable length argument list for the completion function.
+            **kwargs: Arbitrary keyword arguments for the completion function.
+            
+        Returns:
+            Tuple[T, Dict[str, Any]]: The selected response and metadata.
+            The metadata contains all responses and their evaluations.
+        """
+        messages: List[Dict[str, Any]] = kwargs.get('messages', [])
+        tools_info: List[Dict[str, Any]] = kwargs.get('tools', [])
+        
+        attempts: int = kwargs.get('attempts', 3)
+        results: List[Dict[str, Any]] = []
+        options = []
+        for attempt in range(attempts):
+            result = func(*args, **kwargs)
+            results.append(result)
+            next_message: Dict[str, Any] = result.choices[0].message.model_dump()
+            options.append(next_message)
+            
+        
+        evaluation_results_str: str = self.call_selene_mini(
+            prompt = SELECTOR_PROMPT.format(
+                messages=messages,
+                tool_description=tools_info,
+                tool_calls=options
+            )
+        )
+        
+        # extract choice as int after **Choice:** 
+        choice = int(evaluation_results_str.split("**Choice:**")[1].strip().split("\n")[0])
+        justification = evaluation_results_str.split("**Justification:**")[1].strip()
+        logfire.info(f"Selected choice: {choice} with justification: {justification}")
+        next_message: Dict[str, Any] = options[choice]
+        
+        return results[choice], {
+            "mode": "select",
+            "messages": messages,
+            "options": options,
+            "choice": choice,
+            "justification": justification,
+        }
     
     # Orbit function to handle different modes
     def orbit(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
@@ -103,6 +153,8 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
             return self.evaluate_response(func, *args, **kwargs)
         elif self.mode == "improve":
             return self.improve_response(func, *args, **kwargs)
+        elif self.mode == "select":
+            return self.select_response(func, *args, **kwargs)
         else:
             result = func(*args, **kwargs)
             return result, {"mode": "passthrough"}
@@ -124,3 +176,4 @@ def message_to_action(
 
 evaluator = TauBenchSatelliteAgent(mode = "evaluate")    
 improver = TauBenchSatelliteAgent(mode = "improve")
+selector = TauBenchSatelliteAgent(mode = "select")

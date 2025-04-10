@@ -9,7 +9,7 @@ import logfire
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-from tau_bench.agents.atla_agents import evaluator, improver
+from tau_bench.agents.atla_agents import evaluator, improver, selector
 
 class ToolCallingAgent(Agent):
     def __init__(
@@ -18,7 +18,7 @@ class ToolCallingAgent(Agent):
         wiki: str,
         model: str,
         provider: str,
-        temperature: float = 0.0,
+        temperature: float = 0.8,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
@@ -41,7 +41,7 @@ class ToolCallingAgent(Agent):
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
                 with logfire.span("Getting assistant response"):
-                    res, metadata = improver(completion)(
+                    res, metadata = selector(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
