@@ -2,16 +2,16 @@ from math import e
 import logfire
 import json
 from typing import List, Dict, Any, Tuple, Callable, TypeVar
-from atla.satellite import AtlaSatelliteBase
+from atla.satellite_agent import AtlaSatelliteAgent
 from tau_bench.types import RESPOND_ACTION_NAME, Action
-from tau_bench.agents.satellite_agent_prompts import AUTO_EVALUATOR_PROMPT
+from tau_bench.agents.atla_prompts import AUTO_EVALUATOR_PROMPT
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TAU Bench specific AtlaSatellite agent
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 T = TypeVar('T')
 
-class TauBenchSatellite(AtlaSatelliteBase):
+class TauBenchSatelliteAgent(AtlaSatelliteAgent):
     def __init__(self, mode: str, **kwargs: Any) -> None:
         super().__init__()
         self.mode = mode
@@ -38,7 +38,7 @@ class TauBenchSatellite(AtlaSatelliteBase):
         next_message: Dict[str, Any] = result.choices[0].message.model_dump()
         action: Action = message_to_action(next_message)
         
-        metadata: Dict[str, Any] = {"messages": messages, "score": True, "critique": ""}
+        metadata: Dict[str, Any] = {"messages": messages, "score": True, "critique": "", "mode": self.mode}
         
         if action.name != RESPOND_ACTION_NAME:
             next_message["tool_calls"] = next_message["tool_calls"][:1]
@@ -98,7 +98,7 @@ class TauBenchSatellite(AtlaSatelliteBase):
         return result, metadata
     
     # Orbit function to handle different modes
-    def orbit_function(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
+    def orbit(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
         if self.mode == "evaluate":
             return self.evaluate_response(func, *args, **kwargs)
         elif self.mode == "improve":
@@ -120,3 +120,7 @@ def message_to_action(
         )
     else:
         return Action(name=RESPOND_ACTION_NAME, kwargs={"content": message["content"]})
+
+
+evaluator = TauBenchSatelliteAgent(mode = "evaluate")    
+improver = TauBenchSatelliteAgent(mode = "improve")

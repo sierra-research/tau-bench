@@ -9,10 +9,7 @@ import logfire
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-from tau_bench.agents.satellite_agent import TauBenchSatellite
-
-evaluator = TauBenchSatellite(mode = "evaluate")    
-improver = TauBenchSatellite(mode = "improve")
+from tau_bench.agents.atla_agents import evaluator, improver
 
 class ToolCallingAgent(Agent):
     def __init__(
@@ -45,7 +42,7 @@ class ToolCallingAgent(Agent):
             with logfire.span(f"Running step_{i}"):
                 with logfire.span("Getting assistant response"):
     
-                    res, metadata = improver.orbit(completion)(
+                    res, metadata = improver(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,

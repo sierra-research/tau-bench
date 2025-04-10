@@ -8,10 +8,10 @@ from functools import wraps
 T = TypeVar('T')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Base class for AtlaSatellite agents
+# Base class for atla Satellite agents
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class AtlaSatelliteBase(ABC, Generic[T]):
+class AtlaSatelliteAgent(ABC, Generic[T]):
     def __init__(self) -> None:
         self.client = OpenAI(
             base_url="http://localhost:8000/v1", 
@@ -27,24 +27,24 @@ class AtlaSatelliteBase(ABC, Generic[T]):
             )
             return response.choices[0].message.content
 
-    def orbit(self, func: Optional[Callable[..., T]] = None) -> Union[Callable[..., Tuple[T, Dict[str, Any]]], Callable[[Callable[..., T]], Callable[..., Tuple[T, Dict[str, Any]]]]]:
+    def __call__(self, func: Optional[Callable[..., T]] = None) -> Union[Callable[..., Tuple[T, Dict[str, Any]]], Callable[[Callable[..., T]], Callable[..., Tuple[T, Dict[str, Any]]]]]:
         if func is None:
             # Used as a decorator
             def decorator(f: Callable[..., T]):
                 @wraps(f)
                 def wrapper(*args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
-                    return self.orbit_function(f, *args, **kwargs)
+                    return self.orbit(f, *args, **kwargs)
                 return wrapper
             return decorator
         else:
             # Used as a wrapper
             @wraps(func)
             def wrapper(*args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
-                return self.orbit_function(func, *args, **kwargs)
+                return self.orbit(func, *args, **kwargs)
             return wrapper
 
     @abstractmethod
-    def orbit_function(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
+    def orbit(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
         """
         This method should be implemented by subclasses to define an "orbit" function that 
         wraps around a completion function, adding evaluation, improvement, and other functionalities.
@@ -66,20 +66,20 @@ class AtlaSatelliteBase(ABC, Generic[T]):
     
 
 # Example subclass:
-# class MySatellite(AtlaSatelliteBase):
-#     def orbit_function(self, func, *args, **kwargs):
+# class MySatelliteAgent(AtlaSatelliteAgent):
+#     def orbit(self, func, *args, **kwargs):
 #         result = func(*args, **kwargs)
 #         return result, {"metadata": "example"}
 
 # Example usage:
-# sat = MySatellite()
+# evaluate = MySatelliteAgent()
 # 
 # # As wrapper
 # def foo(x): return x * 2
-# wrapped_foo = sat.orbit(foo)
+# wrapped_foo = evaluate(foo)
 # result, metadata = wrapped_foo(5)
 # 
 # # As decorator
-# @sat.orbit()
+# @evaluate()
 # def bar(x): return x * 3
 # result, metadata = bar(5)
