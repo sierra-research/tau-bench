@@ -1,3 +1,4 @@
+from math import e
 import logfire
 import json
 from typing import List, Dict, Any, Tuple, Callable
@@ -88,7 +89,7 @@ class AtlaOrbitTauBench(AtlaOrbitBase):
                 )
                 
         logfire.warning(f"Failed to improve response after {max_attempts} attempts")
-        return result, messages
+        return result, messages, eval_result
     
 # Copied over from the tool calling agent to avoid circular imports
 @logfire.instrument("Extracting action from message")
