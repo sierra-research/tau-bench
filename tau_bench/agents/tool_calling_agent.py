@@ -2,7 +2,7 @@
 
 import json
 from litellm import completion
-from typing import List, Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any
 
 import logfire
 
@@ -41,7 +41,6 @@ class ToolCallingAgent(Agent):
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
                 with logfire.span("Getting assistant response"):
-    
                     res, metadata = improver(completion)(
                         messages=messages,
                         model=self.model,
