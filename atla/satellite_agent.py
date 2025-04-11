@@ -28,6 +28,28 @@ class AtlaSatelliteAgent(ABC, Generic[T]):
             return response.choices[0].message.content
 
     def __call__(self, func: Optional[Callable[..., T]] = None) -> Union[Callable[..., Tuple[T, Dict[str, Any]]], Callable[[Callable[..., T]], Callable[..., Tuple[T, Dict[str, Any]]]]]:
+        """
+        This method allows the class to be used as a decorator or a wrapper.
+        It implicitly calls the orbit method.
+
+        Args:
+            func (Optional[Callable]): The function to be wrapped. If None, the class is used as a decorator.
+        Returns:
+            Union[Callable[..., Tuple[T, Dict[str, Any]]], Callable[[Callable[..., T]], Callable[..., Tuple[T, Dict[str, Any]]]]]:
+            A wrapper function that calls the orbit method.
+            If used as a decorator, it returns a decorator function.
+            If used as a wrapper, it returns the wrapper function itself.
+            
+        Example:
+            satellite = TauBenchSatellite(mode="evaluate")
+            
+            @satellite()
+            def my_function(x):
+                return x * 2
+            result, metadata = my_function(5)  # This implicitly calls orbit
+            
+            result, metadata = satellite(my_function)(5)  # This also implicitly calls orbit
+        """
         if func is None:
             # Used as a decorator
             def decorator(f: Callable[..., T]):
