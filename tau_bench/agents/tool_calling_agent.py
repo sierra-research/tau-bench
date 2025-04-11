@@ -9,7 +9,7 @@ import logfire
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
-
+from tau_bench.agents.atla_agents import evaluator, improver, selector
 
 class ToolCallingAgent(Agent):
     def __init__(
@@ -48,6 +48,17 @@ class ToolCallingAgent(Agent):
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
+                ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
+                ## You can use selene as an "evaluator" (example below), "improver", or "selector"
+                # 
+                #     res, metadata = evaluator(completion)(
+                #         messages=messages,
+                #         model=self.model,
+                #         custom_llm_provider=self.provider,
+                #         tools=self.tools_info,
+                #         temperature=self.temperature,
+                #     )
+                # messages = metadata["messages"] # includes the judge response
                 next_message = res.choices[0].message.model_dump()
                 total_cost += res._hidden_params["response_cost"]
                 action = message_to_action(next_message)
