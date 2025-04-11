@@ -114,6 +114,7 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
         """
         messages: List[Dict[str, Any]] = kwargs.get('messages', [])
         tools_info: List[Dict[str, Any]] = kwargs.get('tools', [])
+        kwargs['temperature'] = 0.8 # Overriding temperature so that we have some variation to select from
         
         attempts: int = kwargs.get('attempts', 3)
         results: List[Dict[str, Any]] = []

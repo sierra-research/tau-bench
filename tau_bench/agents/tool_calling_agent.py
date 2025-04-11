@@ -18,7 +18,7 @@ class ToolCallingAgent(Agent):
         wiki: str,
         model: str,
         provider: str,
-        temperature: float = 0.8,
+        temperature: float = 0,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
@@ -41,7 +41,7 @@ class ToolCallingAgent(Agent):
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
                 with logfire.span("Getting assistant response"):
-                    res, metadata = selector(completion)(
+                    res, metadata = evaluator(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
