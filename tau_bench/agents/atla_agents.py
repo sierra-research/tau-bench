@@ -134,8 +134,12 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
             )
         )
         
-        # extract choice as int after **Choice:** 
-        choice = int(evaluation_results_str.split("**Choice:**")[1].strip().split("\n")[0])
+        # extract choice as int after **Choice:** after handling any possible errors
+        try:
+            choice = int(evaluation_results_str.split("**Choice:**")[1].strip().split("\n")[0])
+        except (IndexError, ValueError):
+            choice = 0
+            logfire.error("Failed to extract choice from evaluation results. Defaulting to choice 0.")
         justification = evaluation_results_str.split("**Justification:**")[1].strip()
         logfire.info(f"Selected choice: {choice} with justification: {justification}")
         next_message: Dict[str, Any] = options[choice]
