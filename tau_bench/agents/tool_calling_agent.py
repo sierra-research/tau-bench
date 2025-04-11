@@ -48,7 +48,9 @@ class ToolCallingAgent(Agent):
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
-                ## Replace res = completion(...) above with the following to use atla's "evaluator" agent to evaluate tool calls
+                ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
+                ## You can use selene as an "evaluator" (example below), "improver", or "selector"
+                # 
                 #     res, metadata = evaluator(completion)(
                 #         messages=messages,
                 #         model=self.model,
