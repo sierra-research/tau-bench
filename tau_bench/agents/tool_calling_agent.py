@@ -41,14 +41,22 @@ class ToolCallingAgent(Agent):
         for i in range(max_num_steps):
             with logfire.span(f"Running step_{i}"):
                 with logfire.span("Getting assistant response"):
-                    res, metadata = evaluator(completion)(
+                    res = completion(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
-                messages = metadata["messages"] # includes the judge response
+                ## Replace the above with the following to use atla's "evaluator" agent to evaluate tool calls
+                #     res, metadata = evaluator(completion)(
+                #         messages=messages,
+                #         model=self.model,
+                #         custom_llm_provider=self.provider,
+                #         tools=self.tools_info,
+                #         temperature=self.temperature,
+                #     )
+                # messages = metadata["messages"] # includes the judge response
                 next_message = res.choices[0].message.model_dump()
                 total_cost += res._hidden_params["response_cost"]
                 action = message_to_action(next_message)
