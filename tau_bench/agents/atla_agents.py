@@ -154,6 +154,35 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
     
     # Orbit function to handle different modes
     def orbit(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> Tuple[T, Dict[str, Any]]:
+        """
+        This method is invoked by the __call__ method when the TauBenchSatellite is used as a decorator or wrapper.
+        It defines the "orbit" function that wraps around a completion function, adding evaluation, improvement,
+        and other functionalities based on the specified mode.
+
+        Args:
+            func (Callable): The completion function to be executed with a return type of T.
+            *args: Variable length argument list for the completion function.
+            **kwargs: Arbitrary keyword arguments for the completion function.
+
+        Returns:
+            Tuple[T, Dict[str, Any]]: The result of the completion function and a dictionary with metadata.
+            The type of the result is determined by the completion function.
+            The metadata dictionary contains evaluation results, messages, and other relevant information.
+
+        Note:
+            This method is automatically called when the TauBenchSatellite instance is used as a decorator
+            (@satellite_instance()) or as a wrapper (satellite_instance(func)). The behavior of the orbit
+            method depends on the mode specified during the TauBenchSatellite initialization.
+
+        Example:
+            satellite = TauBenchSatellite(mode="evaluate")
+            
+            @satellite()
+            def my_function(x):
+                return x * 2
+
+            result, metadata = my_function(5)  # This implicitly calls orbit
+        """
         if self.mode == "evaluate":
             return self.evaluate_response(func, *args, **kwargs)
         elif self.mode == "improve":
