@@ -48,7 +48,7 @@ class ToolCallingAgent(Agent):
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
-                ## Replace the above with the following to use atla's "evaluator" agent to evaluate tool calls
+                ## Replace res = completion(...) above with the following to use atla's "evaluator" agent to evaluate tool calls
                 #     res, metadata = evaluator(completion)(
                 #         messages=messages,
                 #         model=self.model,
