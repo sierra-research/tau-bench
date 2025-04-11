@@ -63,3 +63,31 @@ Here is the data to evaluate:
 **Generated tool call:**
 {tool_call}
 """
+
+SELECTOR_PROMPT = """You are an expert evaluator of agent messages and tool calls.
+
+Your task is to select the best agent response/tool call from a list of 3 candidates.
+
+You will be given the following:
+- The previous messages
+- The tool call instructions
+- The 3 generated responses/tool calls
+
+You should evaluate which of the generated responses/tool calls is the best one based on the following criteria:
+- Correctness: Does the response/tool call correctly address the user's request?
+- Completeness: Does the response/tool call include all necessary information?
+- Coherence: Does the response/tool call make sense in the context of the conversation?
+
+Your reponse should be a choice of 0, 1 or 2, indicating the index of the best response/tool call.
+Your response should strictly follow the format:
+**Choice:** 1
+**Justification:** The tool call is correct and complete.
+
+Here is the data to evaluate:
+**Previous messages:**
+{messages}
+**Tool call instructions:**
+{tool_description}
+**Generated tool calls:**
+{tool_calls}
+"""

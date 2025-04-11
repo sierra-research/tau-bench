@@ -10,7 +10,8 @@ from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 from opentelemetry import context, trace
-from tau_bench.agents.atla_orbit_tau_bench import AtlaOrbitTauBench
+from tau_bench.agents.atla_agents import evaluator, improver, selector
+
 
 
 class ToolCallingAgent(Agent):
@@ -48,18 +49,24 @@ class ToolCallingAgent(Agent):
                 _tags=[f"task_{task_idx}", f"step_{step}"],
             ):
                 with logfire.span("Getting assistant response"):
-
-                    @AtlaOrbitTauBench(mode="evaluate", tools_info=self.tools_info)
-                    def completion_with_atla_orbit(*args, **kwargs):
-                        return completion(*args, **kwargs)
-
-                    res, messages, eval_result = completion_with_atla_orbit(
+                    res = completion(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
+                ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
+                ## You can use selene as an "evaluator" (example below), "improver", or "selector"
+                # 
+                #     res, metadata = evaluator(completion)(
+                #         messages=messages,
+                #         model=self.model,
+                #         custom_llm_provider=self.provider,
+                #         tools=self.tools_info,
+                #         temperature=self.temperature,
+                #     )
+                # messages = metadata["messages"] # includes the judge response
                 next_message = res.choices[0].message.model_dump()
                 total_cost += res._hidden_params["response_cost"]
                 action = message_to_action(next_message)
