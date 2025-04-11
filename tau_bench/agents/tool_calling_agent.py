@@ -18,7 +18,7 @@ class ToolCallingAgent(Agent):
         wiki: str,
         model: str,
         provider: str,
-        temperature: float = 0,
+        temperature: float = 0.0,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
