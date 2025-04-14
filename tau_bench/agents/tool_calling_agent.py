@@ -9,7 +9,10 @@ import logfire
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
+from opentelemetry import context, trace
 from tau_bench.agents.atla_agents import evaluator, improver, selector
+
+
 
 class ToolCallingAgent(Agent):
     def __init__(
@@ -29,6 +32,8 @@ class ToolCallingAgent(Agent):
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
+        task_span = trace.get_current_span()
+        task_idx = task_span.__dict__["span"].__dict__["_attributes"]["idx"]
         total_cost = 0.0
         env_reset_res = env.reset(task_index=task_index)
         obs = env_reset_res.observation
@@ -38,8 +43,11 @@ class ToolCallingAgent(Agent):
             {"role": "system", "content": self.wiki},
             {"role": "user", "content": obs},
         ]
-        for i in range(max_num_steps):
-            with logfire.span(f"Running step_{i}"):
+        for step in range(max_num_steps):
+            with logfire.span(
+                f"Running step_{step}",
+                _tags=[f"task_{task_idx}", f"step_{step}"],
+            ):
                 with logfire.span("Getting assistant response"):
                     res = completion(
                         messages=messages,
@@ -99,7 +107,12 @@ class ToolCallingAgent(Agent):
 def message_to_action(
     message: Dict[str, Any],
 ) -> Action:
-    if "tool_calls" in message and message["tool_calls"] is not None and len(message["tool_calls"]) > 0 and message["tool_calls"][0]["function"] is not None:
+    if (
+        "tool_calls" in message
+        and message["tool_calls"] is not None
+        and len(message["tool_calls"]) > 0
+        and message["tool_calls"][0]["function"] is not None
+    ):
         tool_call = message["tool_calls"][0]
         return Action(
             name=tool_call["function"]["name"],

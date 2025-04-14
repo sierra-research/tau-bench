@@ -121,8 +121,8 @@ def parse_args() -> RunConfig:
 
 def main():
     config = parse_args()
-    with logfire.span(config.get_name_str()):
-        run(config)
+    # with logfire.span(config.get_name_str()):
+    run(config)
 
 
 if __name__ == "__main__":
