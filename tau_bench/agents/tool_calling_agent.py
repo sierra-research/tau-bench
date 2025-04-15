@@ -49,24 +49,24 @@ class ToolCallingAgent(Agent):
                 _tags=[f"task_{task_idx}", f"step_{step}"],
             ):
                 with logfire.span("Getting assistant response"):
-                    res = completion(
+                    # res = completion(
+                    #     messages=messages,
+                    #     model=self.model,
+                    #     custom_llm_provider=self.provider,
+                    #     tools=self.tools_info,
+                    #     temperature=self.temperature,
+                    # )
+                ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
+                ## You can use selene as an "evaluator" (example below), "improver", or "selector"
+
+                    res, metadata = evaluator(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,
                         tools=self.tools_info,
                         temperature=self.temperature,
                     )
-                ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
-                ## You can use selene as an "evaluator" (example below), "improver", or "selector"
-                # 
-                #     res, metadata = evaluator(completion)(
-                #         messages=messages,
-                #         model=self.model,
-                #         custom_llm_provider=self.provider,
-                #         tools=self.tools_info,
-                #         temperature=self.temperature,
-                #     )
-                # messages = metadata["messages"] # includes the judge response
+                messages = metadata["messages"] # includes the judge response
                 next_message = res.choices[0].message.model_dump()
                 total_cost += res._hidden_params["response_cost"]
                 action = message_to_action(next_message)
