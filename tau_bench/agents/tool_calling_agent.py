@@ -58,8 +58,7 @@ class ToolCallingAgent(Agent):
                     # )
                 ## NOTE: Replace res = completion(...) above with the following to put selene in the loop
                 ## You can use selene as an "evaluator" (example below), "improver", or "selector"
-
-                    res, metadata = evaluator(completion)(
+                    res, metadata = improver(completion)(
                         messages=messages,
                         model=self.model,
                         custom_llm_provider=self.provider,

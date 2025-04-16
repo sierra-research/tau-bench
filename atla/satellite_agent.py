@@ -14,8 +14,8 @@ T = TypeVar('T')
 class AtlaSatelliteAgent(ABC, Generic[T]):
     def __init__(self) -> None:
         self.client = OpenAI(
-            base_url="http://localhost:8000/v1", 
-            api_key=os.environ["ATLA_DEV_API_KEY"]
+            base_url="https://api.atla-ai.com/v1",
+            api_key=os.environ["ATLA_API_KEY"]
         )
         logfire.instrument_openai(self.client)
 

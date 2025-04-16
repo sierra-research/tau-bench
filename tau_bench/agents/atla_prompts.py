@@ -1,3 +1,39 @@
+EVALUATOR_PROMPT_TEMPLATE = """\
+You are tasked with evaluating a response of an AI agent based on the requirements constraining its behaviour, its interactions with a user, interactions with various tools, and based on a binary scoring rubric that serves as the evaluation standard. Provide comprehensive feedback on the response quality strictly adhering to the scoring rubric, followed by a binary Yes/No judgment. Avoid generating any additional opening, closing, or explanations.
+
+The AI agent has access to tools. It may only call only once per conversation turn, so may take gradual steps of calling a tool in different turns to complete a task.
+
+Here are some rules of the evaluation:
+(1) You should prioritize evaluating whether the response satisfies the provided rubric. The basis of your score should depend exactly on the rubric. However, the response does not need to explicitly address points raised in the rubric. Rather, evaluate the response based on the criteria outlined in the rubric.
+(2) If the conversation is going in circles, you should ask the agent to ask the user to hang up by saying `###STOP###`.
+
+Your reply must strictly follow this format:
+**Reasoning:** <Your feedback>
+
+**Result:** <Yes or No>
+
+Here is the data:
+
+Interactions:
+```
+{{ interactions }}
+```
+
+Response:
+```
+{{ assistant_response }}
+```{% if tool_info %}
+
+Tool information:
+```
+{{ tool_info }}
+```{% endif %}
+
+Score Rubrics:
+[The response is not detrimental to a successful outcome of the conversation.]
+Yes: The response could help does not violate any of the AI agent's requirements.
+No: The response violates at least one of the AI agent's requirements or negatively contributes to a successful outcome of the conversation."""
+
 
 AUTO_EVALUATOR_PROMPT = """You are an expert evaluator of agent tool calls.
 Your task is to evaluate if a tool call has been generated correctly.

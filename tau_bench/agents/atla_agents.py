@@ -1,10 +1,12 @@
 import logfire
 import json
 import re
-from typing import List, Dict, Any, Tuple, Callable, TypeVar
+from typing import List, Dict, Any, Tuple, Callable, TypeVar, Literal
 from atla.satellite_agent import AtlaSatelliteAgent
 from tau_bench.types import RESPOND_ACTION_NAME, Action
-from tau_bench.agents.atla_prompts import AUTO_EVALUATOR_PROMPT, SELECTOR_PROMPT
+from tau_bench.agents.atla_prompts import SELECTOR_PROMPT, EVALUATOR_PROMPT_TEMPLATE
+from ast import literal_eval
+from jinja2 import Template
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TAU Bench specific AtlaSatellite agent
@@ -12,10 +14,36 @@ from tau_bench.agents.atla_prompts import AUTO_EVALUATOR_PROMPT, SELECTOR_PROMPT
 T = TypeVar("T")
 
 
+def format_interactions(interactions: list[dict[str, Any]]) -> str:
+    return "\n\n".join([format_interaction(interaction) for interaction in interactions])
+
+
+def format_interaction(interaction: dict[str, Any]) -> str:
+    role = interaction['role']
+    content = format_content(interaction)
+    name = interaction.get('name', "agent" if role == "assistant" else "")
+    name_str = f": {name}" if name else ""
+    return f"[{role}{name_str}]\n{content}"
+
+
+def format_content(interaction: dict[str, Any]) -> str:
+    if interaction.get("tool_calls") is None:
+        return interaction["content"]
+
+    function_name = interaction["tool_calls"][0]["function"]["name"]
+    function_kwargs = interaction["tool_calls"][0]["function"]["arguments"]
+    function_kwargs = json.dumps(literal_eval(function_kwargs), indent=4)
+    function_kwargs = ",\n    ".join([f"{k}={v}" for k, v in literal_eval(function_kwargs).items()])
+    function_str = f"{function_name}(\n    {function_kwargs},\n)"
+    return f"Tool call: {function_str}"
+
+
 class TauBenchSatelliteAgent(AtlaSatelliteAgent):
     def __init__(self, mode: str, **kwargs: Any) -> None:
         super().__init__()
         self.mode = mode
+        self.actionable_actions = kwargs.get("actionable_actions", "all")
+        self.max_attempts = kwargs.get("max_attempts", 3)
         self.kwargs = kwargs
 
     # Function to evaluate the response
@@ -37,52 +65,63 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
         result = func(*args, **kwargs)
 
         messages: List[Dict[str, Any]] = kwargs.get("messages", [])
-        tools_info: List[Dict[str, Any]] = kwargs.get("tools", [])
         next_message: Dict[str, Any] = result.choices[0].message.model_dump()
         action: Action = message_to_action(next_message)
+        if action.name != RESPOND_ACTION_NAME:
+            num_tool_calls = len(next_message.get("tool_calls", []))
+            if num_tool_calls > 1:
+                next_message["tool_calls"] = next_message["tool_calls"][:1]
+                result.choices[0].message.tool_calls = result.choices[0].message.tool_calls[:1]
+            assert action.name == next_message["tool_calls"][0]["function"]["name"]
+            tools_info = [t for t in kwargs["tools"] if t["function"]["name"] == action.name][0]
+        else:
+            tools_info = None
 
-        metadata: Dict[str, Any] = {
+
+        metadata: dict[str, Any] = {
             "messages": messages,
-            "score": True,
-            "critique": "",
             "mode": self.mode,
         }
 
-        if action.name != RESPOND_ACTION_NAME:
-            next_message["tool_calls"] = next_message["tool_calls"][:1]
-            tool_name: str = next_message["tool_calls"][0]["function"]["name"]
+        interactions_str = format_interactions(messages)
+        response_str = format_interactions([next_message])
 
-            prompt_inputs: Dict[str, Any] = {
-                "messages": messages,
-                "tool_description": [
-                    t for t in tools_info if t["function"]["name"] == tool_name
-                ][0],
-                "tool_call": str(next_message["tool_calls"][0]),
-            }
+        evaluator_prompt = Template(EVALUATOR_PROMPT_TEMPLATE).render(
+            interactions=interactions_str,
+            assistant_response=response_str,
+            tool_info=tools_info,
+        )
+        evaluation_result_str: str = self.call_selene_mini(evaluator_prompt)
 
-            evaluation_result_str: str = self.call_selene_mini(
-                AUTO_EVALUATOR_PROMPT.format(**prompt_inputs)
+        reasoning_match = re.search(r"\*\*Reasoning:\*\*\s*(.*?)(?=\n\*\*Result:|$)", evaluation_result_str, re.DOTALL)
+        result_match = re.search(r"\*\*Result:\*\*\s*(Yes|No)", evaluation_result_str)
+
+        if reasoning_match is None:
+            logfire.warn("No feedback found in evaluator response")
+        if result_match is None:
+            logfire.warn("No judgement found in evaluator response, assuming OK.")
+
+        evaluation_result = {
+            "judgement": (result_match.group(1) == "Yes") if result_match else True,
+            "feedback": reasoning_match.group(1).strip() if reasoning_match else "",
+            "evaluation": evaluation_result_str,
+            "evaluator_prompt": evaluator_prompt,
+        }
+        metadata.update(evaluation_result)
+
+        logfire.log(
+            "info",
+            "evaluation_result: {evaluation_result}",
+            attributes={"evaluation_result": evaluation_result},
+            tags=[f"eval_{action.name}"],
+        )
+
+        if not evaluation_result["judgement"]:
+            logfire.warn(
+                "Tool called failed check: {feedback}",
+                feedback=evaluation_result["feedback"],
+                _tags=[f"failed_{action.name}"],
             )
-            evaluation_result: Dict[str, Any] = {
-                "critique": evaluation_result_str.split("**Reasoning:**")[1].strip()
-                if "**Reasoning:**" in evaluation_result_str
-                else "",
-                "score": "**Result:** Y" in evaluation_result_str,
-            }
-            logfire.log(
-                "info",
-                "evaluation_result: {evaluation_result}",
-                attributes={"evaluation_result": evaluation_result},
-                tags=[f"eval_{tool_name}"],
-            )
-
-            if not evaluation_result["score"]:
-                logfire.warn(
-                    "Tool called failed check: {critique}",
-                    critique=evaluation_result["critique"],
-                    _tags=[f"failed_{tool_name}"],
-                )
-                metadata.update(evaluation_result)
 
         return result, metadata
 
@@ -102,27 +141,39 @@ class TauBenchSatelliteAgent(AtlaSatelliteAgent):
             Tuple[T, Dict[str, Any]]: The result of the completion function and metadata.
             The metadata is a dictionary containing the original and final responses, evaluation score, critique, and number of retries.
         """
-        max_attempts: int = kwargs.get("max_attempts", 3)
+        metadata: dict[str, Any] = {"messages": kwargs.get("messages", [])}
 
-        for attempt in range(max_attempts):
+        for attempt in range(1, self.max_attempts + 1):
+            kwargs["messages"] = metadata["messages"]
             result, metadata = self.evaluate_response(func, *args, **kwargs)
+            next_message = result.choices[0].message.model_dump()
+            action = message_to_action(next_message)
+            metadata["attempts"] = attempt
 
-            if metadata["score"]:
-                metadata["retries"] = attempt + 1
-                if attempt > 0:
-                    logfire.info(f"Improved response after {attempt + 1} attempts")
-                return result, metadata
-            elif attempt < max_attempts - 1:
-                logfire.warn(
-                    f"Retry attempt {attempt + 1}: Tool call failed again: {metadata['critique']}"
-                )
-                metadata["messages"] = kwargs.get("messages", []) + [
-                    {"role": "assistant", "content": f"{metadata['critique']}"}
+            actionable: bool = (self.actionable_actions == "all") or (self.actionable_actions == action.name == RESPOND_ACTION_NAME) or ((self.actionable_actions == "tool_calls") and (action.name != RESPOND_ACTION_NAME))
+            if not actionable:
+                logfire.warn(f"Not improving response in attempt {attempt + 1} because the {action.name} action is not actionable")
+                break
+
+            if metadata["judgement"]:
+                logfire.info(f"Response OK after {metadata['attempts']} attempts")
+                break
+            elif attempt < self.max_attempts:
+                logfire.warn(f"Attempt {attempt} failed. Feedback: {metadata['feedback']}")
+                metadata["messages"] += [
+                    {"role": "assistant", "content": format_content(next_message)}
                 ]
+                metadata["messages"] += [
+                    {
+                        "role": "assistant",
+                        "content": f"{metadata['feedback']}",
+                        "name": "evaluator",
+                    }
+                ]
+
             else:
-                logfire.warning(
-                    f"Failed to improve response after {max_attempts} attempts"
-                )
+                logfire.warning(f"Failed to pass after {self.max_attempts} attempts. Feedback: {metadata['feedback']}")
+
         return result, metadata
 
     # Function to select the best response from multiple attempts
@@ -249,5 +300,5 @@ def message_to_action(
 
 
 evaluator = TauBenchSatelliteAgent(mode="evaluate")
-improver = TauBenchSatelliteAgent(mode="improve")
+improver = TauBenchSatelliteAgent(mode="improve", actionable_actions="respond", max_attempts=2)
 selector = TauBenchSatelliteAgent(mode="select")
