@@ -13,6 +13,73 @@ from tau_bench.types import (
 )
 from typing import Optional, List, Dict, Any, Tuple
 
+def initialize_create(mode="openai", **kwargs):
+    global create, create_mode
+    if mode == "openai":
+        from openai import OpenAI
+
+        create = OpenAI(**kwargs).chat.completions.create
+        create_mode = "openai"
+
+    elif mode == "anthropic":
+        from anthropic import Anthropic
+
+        create = Anthropic().messages.create
+        create_mode = "anthropic"
+
+    elif mode == "google":
+        global GenerativeModel
+        from google.generativeai import GenerativeModel
+
+        create = None
+        create_mode = "google"
+
+
+# @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(10))
+def get_message_action(
+    messages, model, **kwargs
+):  # kwargs only contain temperature for now
+    global create, create_mode
+    if create_mode == "openai":
+        kwargs["model"] = model
+        kwargs["messages"] = messages
+    elif create_mode == "anthropic":
+        kwargs["system"] = messages[0]["content"]
+        kwargs["max_tokens"] = 256
+        kwargs["model"] = model
+        kwargs["messages"] = messages[1:]
+    elif create_mode == "google":
+        create = GenerativeModel(
+            model, system_instruction=messages[0]["content"], generation_config=kwargs
+        ).generate_content
+        kwargs = {
+            "contents": [
+                {
+                    "role": {"user": "user", "assistant": "model"}[m["role"]],
+                    "parts": [m["content"]],
+                }
+                for m in messages[1:]
+            ]
+        }
+        time.sleep(2)
+
+    response = create(**kwargs)
+
+    if create_mode == "openai":
+        message = response.choices[0].message.content
+    elif create_mode == "anthropic":
+        message = response.content[0].text
+    elif create_mode == "google":
+        message = response.text
+
+    action_name = message.split("Action:")[-1].split("Arguments:")[0].strip()
+    action_args = message.split("Arguments:")[-1].strip().split("\n")[0]
+    if action_name == "respond" or action_name == "":
+        action_args = {"content": action_args}
+    else:
+        action_args = json.loads(action_args)
+    return message, {"name": action_name, "arguments": action_args}
+
 
 class ChatReActAgent(Agent):
     def __init__(

@@ -1,5 +1,8 @@
 # Copyright Sierra
-
+from openai import OpenAI
+from tenacity import retry, stop_after_attempt, wait_random_exponential
+from google.generativeai import GenerativeModel, GenerationConfig
+from google.generativeai import protos
 import abc
 import enum
 from litellm import completion
@@ -32,6 +35,55 @@ class HumanUserSimulationEnv(BaseUserSimulationEnv):
 
     def get_total_cost(self) -> float:
         return 0
+
+# client = OpenAI()
+
+prompt_price_per_million = {"gpt-4o": 5, "gpt-4-turbo": 10, "gpt-4": 30, "gpt-4-32k-0613": 60, "gpt-3.5-turbo": 0.5, "gemini-1.5-pro": 3.5}
+completion_price_per_million = {"gpt-4o": 15, "gpt-4-turbo": 30, "gpt-4": 60, "gpt-4-32k-0613": 120, "gpt-3.5-turbo": 1.5, "gemini-1.5-pro": 10.5}
+safety = [
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE",
+    },
+]
+
+# @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
+def chat_completion_request(messages, model="gpt-4", temperature=1.0, max_output_tokens=150):
+    if not (model in prompt_price_per_million and  model in completion_price_per_million):
+        print(f"Model [{model}] price missing! {model in prompt_price_per_million}, {model in completion_price_per_million}")
+    if "gpt" in model:
+        client = OpenAI()
+        response = client.chat.completions.create(
+            messages=messages,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_output_tokens,
+        )
+        content = response.choices[0].message.content
+        cost = prompt_price_per_million[model] * response.usage.prompt_tokens / 1e6 + completion_price_per_million[model] * response.usage.completion_tokens / 1e6
+    elif "gemini" in model:
+        client = GenerativeModel(model_name=model, system_instruction=messages[0]['content'])
+        contents = []
+        for m in messages[1:]:
+            contents.append({"role":{"user": "user", "assistant": "model"}[m["role"]] ,"parts":[{"text": m["content"]}]})
+        response = client.generate_content(contents, generation_config={"temperature": temperature, "max_output_tokens": max_output_tokens}, safety_settings=safety)
+        content = response.text
+        cost = prompt_price_per_million[model] * response.usage_metadata.prompt_token_count / 1e6 + completion_price_per_million[model] * response.usage_metadata.candidates_token_count / 1e6
+    else:
+        print("Unsupported user model:", model)
+    return content, cost
 
 
 class LLMUserSimulationEnv(BaseUserSimulationEnv):

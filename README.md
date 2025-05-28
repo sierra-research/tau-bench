@@ -1,5 +1,6 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
+
 **Paper**: [https://arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)
 
 ## Leaderboard
@@ -29,6 +30,17 @@
 | [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
 
 *TC = `tool-calling` strategy (the function-calling strategy reported in the paper)
+
+# install DF CX SDK
+
+```
+gsutil cp gs://agent-evals/v3alpha1_dialogflow-v3alpha1-py.tar /content/v3alpha1_dialogflow-v3alpha1-py.tar
+tar -xvf content/v3alpha1_dialogflow-v3alpha1-py.tar
+venv/bin/python3 dialogflow-v3alpha1-py/setup.py sdist
+venv/bin/pip install content/v3alpha1_dialogflow-v3alpha1-py.tar
+
+venv/bin/pip install google-cloud-dialogflow-cx
+```
 
 ## Setup
 
@@ -61,9 +73,15 @@ Run a tool-calling agent on the τ-retail environment:
 python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --user-strategy llm --max-concurrency 10
 ```
 
-Set max concurrency according to your API limit(s).
+Set max concurrency according to your API limit.
 
 To run specific tasks, use the `--task-ids` flag. For example:
+
+Run a decibel agent with gemini as user model: 
+
+```bash
+venv/bin/python3 tau-bench/run.py --env retail  --agent_strategy decibel --agent_id 429da584-b933-4372-822c-52d124ba5a26 --project_id df-decibel2-dev-test  --start_index 0 --end_index -1  --user_model gemini-1.5-pro
+```
 
 ```bash
 python run.py --agent-strategy tool-calling --env retail --model gpt-4o --model-provider openai --user-model gpt-4o --user-model-provider openai --user-strategy llm --max-concurrency 10 --task-ids 2 4 6

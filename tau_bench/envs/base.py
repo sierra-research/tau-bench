@@ -94,9 +94,13 @@ class Env(object):
         reward = 0
         done = False
         if action.name == RESPOND_ACTION_NAME:
-            observation = self.user.step(action.kwargs["content"])
             info.source = "user"
-            done = "###STOP###" in observation
+            # gemini sometimes produce "thank you\n\n ###STOP###"
+            if observation == "###STOP###" or observation.strip("\n").endswith("###STOP###"):
+                done = True
+            else:
+                done = False
+
         elif action.name in self.tools_map:
             try:
                 observation = self.tools_map[action.name].invoke(
