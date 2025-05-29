@@ -16,6 +16,7 @@ from .modify_user_address import ModifyUserAddress
 from .return_delivered_order_items import ReturnDeliveredOrderItems
 from .think import Think
 from .transfer_to_human_agents import TransferToHumanAgents
+from .modify_user_email import ModifyUserEmail
 
 
 ALL_TOOLS = [
@@ -35,4 +36,5 @@ ALL_TOOLS = [
     ReturnDeliveredOrderItems,
     Think,
     TransferToHumanAgents,
+    ModifyUserEmail,
 ]

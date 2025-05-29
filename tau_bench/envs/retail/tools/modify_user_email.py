@@ -33,17 +33,17 @@ class ModifyUserEmail(Tool):
             "type": "function",
             "function": {
                 "name": "modify_user_email",
-                "description": "Modify the default email of a user. The agent needs to explain the modification detail and ask for explicit user confirmation (yes/no) to proceed.",
+                "description": "Modify the email of a user. The agent needs to explain the modification detail and ask for explicit user confirmation (yes/no) to proceed.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "user_id": {
                             "type": "string",
-                            "description": "The user id, such as 'noah_brown_6181'.",
+                            "description": "The user id, such as noah_brown_6181.",
                         },
                         "email": {
                             "type": "string",
-                            "description": "The new email address, such as noah.brown7922@example.com",
+                            "description": "The email address, such as noah.brown7922@example.com",
                         },
                     },
                     "required": [
