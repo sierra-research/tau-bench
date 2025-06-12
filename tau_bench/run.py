@@ -20,7 +20,8 @@ from tau_bench.envs.user import UserStrategy
 def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
     assert config.model_provider in provider_list, "Invalid model provider"
-    assert config.user_model_provider in provider_list, "Invalid user model provider"
+    effective_user_model_provider = config.user_model_provider or config.model_provider
+    assert effective_user_model_provider in provider_list, f"Invalid user model provider: {effective_user_model_provider}"
     assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
     assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
@@ -36,7 +37,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
         config.env,
         user_strategy=config.user_strategy,
         user_model=config.user_model,
-        user_provider=config.user_model_provider,
+        user_provider=effective_user_model_provider,
         task_split=config.task_split,
     )
     agent = agent_factory(
@@ -69,7 +70,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                 user_strategy=config.user_strategy,
                 user_model=config.user_model,
                 task_split=config.task_split,
-                user_provider=config.user_model_provider,
+                user_provider=effective_user_model_provider,
                 task_index=idx,
             )
 
@@ -134,6 +135,8 @@ def agent_factory(
             model=config.model,
             provider=config.model_provider,
             temperature=config.temperature,
+            api_base=config.api_base,
+            api_key=config.api_key,
         )
     elif config.agent_strategy == "act":
         # `act` from https://arxiv.org/abs/2210.03629
@@ -146,6 +149,8 @@ def agent_factory(
             provider=config.model_provider,
             use_reasoning=False,
             temperature=config.temperature,
+            api_base=config.api_base,
+            api_key=config.api_key,
         )
     elif config.agent_strategy == "react":
         # `react` from https://arxiv.org/abs/2210.03629
@@ -158,6 +163,8 @@ def agent_factory(
             provider=config.model_provider,
             use_reasoning=True,
             temperature=config.temperature,
+            api_base=config.api_base,
+            api_key=config.api_key,
         )
     elif config.agent_strategy == "few-shot":
         from tau_bench.agents.few_shot_agent import FewShotToolCallingAgent
@@ -172,6 +179,8 @@ def agent_factory(
             provider=config.model_provider,
             few_shot_displays=few_shot_displays,
             temperature=config.temperature,
+            api_base=config.api_base,
+            api_key=config.api_key,
         )
     else:
         raise ValueError(f"Unknown agent strategy: {config.agent_strategy}")

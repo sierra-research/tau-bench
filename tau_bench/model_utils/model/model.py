@@ -26,6 +26,7 @@ class Platform(enum.Enum):
     OUTLINES = "outlines"
     VLLM_CHAT = "vllm-chat"
     VLLM_COMPLETION = "vllm-completion"
+    COMPANY = "company"
 
 
 # @runtime_checkable

@@ -1,0 +1,12 @@
+[
+  {
+    "task_id": 0,
+    "reward": 0.0,
+    "info": {
+      "error": "EOF when reading a line",
+      "traceback": "Traceback (most recent call last):\n  File \"/app/tau_bench/run.py\", line 79, in _run\n    res = agent.solve(\n  File \"/app/tau_bench/agents/tool_calling_agent.py\", line 35, in solve\n    env_reset_res = env.reset(task_index=task_index)\n  File \"/app/tau_bench/envs/base.py\", line 85, in reset\n    initial_observation = self.user.reset(instruction=self.task.instruction)\n  File \"/app/tau_bench/envs/user.py\", line 28, in reset\n    return input(f\"{instruction}\\n\")\nEOFError: EOF when reading a line\n"
+    },
+    "traj": [],
+    "trial": 0
+  }
+]

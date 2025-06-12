@@ -65,6 +65,7 @@ class OpenAIModel(ChatModel):
     def __init__(
         self,
         model: str | None = None,
+        base_url: str | None = None,
         api_key: str | None = None,
         temperature: float = 0.0,
     ) -> None:
@@ -75,13 +76,23 @@ class OpenAIModel(ChatModel):
         else:
             self.model = model
 
-        api_key = None
-        if api_key is None:
-            api_key = os.getenv(API_KEY_ENV_VAR)
-            if api_key is None:
-                raise ValueError(f"{API_KEY_ENV_VAR} environment variable is not set")
-        self.client = OpenAI(api_key=api_key)
-        self.async_client = AsyncOpenAI(api_key=api_key)
+        # Resolve API key
+        resolved_api_key = api_key
+        if resolved_api_key is None:
+            resolved_api_key = os.getenv(API_KEY_ENV_VAR)
+        if resolved_api_key is None:
+            raise ValueError(
+                f"API key must be provided either as a parameter or through the {API_KEY_ENV_VAR} environment variable"
+            )
+
+        # Instantiate OpenAI clients
+        if base_url:
+            self.client = OpenAI(api_key=resolved_api_key, base_url=base_url)
+            self.async_client = AsyncOpenAI(api_key=resolved_api_key, base_url=base_url)
+        else:
+            self.client = OpenAI(api_key=resolved_api_key)
+            self.async_client = AsyncOpenAI(api_key=resolved_api_key)
+
         self.temperature = temperature
 
     def generate_message(

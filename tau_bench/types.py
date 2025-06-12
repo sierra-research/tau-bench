@@ -71,7 +71,7 @@ class EnvRunResult(BaseModel):
 
 class RunConfig(BaseModel):
     model_provider: str
-    user_model_provider: str
+    user_model_provider: Optional[str] = None
     model: str
     user_model: str = "gpt-4o"
     num_trials: int = 1
@@ -88,3 +88,5 @@ class RunConfig(BaseModel):
     shuffle: int = 0
     user_strategy: str = "llm"
     few_shot_displays_path: Optional[str] = None
+    api_base: Optional[str] = None
+    api_key: Optional[str] = None

@@ -21,6 +21,7 @@ from tau_bench.model_utils.model.model import (
     Platform,
     ScoreModel,
 )
+from tau_bench.model_utils.model.company import CompanyModel
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -149,6 +150,8 @@ def model_factory(
         from tau_bench.model_utils.model.openai import OpenAIModel
 
         return OpenAIModel(model=model_id, api_key=api_key, temperature=temperature)
+    elif platform == Platform.COMPANY:
+        return CompanyModel(model=model_id, api_key=api_key, temperature=temperature)
     elif platform == Platform.MISTRAL:
         from tau_bench.model_utils.model.mistral import MistralModel
 

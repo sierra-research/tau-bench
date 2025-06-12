@@ -17,12 +17,16 @@ class ToolCallingAgent(Agent):
         model: str,
         provider: str,
         temperature: float = 0.0,
+        api_base: str | None = None,
+        api_key: str | None = None,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
         self.model = model
         self.provider = provider
         self.temperature = temperature
+        self.api_base = api_base
+        self.api_key = api_key
 
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
@@ -43,6 +47,7 @@ class ToolCallingAgent(Agent):
                 custom_llm_provider=self.provider,
                 tools=self.tools_info,
                 temperature=self.temperature,
+                **self._get_optional_litellm_params(),
             )
             next_message = res.choices[0].message.model_dump()
             total_cost += res._hidden_params["response_cost"]
@@ -78,6 +83,14 @@ class ToolCallingAgent(Agent):
             messages=messages,
             total_cost=total_cost,
         )
+
+    def _get_optional_litellm_params(self) -> Dict[str, Any]:
+        optional_params = {}
+        if self.api_base:
+            optional_params['api_base'] = self.api_base
+        if self.api_key:
+            optional_params['api_key'] = self.api_key
+        return optional_params
 
 
 def message_to_action(
