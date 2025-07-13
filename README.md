@@ -1,6 +1,6 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
-**❗News**: We have released [τ-bench](https://github.com/sierra-research/tau2-bench) as an extension of $\tau$-bench. $\tau^2$-bench introduces a new domain `telecom` with troubleshooting scenarios and fixed some issues existed in $\tau$-bench. Please use the $\tau^2$-bench as the latest version of this benchmark.
+**❗News**: We have released [τ²-bench](https://github.com/sierra-research/tau2-bench) as an extension of $\tau$-bench. $\tau^2$-bench includes code fixes and an additional `telecom` domain focusing on troubleshooting scenarios. Please use the $\tau^2$-bench as the latest version of this benchmark.
 
 **Paper**:
 * [τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains](https://arxiv.org/abs/2406.12045)
