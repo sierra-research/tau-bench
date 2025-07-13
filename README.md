@@ -1,6 +1,12 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
-**Paper**: [https://arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)
+**❗News**: We have released [τ-bench](https://github.com/sierra-research/tau2-bench) as an extension of $\tau$-bench. $\tau^2$-bench introduces a new domain `telecom` with troubleshooting scenarios and fixed some issues existed in $\tau$-bench. Please use the $\tau^2$-bench as the latest version of this benchmark.
+
+**Paper**:
+* [τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains](https://arxiv.org/abs/2406.12045)
+* [τ²-Bench: Evaluating Conversational Agents in a Dual-Control Environment](https://arxiv.org/abs/2506.07982)
+
+We propose $\tau$-bench, a benchmark emulating dynamic conversations between a user (simulated by language models) and a language agent provided with domain-specific API tools and policy guidelines.
 
 ## Leaderboard
 
@@ -157,5 +163,14 @@ Please submit issues or pull requests if you find problems with the benchmark.
       archivePrefix={arXiv},
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2406.12045}, 
+}
+@misc{barres2025tau2,
+      title={$\tau^2$-Bench: Evaluating Conversational Agents in a Dual-Control Environment}, 
+      author={Victor Barres and Honghua Dong and Soham Ray and Xujie Si and Karthik Narasimhan},
+      year={2025},
+      eprint={2506.07982},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.07982}, 
 }
 ```
