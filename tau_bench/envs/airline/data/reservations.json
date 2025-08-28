@@ -212,8 +212,8 @@
         "reservation_id": "JP6LYC",
         "user_id": "emma_nguyen_9431",
         "origin": "DTW",
-        "destination": "DTW",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -336,7 +336,7 @@
         "reservation_id": "NA6PZ3",
         "user_id": "raj_johnson_6495",
         "origin": "DTW",
-        "destination": "DTW",
+        "destination": "PHX",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -825,8 +825,8 @@
         "reservation_id": "Z7GOZK",
         "user_id": "olivia_gonzalez_2305",
         "origin": "EWR",
-        "destination": "EWR",
-        "flight_type": "one_way",
+        "destination": "IAH",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -911,8 +911,8 @@
         "reservation_id": "FMQD8I",
         "user_id": "yusuf_li_4428",
         "origin": "PHL",
-        "destination": "PHL",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -1576,7 +1576,7 @@
         "reservation_id": "ESDZ4W",
         "user_id": "aarav_nguyen_1055",
         "origin": "MIA",
-        "destination": "MIA",
+        "destination": "JFK",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -2360,7 +2360,7 @@
         "reservation_id": "WGMKL8",
         "user_id": "ivan_taylor_6615",
         "origin": "MCO",
-        "destination": "MCO",
+        "destination": "LAS",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -3777,7 +3777,7 @@
         "reservation_id": "ZND99F",
         "user_id": "mohamed_ahmed_3350",
         "origin": "MSP",
-        "destination": "MSP",
+        "destination": "DTW",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -4099,8 +4099,8 @@
         "reservation_id": "MQS6FV",
         "user_id": "mohamed_patel_4472",
         "origin": "PHL",
-        "destination": "PHL",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -4644,8 +4644,8 @@
         "reservation_id": "I6XC2H",
         "user_id": "lucas_wilson_8118",
         "origin": "MCO",
-        "destination": "MCO",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -5697,7 +5697,7 @@
         "reservation_id": "GHHGOB",
         "user_id": "olivia_anderson_8651",
         "origin": "LGA",
-        "destination": "LGA",
+        "destination": "PHL",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -5850,8 +5850,8 @@
         "reservation_id": "NFJV4U",
         "user_id": "isabella_silva_3788",
         "origin": "EWR",
-        "destination": "EWR",
-        "flight_type": "one_way",
+        "destination": "MIA",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -6355,7 +6355,7 @@
         "reservation_id": "ZXIYE7",
         "user_id": "anya_anderson_8280",
         "origin": "MIA",
-        "destination": "MIA",
+        "destination": "JFK",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -7161,7 +7161,7 @@
         "reservation_id": "AQLBTL",
         "user_id": "sofia_kim_7287",
         "origin": "LAX",
-        "destination": "LAX",
+        "destination": "SFO",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -8058,7 +8058,7 @@
         "reservation_id": "XL2C75",
         "user_id": "mia_kim_4397",
         "origin": "MSP",
-        "destination": "MSP",
+        "destination": "DTW",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -8303,8 +8303,8 @@
         "reservation_id": "8RI5AI",
         "user_id": "daiki_patel_1917",
         "origin": "MIA",
-        "destination": "MIA",
-        "flight_type": "one_way",
+        "destination": "JFK",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -9294,7 +9294,7 @@
         "reservation_id": "DCZ13Q",
         "user_id": "isabella_khan_8788",
         "origin": "MSP",
-        "destination": "MSP",
+        "destination": "DTW",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -9472,7 +9472,7 @@
         "reservation_id": "UDMOP1",
         "user_id": "amelia_davis_8890",
         "origin": "SFO",
-        "destination": "SFO",
+        "destination": "PHX",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -9783,7 +9783,7 @@
         "reservation_id": "ER7A5P",
         "user_id": "harper_martin_8348",
         "origin": "ORD",
-        "destination": "ORD",
+        "destination": "IAH",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -10128,8 +10128,8 @@
         "reservation_id": "IDFCNB",
         "user_id": "mia_silva_9133",
         "origin": "SFO",
-        "destination": "SFO",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -10743,8 +10743,8 @@
         "reservation_id": "971W9L",
         "user_id": "liam_garcia_8705",
         "origin": "PHL",
-        "destination": "PHL",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -11162,8 +11162,8 @@
         "reservation_id": "YKCIBO",
         "user_id": "emma_jackson_2190",
         "origin": "BOS",
-        "destination": "BOS",
-        "flight_type": "one_way",
+        "destination": "MIA",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -11787,8 +11787,8 @@
         "reservation_id": "YKWHVU",
         "user_id": "aarav_lee_3563",
         "origin": "BOS",
-        "destination": "BOS",
-        "flight_type": "one_way",
+        "destination": "SEA",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -12216,8 +12216,8 @@
         "reservation_id": "2NULCR",
         "user_id": "juan_moore_4540",
         "origin": "DFW",
-        "destination": "DFW",
-        "flight_type": "one_way",
+        "destination": "ATL",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -12372,8 +12372,8 @@
         "reservation_id": "LH9KMJ",
         "user_id": "lucas_sanchez_1853",
         "origin": "DEN",
-        "destination": "DEN",
-        "flight_type": "one_way",
+        "destination": "LAS",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -12942,7 +12942,7 @@
         "reservation_id": "71A70N",
         "user_id": "raj_moore_3967",
         "origin": "JFK",
-        "destination": "JFK",
+        "destination": "DTW",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -13223,7 +13223,7 @@
         "reservation_id": "IS6JKD",
         "user_id": "aarav_nguyen_1055",
         "origin": "SEA",
-        "destination": "SEA",
+        "destination": "DFW",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -13495,8 +13495,8 @@
         "reservation_id": "WHGMVJ",
         "user_id": "aarav_nguyen_9116",
         "origin": "ORD",
-        "destination": "ORD",
-        "flight_type": "one_way",
+        "destination": "ATL",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -14340,7 +14340,7 @@
         "reservation_id": "816Y7T",
         "user_id": "juan_johansson_1492",
         "origin": "SEA",
-        "destination": "SEA",
+        "destination": "JFK",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -14672,7 +14672,7 @@
         "reservation_id": "VYVD4J",
         "user_id": "mason_garcia_8795",
         "origin": "PHX",
-        "destination": "PHX",
+        "destination": "LGA",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -14904,7 +14904,7 @@
         "reservation_id": "TFURGB",
         "user_id": "fatima_johnson_3148",
         "origin": "DFW",
-        "destination": "DFW",
+        "destination": "ATL",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -15746,7 +15746,7 @@
         "reservation_id": "QBYLMN",
         "user_id": "ivan_brown_5554",
         "origin": "PHX",
-        "destination": "PHX",
+        "destination": "SFO",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -16087,7 +16087,7 @@
         "reservation_id": "A3ARY5",
         "user_id": "ava_brown_3860",
         "origin": "ATL",
-        "destination": "ATL",
+        "destination": "JFK",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -16558,8 +16558,8 @@
         "reservation_id": "OWADTS",
         "user_id": "sofia_gonzalez_4431",
         "origin": "ORD",
-        "destination": "ORD",
-        "flight_type": "one_way",
+        "destination": "DEN",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -16591,8 +16591,8 @@
         "reservation_id": "3SHBFW",
         "user_id": "liam_smith_7283",
         "origin": "MCO",
-        "destination": "MCO",
-        "flight_type": "one_way",
+        "destination": "BOS",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -16717,8 +16717,8 @@
         "reservation_id": "TR30XR",
         "user_id": "raj_muller_5942",
         "origin": "PHX",
-        "destination": "PHX",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -17330,7 +17330,7 @@
         "reservation_id": "10V3GN",
         "user_id": "chen_brown_8250",
         "origin": "JFK",
-        "destination": "JFK",
+        "destination": "SEA",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -17705,8 +17705,8 @@
         "reservation_id": "QL459O",
         "user_id": "mohamed_martin_1679",
         "origin": "JFK",
-        "destination": "JFK",
-        "flight_type": "one_way",
+        "destination": "DTW",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -18096,8 +18096,8 @@
         "reservation_id": "4SAGZV",
         "user_id": "anya_sanchez_5251",
         "origin": "PHL",
-        "destination": "PHL",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -18490,8 +18490,8 @@
         "reservation_id": "8KWNS5",
         "user_id": "mei_wilson_9061",
         "origin": "LGA",
-        "destination": "LGA",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -18926,7 +18926,7 @@
         "reservation_id": "MH6BI5",
         "user_id": "sophia_jackson_1792",
         "origin": "CLT",
-        "destination": "CLT",
+        "destination": "EWR",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -18973,7 +18973,7 @@
         "reservation_id": "LXWNEB",
         "user_id": "raj_moore_3967",
         "origin": "SEA",
-        "destination": "SEA",
+        "destination": "DFW",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -20284,8 +20284,8 @@
         "reservation_id": "J3SAZF",
         "user_id": "sophia_taylor_9065",
         "origin": "LGA",
-        "destination": "LGA",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -20318,8 +20318,8 @@
         "reservation_id": "LYZ2U6",
         "user_id": "fatima_ito_3977",
         "origin": "CLT",
-        "destination": "CLT",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -21404,7 +21404,7 @@
         "reservation_id": "I57WUD",
         "user_id": "sofia_kim_7287",
         "origin": "DFW",
-        "destination": "DFW",
+        "destination": "ATL",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -21602,8 +21602,8 @@
         "reservation_id": "GT73N4",
         "user_id": "ava_kovacs_2694",
         "origin": "DFW",
-        "destination": "DFW",
-        "flight_type": "one_way",
+        "destination": "SEA",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -24060,8 +24060,8 @@
         "reservation_id": "CZDHQS",
         "user_id": "fatima_rossi_9652",
         "origin": "ATL",
-        "destination": "ATL",
-        "flight_type": "one_way",
+        "destination": "LAS",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -24780,7 +24780,7 @@
         "reservation_id": "9FVEXC",
         "user_id": "fatima_johansson_1766",
         "origin": "EWR",
-        "destination": "EWR",
+        "destination": "IAH",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -24934,7 +24934,7 @@
         "reservation_id": "NQDGR6",
         "user_id": "evelyn_brown_8513",
         "origin": "SEA",
-        "destination": "SEA",
+        "destination": "DFW",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -25066,8 +25066,8 @@
         "reservation_id": "IQ1B32",
         "user_id": "harper_lopez_1489",
         "origin": "CLT",
-        "destination": "CLT",
-        "flight_type": "one_way",
+        "destination": "BOS",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -26311,8 +26311,8 @@
         "reservation_id": "90ZXQ9",
         "user_id": "noah_rossi_6214",
         "origin": "CLT",
-        "destination": "CLT",
-        "flight_type": "one_way",
+        "destination": "EWR",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -26749,7 +26749,7 @@
         "reservation_id": "OFW6LW",
         "user_id": "mia_ahmed_3713",
         "origin": "CLT",
-        "destination": "CLT",
+        "destination": "BOS",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -27330,8 +27330,8 @@
         "reservation_id": "K2LPTR",
         "user_id": "raj_johnson_6495",
         "origin": "PHX",
-        "destination": "PHX",
-        "flight_type": "one_way",
+        "destination": "LAS",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -27360,7 +27360,7 @@
         "reservation_id": "PNMOG6",
         "user_id": "ethan_davis_3996",
         "origin": "MIA",
-        "destination": "MIA",
+        "destination": "JFK",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -27653,8 +27653,8 @@
         "reservation_id": "LU15PA",
         "user_id": "amelia_davis_8890",
         "origin": "SFO",
-        "destination": "SFO",
-        "flight_type": "one_way",
+        "destination": "PHX",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -27873,8 +27873,8 @@
         "reservation_id": "H0S6OC",
         "user_id": "aarav_nguyen_1055",
         "origin": "ORD",
-        "destination": "ORD",
-        "flight_type": "one_way",
+        "destination": "IAH",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -28545,8 +28545,8 @@
         "reservation_id": "2E2N7I",
         "user_id": "isabella_khan_6576",
         "origin": "IAH",
-        "destination": "IAH",
-        "flight_type": "one_way",
+        "destination": "SFO",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -29122,7 +29122,7 @@
         "reservation_id": "3IV8Y2",
         "user_id": "harper_anderson_7659",
         "origin": "PHL",
-        "destination": "PHL",
+        "destination": "LGA",
         "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
@@ -29485,7 +29485,7 @@
         "reservation_id": "2FBBAH",
         "user_id": "omar_davis_3817",
         "origin": "DEN",
-        "destination": "DEN",
+        "destination": "PHL",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -30244,7 +30244,7 @@
         "reservation_id": "B5A030",
         "user_id": "ethan_johnson_9800",
         "origin": "ORD",
-        "destination": "ORD",
+        "destination": "IAH",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -30596,7 +30596,7 @@
         "reservation_id": "3PQDP7",
         "user_id": "ivan_silva_9292",
         "origin": "CLT",
-        "destination": "CLT",
+        "destination": "EWR",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -30666,8 +30666,8 @@
         "reservation_id": "ZYD2S9",
         "user_id": "lei_kovacs_2208",
         "origin": "LGA",
-        "destination": "LGA",
-        "flight_type": "one_way",
+        "destination": "PHL",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -30812,7 +30812,7 @@
         "reservation_id": "FA3Q0Z",
         "user_id": "olivia_patel_3577",
         "origin": "LAS",
-        "destination": "LAS",
+        "destination": "ATL",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -31242,7 +31242,7 @@
         "reservation_id": "X38JYX",
         "user_id": "ethan_garcia_7028",
         "origin": "ORD",
-        "destination": "ORD",
+        "destination": "PHL",
         "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
@@ -31286,7 +31286,7 @@
         "reservation_id": "01WQQ7",
         "user_id": "mohamed_taylor_5128",
         "origin": "JFK",
-        "destination": "JFK",
+        "destination": "ATL",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -32326,8 +32326,8 @@
         "reservation_id": "QGR999",
         "user_id": "raj_garcia_4690",
         "origin": "PHL",
-        "destination": "PHL",
-        "flight_type": "one_way",
+        "destination": "LGA",
+        "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
             {
@@ -33185,8 +33185,8 @@
         "reservation_id": "78ULOP",
         "user_id": "chen_nguyen_6691",
         "origin": "SEA",
-        "destination": "SEA",
-        "flight_type": "one_way",
+        "destination": "DFW",
+        "flight_type": "round_trip",
         "cabin": "business",
         "flights": [
             {
@@ -33367,7 +33367,7 @@
         "reservation_id": "ST1ZZ2",
         "user_id": "amelia_li_7843",
         "origin": "JFK",
-        "destination": "JFK",
+        "destination": "DTW",
         "flight_type": "round_trip",
         "cabin": "basic_economy",
         "flights": [
@@ -33544,8 +33544,8 @@
         "reservation_id": "J8LCSR",
         "user_id": "mia_hernandez_2149",
         "origin": "DEN",
-        "destination": "DEN",
-        "flight_type": "one_way",
+        "destination": "MIA",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
@@ -35038,8 +35038,8 @@
         "reservation_id": "O8QZZR",
         "user_id": "amelia_rossi_1651",
         "origin": "DEN",
-        "destination": "DEN",
-        "flight_type": "one_way",
+        "destination": "PHL",
+        "flight_type": "round_trip",
         "cabin": "economy",
         "flights": [
             {
