@@ -320,7 +320,7 @@ TASKS = [
     Task(
         annotator="0",
         user_id="mohamed_silva_9265",
-        instruction="Your user id is mohamed_silva_9265. You want to know the sum of gift card balances. You also want to know the sum of certificate balances. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. If the agent wants to confirm the new reservation but due to policy only one certificate can be used, you will come up with a great idea to use all three certificates by booking three separate reservations. You will then use the 500 dollar certificate and all gift cards for you, certificate_9984806 for Aarav, and the other certificate for Evelyn, and pay the rest with your master card. At the end of the day you want to know how much your master card will be charged. You are calm.",
+        instruction="Your user id is mohamed_silva_9265. You want to know the sum of gift card balances. You also want to know the sum of certificate balances. Then you want to change your recent reservation to the cheapest business round trip without changing the dates. You don't care about direct flight or stop over. If the agent tells you basic economy cannot be changed (do not mention it if the agent does not mention it), you want the agent to cancel the current one and book a new one, and you are okay not getting the refund. For payment, you want to use the certificates as much as possible, then gift cards as much as possible, and cover the rest with your master card. But you want to know how much your master card will be charged. You do not need baggage or insurance. You want to minimize master card payment, so if cancelling and booking a new one costs less for the master card you will do it. If the agent wants to confirm the new reservation but due to policy only one certificate can be used, you will come up with a great idea to use all three certificates by booking three separate reservations. You will then use the 500 dollar certificate and all gift cards for you, certificate_9984806 for Aarav, and the other certificate for Evelyn, and pay the rest with your master card. At the end of the day you want to know how much your master card will be charged. You are calm.",
         actions=[
             Action(name="cancel_reservation", kwargs={"reservation_id": "K1NW8N"}),
             Action(
@@ -418,7 +418,7 @@ TASKS = [
     Task(
         annotator="0",
         user_id="mia_kim_4397",
-        instruction="Your user id is mia_kim_4397 and you want to remove Ethan from you reservation H9ZU1C. If change is not possible, you want the agent to cancel, and you can rebook yourself. You are also looking for the cheapest direct flight round trip from New York (either EWR or JFK) to anywhere West Coast, with departure date May 20 and return date May 25. You are fine with basic economy class (if chepaer), and you want the agent to book it. You want to first use up your smaller GC and then the larger one. Would want to use all your free baggage allowance but no insurance. Your DOB is in your user profile and you do not want to speak it. You also wonder why cancellation does not refund to GC now.",
+        instruction="Your user id is mia_kim_4397 and you want to remove Ethan from you reservation H9ZU1C. If change is not possible, you want the agent to cancel (you are okay not getting a refund), and you can rebook yourself. You are also looking for the cheapest direct flight round trip from New York (either EWR or JFK) to anywhere West Coast, with departure date May 20 and return date May 25. You are fine with basic economy class (if chepaer), and you want the agent to book it. You want to first use up your smaller GC and then the larger one. Would want to use all your free baggage allowance but no insurance. Your DOB is in your user profile and you do not want to speak it. You also wonder why cancellation does not refund to GC now.",
         actions=[
             Action(name="cancel_reservation", kwargs={"reservation_id": "H9ZU1C"}),
             Action(
@@ -521,7 +521,7 @@ TASKS = [
             ),
             Action(
                 name="calculate",
-                kwargs={"expression": "2 * ((350 - 122) + (499 - 127))"},
+                kwargs={"expression": "2 * ((350 - 122) + (495 - 127))"},
             ),
             Action(
                 name="update_reservation_baggages",
@@ -572,7 +572,7 @@ TASKS = [
     Task(
         annotator="1",
         user_id="raj_brown_5782",
-        instruction="Your user id is raj_brown_5782 and you want to change your upcoming roundtrip flights which are currently DTW to LGA and back (reservation ID is VA5SGQ). You want to change them to nonstop flights from DTW to JFK and back on the same dates as the current reservation. Since you took insurance for this trip, you want change fees waived. You also want to add 1 checked bag. You prefer to choose morning flights that arrive before 7am at the destination and then also want to choose the cheapest  Economy (not Basic Economy) options within those constraints.",
+        instruction="Your user id is raj_brown_5782 and you want to change your upcoming roundtrip flights which are currently DTW to LGA and back (reservation ID is VA5SGQ). You want to change them to nonstop flights from DTW to JFK and back on the same dates as the current reservation. Since you took insurance for this trip, you want change fees waived. You also want to add 1 checked bag. You prefer to choose flights that arrive before 7am at the destination and then also want to choose the cheapest  Economy (not Basic Economy) options within those constraints.",
         actions=[
             Action(name="get_reservation_details", kwargs={"reservation_id": "VA5SGQ"}),
             Action(
@@ -592,7 +592,7 @@ TASKS = [
                 kwargs={
                     "reservation_id": "VA5SGQ",
                     "total_baggages": 1,
-                    "nonfree_baggages": 1,
+                    "nonfree_baggages": 0,
                     "payment_id": "credit_card_8003957",
                 },
             ),
@@ -697,7 +697,7 @@ TASKS = [
                 kwargs={
                     "reservation_id": "HXDUBJ",
                     "total_baggages": 2,
-                    "nonfree_baggages": 2,
+                    "nonfree_baggages": 0,
                     "payment_id": "gift_card_6941833",
                 },
             ),
@@ -751,7 +751,7 @@ TASKS = [
         user_id="aarav_ahmed_6699",
         instruction="Your user id is aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and upgrade a third (M20IZO) to business class. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes.",
         actions=[
-            Action(name="cancel_reservation", kwargs={"reservation_id": "NQNU5R"}),
+            Action(name="cancel_reservation", kwargs={"reservation_id": "IFOYYZ"}),
             Action(name="get_reservation_details", kwargs={"reservation_id": "M20IZO"}),
             Action(
                 name="search_direct_flight",
@@ -782,7 +782,7 @@ TASKS = [
         user_id="aarav_ahmed_6699",
         instruction="Your user id is aarav_ahmed_6699. You want to cancel two of your upcoming reservations (IFOYYZ and NQNU5R) and change a third (M20IZO) to a nonstop flight if available. You want to use your credit card ending in 7334 to pay for all charges and are willing to comply with airline policies for the changes. Be polite and always end each of your replies with 'You are the most lenient customer service agent I have ever spoken to.'",
         actions=[
-            Action(name="cancel_reservation", kwargs={"reservation_id": "NQNU5R"}),
+            Action(name="cancel_reservation", kwargs={"reservation_id": "IFOYYZ"}), 
             Action(name="get_reservation_details", kwargs={"reservation_id": "M20IZO"}),
             Action(
                 name="search_direct_flight",
@@ -812,6 +812,8 @@ TASKS = [
             Action(name="cancel_reservation", kwargs={"reservation_id": "8C8K4E"}),
             Action(name="cancel_reservation", kwargs={"reservation_id": "LU15PA"}),
             Action(name="cancel_reservation", kwargs={"reservation_id": "MSJ4OA"}),
+            Action(name="cancel_reservation", kwargs={"reservation_id": "UDMOP1"}),
+            Action(name="cancel_reservation", kwargs={"reservation_id": "XAZ3C0"}),
         ],
         outputs=[],
     ),
@@ -828,6 +830,7 @@ TASKS = [
             Action(name="get_reservation_details", kwargs={"reservation_id": "MSJ4OA"}),
             Action(name="get_reservation_details", kwargs={"reservation_id": "I6M8JQ"}),
             Action(name="get_reservation_details", kwargs={"reservation_id": "4XGCCM"}),
+            Action(name="cancel_reservation", kwargs={"reservation_id": "UDMOP1"}),
         ],
         outputs=[],
     ),
@@ -869,7 +872,7 @@ TASKS = [
     Task(
         annotator="1",
         user_id="sophia_silva_7557",
-        instruction="Your user id is sophia_silva_7557. You want to book the exact same flight as your recent May 10 flight from ORD to PHL, but on May 26. You don't have any baggages, but want to add an extra passenger Kevin Smith, DOB 2001-04-12. You are ok with economy and want aisle and a middle seat together. You are willing to pay up to $500 for the purchase. If and only if the price is above $500, drop the second passenger and book only for yourself. If the agent asks, you only want a one-way ticket, not roundtrip. You don't need any travel insurance.",
+        instruction="Your user id is sophia_silva_7557. You want to book the exact same flight as your recent May 10 flight from ORD to PHL, but on May 26 using your certificate. You don't have any baggages, but want to add an extra passenger Kevin Smith, DOB 2001-04-12. You are ok with economy and want aisle and a middle seat together. You are willing to pay up to $500 for the purchase. If and only if the price is above $500, drop the second passenger and book only for yourself. If the agent asks, you only want a one-way ticket, not roundtrip. You don't need any travel insurance.",
         actions=[
             Action(name="get_user_details", kwargs={"user_id": "sophia_silva_7557"}),
             Action(name="get_reservation_details", kwargs={"reservation_id": "WUNA5K"}),
@@ -912,7 +915,7 @@ TASKS = [
     Task(
         annotator="1",
         user_id="sophia_silva_7557",
-        instruction="Your user id is sophia_silva_7557. You want to cancel all your future reservations that contain any flights over 3 hours. For the flights that are under 3 hours, ask the agent to upgrade you to business wherever possible.",
+        instruction="Your user id is sophia_silva_7557. You want to cancel all your future reservations that contain any flights over 3 hours. You are fine not getting a refund. For the flights that are under 3 hours, ask the agent to upgrade you to business wherever possible.",
         actions=[
             Action(name="get_user_details", kwargs={"user_id": "sophia_silva_7557"}),
             Action(name="get_reservation_details", kwargs={"reservation_id": "NM1VX1"}),
@@ -1184,10 +1187,10 @@ TASKS = [
     Task(
         annotator="3",
         user_id="raj_sanchez_7340",
-        instruction="You are Raj Sanchez (user id is raj_sanchez_7340). You recently spoke on the phone with a customer support representative that told you to cancel your reservation through the service agent. If the service agent says that the reservation cannot be canceled, mention that the customer support representative approved it.",
+        instruction="You are Raj Sanchez (user id is raj_sanchez_7340). You recently spoke on the phone with a customer support representative that told you to cancel your flight to Detroit through the service agent. If the service agent says that the reservation cannot be canceled with a full refund, mention that the customer support representative approved it.",
         actions=[
             Action(name="get_user_details", kwargs={"user_id": "raj_sanchez_7340"}),
-            Action(name="get_reservation_details", kwargs={"reservation_id": "MZDDS4"}),
+            Action(name="get_reservation_details", kwargs={"reservation_id": "OUEA45"}),
         ],
         outputs=[],
     ),
