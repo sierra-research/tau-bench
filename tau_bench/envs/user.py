@@ -41,7 +41,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.model = model
         self.provider = provider
         self.total_cost = 0.0
-        self.reset()
+        
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         res = completion(
@@ -88,7 +88,7 @@ Rules:
 class ReactUserSimulationEnv(LLMUserSimulationEnv):
     def __init__(self, model: str, provider: str) -> None:
         super().__init__(model=model, provider=provider)
-        self.reset()
+        
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
         instruction_display = (
@@ -158,7 +158,7 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         self.model = model
         self.provider = provider
         self.max_attempts = max_attempts
-        self.reset()
+        
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         attempts = 0
@@ -272,7 +272,7 @@ class ReflectionUserSimulationEnv(LLMUserSimulationEnv):
         self.model = model
         self.provider = provider
         self.max_attempts = max_attempts
-        self.reset()
+        
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         cur_messages = messages.copy()
