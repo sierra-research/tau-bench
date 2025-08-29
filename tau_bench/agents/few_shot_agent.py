@@ -2,13 +2,17 @@
 
 import json
 import random
-from litellm import completion
+import logging
+from tau_bench.utils import completion_w_retry
 from typing import List, Optional, Dict, Any
 
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
 from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
 
+# Setup logging
+logging.basicConfig(format='[%(asctime)s] p%(process)s {%(filename)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class FewShotToolCallingAgent(Agent):
     def __init__(
@@ -32,6 +36,8 @@ class FewShotToolCallingAgent(Agent):
         self.few_shot_displays = few_shot_displays
         self.temperature = temperature
         self.num_few_shots = num_few_shots
+        logger.info(f"FewShotToolCallingAgent, model={model}, provider={provider}, temperature={temperature}, num_few_shots{num_few_shots}")
+
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
@@ -46,8 +52,9 @@ class FewShotToolCallingAgent(Agent):
             {"role": "system", "content": f"{self.wiki}\n\n{few_shots}"},
             {"role": "user", "content": obs},
         ]
-        for _ in range(max_num_steps):
-            res = completion(
+        for i in range(max_num_steps):
+            logger.info(f"solve, i={i}/{max_num_steps}")
+            res = completion_w_retry(
                 messages=messages,
                 model=self.model,
                 custom_llm_provider=self.provider,
@@ -81,6 +88,7 @@ class FewShotToolCallingAgent(Agent):
                     ]
                 )
             if env_response.done:
+                logger.info(f"solve, task_index={task_index}, done at i={i}/{max_num_steps}")
                 break
         return SolveResult(
             reward=reward,

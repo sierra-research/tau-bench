@@ -74,6 +74,7 @@ class Env(object):
             user_strategy=user_strategy, model=user_model, provider=user_provider
         )
         self.actions: List[Action] = []
+        self.reward = 0
 
     def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
         if task_index is None:
@@ -110,9 +111,9 @@ class Env(object):
         else:
             observation = f"Unknown action {action.name}"
             info.source = action.name
-
         if done:
             reward_res = self.calculate_reward()
+            self.reward = reward_res.reward
             reward = reward_res.reward
             info.reward_info = reward_res
             info.user_cost = self.user.get_total_cost()
@@ -138,6 +139,7 @@ class Env(object):
         info = RewardActionInfo(
             r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash
         )
+        
         if not info.r_actions:
             reward = 0.0
 
@@ -147,6 +149,7 @@ class Env(object):
             outputs = {}
             for output in self.task.outputs:
                 found = False
+                
                 for action in self.actions:
                     if (
                         action.name == RESPOND_ACTION_NAME
@@ -155,10 +158,11 @@ class Env(object):
                     ):
                         found = True
                         break
+                
                 outputs[output] = found
                 if not found:
                     r_outputs = 0.0
                     reward = 0.0
             info = RewardOutputInfo(r_outputs=r_outputs, outputs=outputs)
             
-        return RewardResult(reward=reward, info=info, actions=actions)
+        return RewardResult(reward=reward, info=info, actions=actions, taken_actions=self.actions)
