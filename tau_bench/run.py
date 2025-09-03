@@ -78,6 +78,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                 res = agent.solve(
                     env=isolated_env,
                     task_index=idx,
+                    num_max_steps=config.num_max_steps,
                 )
                 result = EnvRunResult(
                     task_id=idx,
