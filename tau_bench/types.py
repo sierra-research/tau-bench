@@ -30,9 +30,11 @@ class RewardActionInfo(BaseModel):
 
 
 class RewardResult(BaseModel):
-    reward: float
+    reward: float  # composite reward (includes penalties/bonuses)
     info: Union[RewardOutputInfo, RewardActionInfo]
     actions: List[Action]
+    # granular components
+    components: Optional[Dict[str, Any]] = None  # {base_success, efficiency_penalty, resilience_bonus, steps, resilience_triggered, composite}
 
 
 class SolveResult(BaseModel):
