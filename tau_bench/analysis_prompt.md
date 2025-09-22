@@ -8,7 +8,7 @@ You are an expert AI Engineer. Your task is to analyze the results of an agent's
 
 ## **Input Data**
 
-The input will be a JSON object containing a list of task results. Each task result includes a `task_id`, a final `reward` score, and detailed `info` about the task trajectory.
+The input will be a JSON object containing a list of task results. Each task result includes a `task_id`, a final `reward` score, and detailed `info` about the task trajectory. Make sure you read all the tasks, and use them to do the output analysis.
 
 **Key features of the modified benchmark:**
 - **Granular Reward Score:** The `reward` is a composite score where `1.0` is a perfect success. `0.0` is a failure. `0.0 < reward < 1.0` is a success with some penalty.
@@ -64,14 +64,14 @@ Analyze the entire list of tasks in the provided JSON to calculate the following
 
 ### **Step 2: Strengths and Weaknesses**
 
-Based on the quantitative results, provide a qualitative assessment of the agent's performance.
+Based on the quantitative results, provide a concise but insightful qualitative assessment of the agent's performance.
 
 * **Strengths:** Look for evidence of high resilience, efficiency in successful tasks, and patterns in how the agent achieves high scores.
 * **Weaknesses:** Analyze the failure breakdown. Does the agent struggle more with complete failures or partial credit scenarios? Is the Resilience Rate low? Does inefficiency significantly impact its scores?
 
 ### **Step 3: Notable Cases Analysis**
 
-Scan the JSON to find specific `task_id` examples that clearly illustrate the agent's capabilities.
+Scan the whole JSON file to find specific `task_id` examples that clearly illustrate the agent's capabilities.
 
 1.  **Notable Success Example:**
     * Find a task with a high score that prominently features the **Resilience Bonus**.
