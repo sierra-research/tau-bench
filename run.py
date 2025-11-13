@@ -1,17 +1,18 @@
 # Copyright Sierra
 
 import argparse
-from tau_bench.types import RunConfig
-from tau_bench.run import run
+
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
+from tau_bench.run import run
+from tau_bench.types import RunConfig
 
 
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser()
     parser.add_argument("--num-trials", type=int, default=1)
     parser.add_argument(
-        "--env", type=str, choices=["retail", "airline"], default="retail"
+        "--env", type=str, choices=["retail", "airline", "telecom", "telehealth"], default="retail"
     )
     parser.add_argument(
         "--model",

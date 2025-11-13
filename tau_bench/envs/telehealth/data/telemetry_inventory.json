@@ -1,0 +1,143 @@
+[
+  {
+    "device_id": "NS-EEG-218",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-20",
+    "notes": "Spare unit ready for dispatch"
+  },
+  {
+    "device_id": "NS-EEG-219",
+    "device_type": "Wearable EEG",
+    "status": "shipped",
+    "last_audit": "2025-07-18",
+    "notes": "In transit to patient"
+  },
+  {
+    "device_id": "NS-EEG-220",
+    "device_type": "Wearable EEG",
+    "status": "missing_overdue",
+    "last_audit": "2025-07-05",
+    "notes": "Flagged missing; escalate replacement"
+  },
+  {
+    "device_id": "NS-EEG-221",
+    "device_type": "Wearable EEG",
+    "status": "inspection",
+    "last_audit": "2025-07-22",
+    "notes": "Awaiting QA sign-off"
+  },
+  {
+    "device_id": "NS-EEG-222",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-23",
+    "notes": "Newly imaged unit"
+  },
+  {
+    "device_id": "NS-EEG-223",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-23",
+    "notes": "Ready for overnight ship"
+  },
+  {
+    "device_id": "NS-EEG-224",
+    "device_type": "Wearable EEG",
+    "status": "maintenance",
+    "last_audit": "2025-07-19",
+    "notes": "Battery calibration pending"
+  },
+  {
+    "device_id": "NS-EEG-225",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-21",
+    "notes": "Tag for seizure protocol"
+  },
+  {
+    "device_id": "NS-EEG-226",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-21",
+    "notes": "Prep for telemetry coaching"
+  },
+  {
+    "device_id": "NS-EEG-228",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-24",
+    "notes": "Cleared for immediate use"
+  },
+  {
+    "device_id": "VC-449",
+    "device_type": "Philips Trilogy Ventilator",
+    "status": "deployed",
+    "last_audit": "2025-06-01",
+    "notes": "Assigned to Jin Park"
+  },
+  {
+    "device_id": "VC-450",
+    "device_type": "Philips Trilogy Ventilator",
+    "status": "available",
+    "last_audit": "2025-06-03",
+    "notes": "Backup ventilator for compliance swaps"
+  },
+  {
+    "device_id": "NS-EEG-229",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-24",
+    "notes": "Paired with telemetry kit"
+  },
+  {
+    "device_id": "NS-EEG-230",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-25",
+    "notes": "New sensor batch"
+  },
+  {
+    "device_id": "NS-EEG-231",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-25",
+    "notes": "Ready for priority shipping"
+  },
+  {
+    "device_id": "NS-EEG-232",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-25",
+    "notes": "Spare electrodes included"
+  },
+  {
+    "device_id": "NS-EEG-233",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-26",
+    "notes": "Telemetry-ready"
+  },
+  {
+    "device_id": "NS-EEG-234",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-26",
+    "notes": "Passed overnight QA"
+  },
+  {
+    "device_id": "NS-EEG-235",
+    "device_type": "Wearable EEG",
+    "status": "available",
+    "last_audit": "2025-07-27",
+    "notes": "Replacement kit ready"
+  },
+  {
+    "device_id": "NS-EEG-227",
+    "device_type": "Wearable EEG",
+    "status": "inspection",
+    "last_audit": "2025-07-22",
+    "notes": "Surface damage check"
+  }
+]
+

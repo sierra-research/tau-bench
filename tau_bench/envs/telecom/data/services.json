@@ -1,0 +1,92 @@
+{
+    "mobile_unlimited": {
+        "service_id": "mobile_unlimited",
+        "name": "Unlimited Mobile Plan",
+        "category": "mobile",
+        "price": 85.00
+    },
+    "mobile_family_4lines": {
+        "service_id": "mobile_family_4lines",
+        "name": "Family Plan - 4 Lines",
+        "category": "mobile",
+        "price": 160.00
+    },
+    "mobile_business_10lines": {
+        "service_id": "mobile_business_10lines",
+        "name": "Business Mobile - 10 Lines",
+        "category": "mobile",
+        "price": 450.00
+    },
+    "mobile_basic": {
+        "service_id": "mobile_basic",
+        "name": "Basic Mobile Plan",
+        "category": "mobile",
+        "price": 35.00
+    },
+    "mobile_senior": {
+        "service_id": "mobile_senior",
+        "name": "Senior Mobile Plan",
+        "category": "mobile",
+        "price": 45.00
+    },
+    "internet_fiber_1gb": {
+        "service_id": "internet_fiber_1gb",
+        "name": "Fiber Internet 1GB",
+        "category": "internet",
+        "price": 80.00
+    },
+    "internet_fiber_2gb": {
+        "service_id": "internet_fiber_2gb",
+        "name": "Fiber Internet 2GB",
+        "category": "internet",
+        "price": 120.00
+    },
+    "internet_fiber_500mb": {
+        "service_id": "internet_fiber_500mb",
+        "name": "Fiber Internet 500MB",
+        "category": "internet",
+        "price": 60.00
+    },
+    "internet_cable_500mb": {
+        "service_id": "internet_cable_500mb",
+        "name": "Cable Internet 500MB",
+        "category": "internet",
+        "price": 55.00
+    },
+    "internet_cable_100mb": {
+        "service_id": "internet_cable_100mb",
+        "name": "Cable Internet 100MB",
+        "category": "internet",
+        "price": 35.00
+    },
+    "tv_premium": {
+        "service_id": "tv_premium",
+        "name": "Premium TV Package",
+        "category": "tv",
+        "price": 95.00
+    },
+    "tv_basic": {
+        "service_id": "tv_basic",
+        "name": "Basic TV Package",
+        "category": "tv",
+        "price": 45.00
+    },
+    "tv_sports_package": {
+        "service_id": "tv_sports_package",
+        "name": "Sports TV Package",
+        "category": "tv",
+        "price": 75.00
+    },
+    "business_phone_system": {
+        "service_id": "business_phone_system",
+        "name": "Business Phone System",
+        "category": "phone",
+        "price": 150.00
+    },
+    "home_security": {
+        "service_id": "home_security",
+        "name": "Home Security System",
+        "category": "security",
+        "price": 40.00
+    }
+}

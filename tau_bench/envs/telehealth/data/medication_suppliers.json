@@ -1,0 +1,976 @@
+{
+    "Atorvastatin": [
+        {
+            "company": "Sunrise Biotech",
+            "country": "India",
+            "brand_name": "Lipistal",
+            "price_usd": 4.15
+        },
+        {
+            "company": "VedaRx Labs",
+            "country": "India",
+            "brand_name": "Atorveeda",
+            "price_usd": 4.05
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "StatGuard",
+            "price_usd": 6.8
+        },
+        {
+            "company": "NovaNord Therapeutics",
+            "country": "Denmark",
+            "brand_name": "AtorvaNova",
+            "price_usd": 7.1
+        },
+        {
+            "company": "Silver Maple Pharma",
+            "country": "Canada",
+            "brand_name": "MapleStat",
+            "price_usd": 6.2
+        },
+        {
+            "company": "Bharat Lifecare",
+            "country": "India",
+            "brand_name": "Cholozen",
+            "price_usd": 4.3
+        },
+        {
+            "company": "Trinity Generics",
+            "country": "UK",
+            "brand_name": "Cardiotor",
+            "price_usd": 6.45
+        },
+        {
+            "company": "Lagos Pharma",
+            "country": "Nigeria",
+            "brand_name": "Atorlag",
+            "price_usd": 5.95
+        },
+        {
+            "company": "Pacific Coast Labs",
+            "country": "USA",
+            "brand_name": "CoastStat",
+            "price_usd": 6.55
+        },
+        {
+            "company": "Qianlong Remedies",
+            "country": "China",
+            "brand_name": "LongStat",
+            "price_usd": 5.4
+        },
+        {
+            "company": "Andes Salud",
+            "country": "Chile",
+            "brand_name": "Atorsure",
+            "price_usd": 5.6
+        },
+        {
+            "company": "Aster Generics",
+            "country": "Australia",
+            "brand_name": "AsterAtor",
+            "price_usd": 6.1
+        }
+    ],
+    "Metoprolol Succinate": [
+        {
+            "company": "MedNova Kerala",
+            "country": "India",
+            "brand_name": "Metotime",
+            "price_usd": 3.95
+        },
+        {
+            "company": "Aurora Heart Labs",
+            "country": "India",
+            "brand_name": "BetaShield",
+            "price_usd": 3.8
+        },
+        {
+            "company": "Evergreen Generics",
+            "country": "USA",
+            "brand_name": "Metoprol XL",
+            "price_usd": 5.9
+        },
+        {
+            "company": "CardioSure GmbH",
+            "country": "Germany",
+            "brand_name": "Cardioslow",
+            "price_usd": 6.25
+        },
+        {
+            "company": "Riverbend Pharma",
+            "country": "USA",
+            "brand_name": "Riverlol",
+            "price_usd": 5.7
+        },
+        {
+            "company": "Tianjin Vital",
+            "country": "China",
+            "brand_name": "Metrocare",
+            "price_usd": 4.9
+        },
+        {
+            "company": "Zuma Health",
+            "country": "South Africa",
+            "brand_name": "MetoZuma",
+            "price_usd": 5.35
+        },
+        {
+            "company": "Prana Cardiac",
+            "country": "India",
+            "brand_name": "Pranolol",
+            "price_usd": 4.05
+        },
+        {
+            "company": "Polar Therapeutics",
+            "country": "Iceland",
+            "brand_name": "Glacialol",
+            "price_usd": 6.8
+        },
+        {
+            "company": "Danube Generics",
+            "country": "Austria",
+            "brand_name": "SuccinateX",
+            "price_usd": 6.1
+        },
+        {
+            "company": "Blue Harbor Labs",
+            "country": "USA",
+            "brand_name": "Harborol",
+            "price_usd": 5.45
+        },
+        {
+            "company": "Alpine Summit Pharma",
+            "country": "Switzerland",
+            "brand_name": "Summet",
+            "price_usd": 6.5
+        }
+    ],
+    "Aspirin EC": [
+        {
+            "company": "Kolkata Pharma Works",
+            "country": "India",
+            "brand_name": "Aspiru EC",
+            "price_usd": 1.95
+        },
+        {
+            "company": "Mumbai Care Labs",
+            "country": "India",
+            "brand_name": "CardiShield 81",
+            "price_usd": 1.85
+        },
+        {
+            "company": "Heartland Remedies",
+            "country": "USA",
+            "brand_name": "HeartTabs EC",
+            "price_usd": 2.5
+        },
+        {
+            "company": "Bayview Therapeutics",
+            "country": "USA",
+            "brand_name": "BayCoat",
+            "price_usd": 2.7
+        },
+        {
+            "company": "Greenfield Pharma",
+            "country": "Ireland",
+            "brand_name": "CoatASA",
+            "price_usd": 2.65
+        },
+        {
+            "company": "Pharma Lagos",
+            "country": "Nigeria",
+            "brand_name": "Guard81",
+            "price_usd": 2.4
+        },
+        {
+            "company": "Novalife Brasil",
+            "country": "Brazil",
+            "brand_name": "Aspiriz EC",
+            "price_usd": 2.3
+        },
+        {
+            "company": "SeoulCare",
+            "country": "South Korea",
+            "brand_name": "EzyGuard",
+            "price_usd": 2.55
+        },
+        {
+            "company": "Saffron Generics",
+            "country": "India",
+            "brand_name": "Cardisafe",
+            "price_usd": 1.9
+        },
+        {
+            "company": "Fjord Pharma",
+            "country": "Norway",
+            "brand_name": "NordASA",
+            "price_usd": 2.85
+        },
+        {
+            "company": "Savannah Wellness",
+            "country": "USA",
+            "brand_name": "Savanna ASA",
+            "price_usd": 2.6
+        },
+        {
+            "company": "Bengal Biotech",
+            "country": "India",
+            "brand_name": "EcoSpirin",
+            "price_usd": 1.88
+        }
+    ],
+    "Montelukast": [
+        {
+            "company": "Chandra Labs",
+            "country": "India",
+            "brand_name": "Montiva",
+            "price_usd": 3.3
+        },
+        {
+            "company": "Hyderabad Respiratory",
+            "country": "India",
+            "brand_name": "AsthriMont",
+            "price_usd": 3.1
+        },
+        {
+            "company": "Great Lakes Pharma",
+            "country": "USA",
+            "brand_name": "Montelair",
+            "price_usd": 4.85
+        },
+        {
+            "company": "Nordic Relief",
+            "country": "Sweden",
+            "brand_name": "Montelis",
+            "price_usd": 5.05
+        },
+        {
+            "company": "Andhra Life Sciences",
+            "country": "India",
+            "brand_name": "Lukastin",
+            "price_usd": 3.25
+        },
+        {
+            "company": "MetroMed Canada",
+            "country": "Canada",
+            "brand_name": "LeafLukast",
+            "price_usd": 4.4
+        },
+        {
+            "company": "Pacific Airways",
+            "country": "Australia",
+            "brand_name": "AeroMont",
+            "price_usd": 4.65
+        },
+        {
+            "company": "Cairo Generics",
+            "country": "Egypt",
+            "brand_name": "Monteliz",
+            "price_usd": 3.95
+        },
+        {
+            "company": "Silver Desert Pharma",
+            "country": "UAE",
+            "brand_name": "Montesol",
+            "price_usd": 4.1
+        },
+        {
+            "company": "Sichuan Relief",
+            "country": "China",
+            "brand_name": "Montai",
+            "price_usd": 3.7
+        },
+        {
+            "company": "Patagonia Wellness",
+            "country": "Argentina",
+            "brand_name": "Montelar",
+            "price_usd": 4.2
+        },
+        {
+            "company": "Lotus Breath",
+            "country": "India",
+            "brand_name": "BreathFree",
+            "price_usd": 3.05
+        }
+    ],
+    "Fluticasone Inhaler": [
+        {
+            "company": "IndiAir Therapeutics",
+            "country": "India",
+            "brand_name": "Fluticair",
+            "price_usd": 7.4
+        },
+        {
+            "company": "Lotus Respiratory",
+            "country": "India",
+            "brand_name": "Flohale",
+            "price_usd": 7.1
+        },
+        {
+            "company": "Cascade Aero",
+            "country": "USA",
+            "brand_name": "FlutiaMist",
+            "price_usd": 9.9
+        },
+        {
+            "company": "BluePeak Inhalers",
+            "country": "USA",
+            "brand_name": "PeakFlo",
+            "price_usd": 9.4
+        },
+        {
+            "company": "Auckland Air",
+            "country": "New Zealand",
+            "brand_name": "FlutiBreathe",
+            "price_usd": 9.65
+        },
+        {
+            "company": "Rhein Respiratory",
+            "country": "Germany",
+            "brand_name": "RheinMist",
+            "price_usd": 9.8
+        },
+        {
+            "company": "Cape Care Pharma",
+            "country": "South Africa",
+            "brand_name": "CapeFlow",
+            "price_usd": 8.95
+        },
+        {
+            "company": "Punjab Pulmo",
+            "country": "India",
+            "brand_name": "Pulmist",
+            "price_usd": 7.25
+        },
+        {
+            "company": "Tokyo Breath",
+            "country": "Japan",
+            "brand_name": "Flutisora",
+            "price_usd": 9.7
+        },
+        {
+            "company": "Cordoba Med",
+            "country": "Spain",
+            "brand_name": "InhalaFlu",
+            "price_usd": 9.2
+        },
+        {
+            "company": "Seacoast Generics",
+            "country": "USA",
+            "brand_name": "SeaFlute",
+            "price_usd": 9.15
+        },
+        {
+            "company": "Emerald Inhalers",
+            "country": "Ireland",
+            "brand_name": "EmerFlu",
+            "price_usd": 9.05
+        }
+    ],
+    "Sertraline": [
+        {
+            "company": "Harmony Labs",
+            "country": "India",
+            "brand_name": "Sertrawin",
+            "price_usd": 4.75
+        },
+        {
+            "company": "Triveni Pharma",
+            "country": "India",
+            "brand_name": "Setrina",
+            "price_usd": 4.55
+        },
+        {
+            "company": "Midwest Mood Meds",
+            "country": "USA",
+            "brand_name": "MoodBalance",
+            "price_usd": 6.9
+        },
+        {
+            "company": "Boreal Therapeutics",
+            "country": "Canada",
+            "brand_name": "SertraNorth",
+            "price_usd": 6.5
+        },
+        {
+            "company": "Lisbon Neurology",
+            "country": "Portugal",
+            "brand_name": "Serenil",
+            "price_usd": 6.4
+        },
+        {
+            "company": "Cape Town Pharma",
+            "country": "South Africa",
+            "brand_name": "SertraCape",
+            "price_usd": 6.1
+        },
+        {
+            "company": "Seoul Synapse",
+            "country": "South Korea",
+            "brand_name": "Zenline",
+            "price_usd": 6.35
+        },
+        {
+            "company": "Gujarat MindCare",
+            "country": "India",
+            "brand_name": "Serenem",
+            "price_usd": 4.65
+        },
+        {
+            "company": "Turquoise Labs",
+            "country": "Turkey",
+            "brand_name": "Sertranex",
+            "price_usd": 6.05
+        },
+        {
+            "company": "Buenos Spirits",
+            "country": "Argentina",
+            "brand_name": "Calmist",
+            "price_usd": 5.9
+        },
+        {
+            "company": "Pacific Calm",
+            "country": "USA",
+            "brand_name": "SertraCalm",
+            "price_usd": 6.25
+        },
+        {
+            "company": "Aegean Generics",
+            "country": "Greece",
+            "brand_name": "Sertraegea",
+            "price_usd": 6.45
+        }
+    ],
+    "Buspirone": [
+        {
+            "company": "Udayan Pharma",
+            "country": "India",
+            "brand_name": "Buspiwin",
+            "price_usd": 3.35
+        },
+        {
+            "company": "Sahyadri Neuro",
+            "country": "India",
+            "brand_name": "Anxitab",
+            "price_usd": 3.2
+        },
+        {
+            "company": "River City Generics",
+            "country": "USA",
+            "brand_name": "BuspaEase",
+            "price_usd": 5.15
+        },
+        {
+            "company": "Galway Mind Labs",
+            "country": "Ireland",
+            "brand_name": "BuZen",
+            "price_usd": 4.95
+        },
+        {
+            "company": "Ontario Neuro",
+            "country": "Canada",
+            "brand_name": "SereniBus",
+            "price_usd": 5.05
+        },
+        {
+            "company": "Peninsula Pharma",
+            "country": "USA",
+            "brand_name": "Equilibrium",
+            "price_usd": 5.3
+        },
+        {
+            "company": "Jaipur CalmCare",
+            "country": "India",
+            "brand_name": "Calmbus",
+            "price_usd": 3.1
+        },
+        {
+            "company": "Dakar Serenity",
+            "country": "Senegal",
+            "brand_name": "BuspaSene",
+            "price_usd": 4.6
+        },
+        {
+            "company": "Baltic Neuro",
+            "country": "Latvia",
+            "brand_name": "Buspirax",
+            "price_usd": 4.85
+        },
+        {
+            "company": "Horizon Therapeutics",
+            "country": "USA",
+            "brand_name": "HoriBus",
+            "price_usd": 5.25
+        },
+        {
+            "company": "Delhi ZenLabs",
+            "country": "India",
+            "brand_name": "Zenpira",
+            "price_usd": 3.05
+        },
+        {
+            "company": "Auckland Balance",
+            "country": "New Zealand",
+            "brand_name": "PacificaBus",
+            "price_usd": 4.75
+        }
+    ],
+    "Ezetimibe": [
+        {
+            "company": "Lucknow Lipids",
+            "country": "India",
+            "brand_name": "Ezeswift",
+            "price_usd": 3.25
+        },
+        {
+            "company": "Harmony Cardio Labs",
+            "country": "India",
+            "brand_name": "EzeCare",
+            "price_usd": 3.35
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "Zetfast",
+            "price_usd": 5.2
+        },
+        {
+            "company": "Silver Maple Pharma",
+            "country": "Canada",
+            "brand_name": "Ezetisure",
+            "price_usd": 4.9
+        },
+        {
+            "company": "Qianlong Remedies",
+            "country": "China",
+            "brand_name": "EzeBright",
+            "price_usd": 4.3
+        }
+    ],
+    "Atorvastatin/Ezetimibe Combo": [
+        {
+            "company": "Harmony Cardio Labs",
+            "country": "India",
+            "brand_name": "LipiEz Duo",
+            "price_usd": 6.9
+        },
+        {
+            "company": "Aurora Heart Labs",
+            "country": "India",
+            "brand_name": "ComboStat",
+            "price_usd": 7.05
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "StatFuse",
+            "price_usd": 9.8
+        },
+        {
+            "company": "Trinity Generics",
+            "country": "UK",
+            "brand_name": "AtorEze",
+            "price_usd": 9.4
+        }
+    ],
+    "Fluticasone/Formoterol Inhaler": [
+        {
+            "company": "IndiAir Therapeutics",
+            "country": "India",
+            "brand_name": "BreezaOnce",
+            "price_usd": 8.4
+        },
+        {
+            "company": "Lotus Respiratory",
+            "country": "India",
+            "brand_name": "FloForm",
+            "price_usd": 8.55
+        },
+        {
+            "company": "Cascade Aero",
+            "country": "USA",
+            "brand_name": "FlutiaForm",
+            "price_usd": 10.2
+        },
+        {
+            "company": "Cape Care Pharma",
+            "country": "South Africa",
+            "brand_name": "CapeFlow Duo",
+            "price_usd": 9.6
+        }
+    ],
+    "Montelukast/Fexofenadine Combo": [
+        {
+            "company": "Lotus Breath",
+            "country": "India",
+            "brand_name": "LevoBreathe",
+            "price_usd": 3.6
+        },
+        {
+            "company": "Hyderabad Respiratory",
+            "country": "India",
+            "brand_name": "MontiFX",
+            "price_usd": 3.75
+        },
+        {
+            "company": "MetroMed Canada",
+            "country": "Canada",
+            "brand_name": "AllerMont",
+            "price_usd": 4.95
+        }
+    ],
+    "Rosuvastatin/Ezetimibe Combo": [
+        {
+            "company": "Aurora Heart Labs",
+            "country": "India",
+            "brand_name": "RosuEz",
+            "price_usd": 7.15
+        },
+        {
+            "company": "Harmony Cardio Labs",
+            "country": "India",
+            "brand_name": "CardioSync",
+            "price_usd": 7.35
+        },
+        {
+            "company": "Danube Generics",
+            "country": "Austria",
+            "brand_name": "RosuEze",
+            "price_usd": 9.9
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "CrestoPlus",
+            "price_usd": 10.4
+        }
+    ],
+    "Rosuvastatin": [
+        {
+            "company": "Aurora Heart Labs",
+            "country": "India",
+            "brand_name": "RosuPrime",
+            "price_usd": 5.95
+        },
+        {
+            "company": "Harmony Cardio Labs",
+            "country": "India",
+            "brand_name": "CardioRos",
+            "price_usd": 6.1
+        },
+        {
+            "company": "Silver Maple Pharma",
+            "country": "Canada",
+            "brand_name": "RosuMaple",
+            "price_usd": 6.75
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "RosuShield",
+            "price_usd": 7.05
+        }
+    ],
+    "Lamotrigine": [
+        {
+            "company": "Bangalore Neuro Labs",
+            "country": "India",
+            "brand_name": "LamoEase",
+            "price_usd": 6.20
+        },
+        {
+            "company": "Hyderabad CNS Pharma",
+            "country": "India",
+            "brand_name": "NeuroLam",
+            "price_usd": 6.05
+        },
+        {
+            "company": "Gujarat Seizure Care",
+            "country": "India",
+            "brand_name": "Lamotral",
+            "price_usd": 6.15
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "Lamostar",
+            "price_usd": 7.4
+        }
+    ],
+    "Buspirone": [
+        {
+            "company": "Sahyadri Neuro",
+            "country": "India",
+            "brand_name": "Anxitab",
+            "price_usd": 3.2
+        },
+        {
+            "company": "Delhi ZenLabs",
+            "country": "India",
+            "brand_name": "Zenpira",
+            "price_usd": 3.05
+        },
+        {
+            "company": "Jaipur CalmCare",
+            "country": "India",
+            "brand_name": "Calmbus",
+            "price_usd": 3.1
+        },
+        {
+            "company": "Galway Mind Labs",
+            "country": "Ireland",
+            "brand_name": "BuZen",
+            "price_usd": 4.95
+        }
+    ],
+    "Clonazepam": [
+        {
+            "company": "Sahyadri Neuro",
+            "country": "India",
+            "brand_name": "Anxitab",
+            "price_usd": 3.20
+        },
+        {
+            "company": "Delhi ZenLabs",
+            "country": "India",
+            "brand_name": "Zenpira",
+            "price_usd": 3.10
+        },
+        {
+            "company": "Bangalore Neuro Labs",
+            "country": "India",
+            "brand_name": "ClonoEase",
+            "price_usd": 3.25
+        },
+        {
+            "company": "Gujarat Seizure Care",
+            "country": "India",
+            "brand_name": "Clonatrol",
+            "price_usd": 3.30
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "ClonoShield",
+            "price_usd": 4.80
+        }
+    ],
+    "Warfarin": [
+        {
+            "company": "Sunrise Biotech",
+            "country": "India",
+            "brand_name": "Warfast",
+            "price_usd": 4.35
+        },
+        {
+            "company": "VedaRx Labs",
+            "country": "India",
+            "brand_name": "Vedarin",
+            "price_usd": 4.28
+        },
+        {
+            "company": "MedFirst Generics",
+            "country": "USA",
+            "brand_name": "Coumagard",
+            "price_usd": 6.8
+        },
+        {
+            "company": "Qianlong Remedies",
+            "country": "China",
+            "brand_name": "Heparlong",
+            "price_usd": 5.25
+        },
+        {
+            "company": "Aster Generics",
+            "country": "Australia",
+            "brand_name": "Asterfarin",
+            "price_usd": 5.95
+        }
+    ],
+    "Budesonide/Formoterol Inhaler": [
+        {
+            "company": "IndiAir Therapeutics",
+            "country": "India",
+            "brand_name": "Symbion",
+            "price_usd": 8.95
+        },
+        {
+            "company": "Lotus Respiratory",
+            "country": "India",
+            "brand_name": "BudoForm",
+            "price_usd": 9.1
+        },
+        {
+            "company": "BluePeak Inhalers",
+            "country": "USA",
+            "brand_name": "SymbAir",
+            "price_usd": 10.5
+        }
+    ],
+    "Insulin Glargine": [
+        {
+            "company": "Hyderabad Endo Labs",
+            "country": "India",
+            "brand_name": "Glaritus",
+            "price_usd": 22.1
+        },
+        {
+            "company": "SunPharm Endocrine",
+            "country": "India",
+            "brand_name": "Basargine",
+            "price_usd": 21.6
+        },
+        {
+            "company": "Great Lakes Biologics",
+            "country": "USA",
+            "brand_name": "LumaGlarg",
+            "price_usd": 28.4
+        },
+        {
+            "company": "NordicSugar Pharma",
+            "country": "Sweden",
+            "brand_name": "Glarinor",
+            "price_usd": 27.9
+        }
+    ],
+    "Insulin Lispro": [
+        {
+            "company": "Lotus Rapid Therapeutics",
+            "country": "India",
+            "brand_name": "Lispry",
+            "price_usd": 19.75
+        },
+        {
+            "company": "Bengal EndoCare",
+            "country": "India",
+            "brand_name": "SwiftLis",
+            "price_usd": 19.2
+        },
+        {
+            "company": "Frontier Pharma",
+            "country": "USA",
+            "brand_name": "LisproFast",
+            "price_usd": 25.5
+        },
+        {
+            "company": "EuroApex Labs",
+            "country": "Germany",
+            "brand_name": "Lispronex",
+            "price_usd": 24.8
+        }
+    ],
+    "Hydration Tracker Bottle": [
+        {
+            "company": "HydraEase Medical",
+            "country": "India",
+            "brand_name": "HydraEase 1.0L",
+            "price_usd": 15.9
+        },
+        {
+            "company": "WellHydrate Logistics",
+            "country": "USA",
+            "brand_name": "HydraPulse 600",
+            "price_usd": 16.5
+        },
+        {
+            "company": "BlueSpring Wellness",
+            "country": "USA",
+            "brand_name": "HydraSpring 750",
+            "price_usd": 17.8
+        }
+    ],
+    "Telehealth Desk Lamp": [
+        {
+            "company": "GlowLite Portable",
+            "country": "India",
+            "brand_name": "GlowLite Battery Calm",
+            "price_usd": 19.4
+        },
+        {
+            "company": "LuminaCare",
+            "country": "USA",
+            "brand_name": "High Beam USB",
+            "price_usd": 28.0
+        },
+        {
+            "company": "Aurora Clinic Supplies",
+            "country": "USA",
+            "brand_name": "Aurora AC Focus",
+            "price_usd": 22.5
+        }
+    ],
+    "Resistance Band Set": [
+        {
+            "company": "Mumbai Active Care",
+            "country": "India",
+            "brand_name": "Active Care Heavy",
+            "price_usd": 17.6
+        },
+        {
+            "company": "FlexiFit Rehab",
+            "country": "USA",
+            "brand_name": "FlexiFit Medium",
+            "price_usd": 24.5
+        },
+        {
+            "company": "BandPlus Germany",
+            "country": "Germany",
+            "brand_name": "BandPlus Pro",
+            "price_usd": 26.8
+        }
+    ],
+    "Foam Massage Roller": [
+        {
+            "company": "Kerala Wellness Supplies",
+            "country": "India",
+            "brand_name": "Kerala Soft Relief",
+            "price_usd": 14.9
+        },
+        {
+            "company": "RollEase Therapy",
+            "country": "USA",
+            "brand_name": "RollEase Firm",
+            "price_usd": 21.0
+        },
+        {
+            "company": "Nordic Recovery",
+            "country": "Sweden",
+            "brand_name": "Nordic Cushion",
+            "price_usd": 23.4
+        }
+    ],
+    "Lisinopril": [
+        {
+            "company": "Mumbai Cardio Pharma",
+            "country": "India",
+            "brand_name": "Lisipril-M",
+            "price_usd": 2.80
+        },
+        {
+            "company": "Hyderabad Heart Meds",
+            "country": "India",
+            "brand_name": "Sinopril-H",
+            "price_usd": 3.10
+        },
+        {
+            "company": "Delhi Cardiovascular",
+            "country": "India",
+            "brand_name": "CardioPril",
+            "price_usd": 2.95
+        },
+        {
+            "company": "US Generic Plus",
+            "country": "USA",
+            "brand_name": "Lisinopril-G",
+            "price_usd": 8.50
+        },
+        {
+            "company": "EuroHeart Labs",
+            "country": "Germany",
+            "brand_name": "HeartGuard",
+            "price_usd": 9.20
+        }
+    ]
+}

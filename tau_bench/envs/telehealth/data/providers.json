@@ -1,0 +1,1104 @@
+{
+    "dr_smith_cardiology": {
+        "provider_id": "dr_smith_cardiology",
+        "name": {
+            "first_name": "Robert",
+            "last_name": "Smith",
+            "title": "MD"
+        },
+        "specialty": "Cardiology",
+        "license_number": "MD12345",
+        "credentials": [
+            "MD",
+            "FACC"
+        ],
+        "contact": {
+            "phone": "(555) 100-2001",
+            "email": "dr.smith@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "15:00",
+                "16:00"
+            ],
+            "tuesday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "15:00"
+            ],
+            "wednesday": [
+                "09:00",
+                "10:00",
+                "15:00",
+                "16:00"
+            ],
+            "thursday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "15:00",
+                "16:00"
+            ],
+            "friday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "15:00"
+            ]
+        },
+        "consultation_fee": 200.0,
+        "languages": [
+            "English",
+            "Spanish"
+        ],
+        "years_experience": 15
+    },
+    "dr_thompson_cardiology": {
+        "provider_id": "dr_thompson_cardiology",
+        "name": {
+            "first_name": "Margaret",
+            "last_name": "Thompson",
+            "title": "MD"
+        },
+        "specialty": "Cardiology",
+        "license_number": "MD67890",
+        "credentials": [
+            "MD",
+            "FACC",
+            "FSCAI"
+        ],
+        "contact": {
+            "phone": "(555) 100-2005",
+            "email": "dr.thompson@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "tuesday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00"
+            ],
+            "wednesday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "14:00",
+                "15:00"
+            ],
+            "thursday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "friday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00"
+            ]
+        },
+        "consultation_fee": 275.0,
+        "languages": [
+            "English"
+        ],
+        "years_experience": 25
+    },
+    "dr_patel_dermatology": {
+        "provider_id": "dr_patel_dermatology",
+        "name": {
+            "first_name": "Priya",
+            "last_name": "Patel",
+            "title": "MD"
+        },
+        "specialty": "Dermatology",
+        "license_number": "MD23456",
+        "credentials": [
+            "MD",
+            "FAAD"
+        ],
+        "contact": {
+            "phone": "(555) 100-2002",
+            "email": "dr.patel@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "tuesday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "wednesday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "thursday": [
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "friday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00"
+            ]
+        },
+        "consultation_fee": 175.0,
+        "languages": [
+            "English",
+            "Hindi"
+        ],
+        "years_experience": 12
+    },
+    "dr_williams_psychiatry": {
+        "provider_id": "dr_williams_psychiatry",
+        "name": {
+            "first_name": "Jennifer",
+            "last_name": "Williams",
+            "title": "MD"
+        },
+        "specialty": "Psychiatry",
+        "license_number": "MD34567",
+        "credentials": [
+            "MD",
+            "Board Certified Psychiatrist"
+        ],
+        "contact": {
+            "phone": "(555) 100-2003",
+            "email": "dr.williams@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "tuesday": [
+                "09:00",
+                "10:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "wednesday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "thursday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "friday": [
+                "14:00",
+                "15:00",
+                "16:00"
+            ]
+        },
+        "consultation_fee": 250.0,
+        "languages": [
+            "English"
+        ],
+        "years_experience": 20
+    },
+    "dr_garcia_primary": {
+        "provider_id": "dr_garcia_primary",
+        "name": {
+            "first_name": "Carlos",
+            "last_name": "Garcia",
+            "title": "MD"
+        },
+        "specialty": "Primary Care",
+        "license_number": "MD45678",
+        "credentials": [
+            "MD",
+            "Board Certified Family Medicine"
+        ],
+        "contact": {
+            "phone": "(555) 100-2004",
+            "email": "dr.garcia@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "06:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "tuesday": [
+                "06:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "wednesday": [
+                "06:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "thursday": [
+                "06:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "friday": [
+                "06:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00"
+            ]
+        },
+        "consultation_fee": 150.0,
+        "languages": [
+            "English",
+            "Spanish"
+        ],
+        "years_experience": 10
+    },
+    "dr_lee_dermatology": {
+        "provider_id": "dr_lee_dermatology",
+        "name": {
+            "first_name": "Sarah",
+            "last_name": "Lee",
+            "title": "MD"
+        },
+        "specialty": "Dermatology",
+        "license_number": "MD56789",
+        "credentials": [
+            "MD",
+            "FAAD"
+        ],
+        "contact": {
+            "phone": "(555) 100-2005",
+            "email": "dr.lee@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "09:00",
+                "10:00",
+                "14:00",
+                "15:00",
+                "16:00"
+            ],
+            "tuesday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "15:00",
+                "16:00"
+            ],
+            "wednesday": [
+                "10:00",
+                "11:00",
+                "14:00",
+                "15:00"
+            ],
+            "thursday": [
+                "09:00",
+                "10:00",
+                "11:00",
+                "14:00",
+                "16:00"
+            ],
+            "friday": [
+                "10:00",
+                "11:00",
+                "15:00",
+                "16:00"
+            ]
+        },
+        "consultation_fee": 180.0,
+        "languages": [
+            "English",
+            "Korean"
+        ],
+        "years_experience": 8
+    },
+    "pharmacist_jones": {
+        "provider_id": "pharmacist_jones",
+        "name": {
+            "first_name": "Evelyn",
+            "last_name": "Jones",
+            "title": "PharmD"
+        },
+        "specialty": "Pharmacy",
+        "license_number": "PH123456",
+        "credentials": [
+            "PharmD",
+            "BCACP"
+        ],
+        "contact": {
+            "phone": "(555) 100-2010",
+            "email": "pharmacist.jones@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "09:00",
+                "09:30",
+                "10:00",
+                "14:00",
+                "14:30",
+                "15:00"
+            ],
+            "tuesday": [
+                "09:00",
+                "09:30",
+                "10:00",
+                "14:00",
+                "14:30",
+                "15:00"
+            ],
+            "wednesday": [
+                "09:00",
+                "09:30",
+                "10:00",
+                "14:00",
+                "14:30"
+            ],
+            "thursday": [
+                "09:00",
+                "09:30",
+                "10:00",
+                "14:00",
+                "14:30",
+                "15:00"
+            ],
+            "friday": [
+                "09:00",
+                "09:30",
+                "10:00",
+                "13:30",
+                "14:00"
+            ],
+            "saturday": [
+                "10:00",
+                "10:30",
+                "11:00"
+            ]
+        },
+        "consultation_fee": 90.0,
+        "languages": [
+            "English",
+            "Spanish"
+        ],
+        "years_experience": 12
+    },
+    "dr_nguyen_pediatrics": {
+        "provider_id": "dr_nguyen_pediatrics",
+        "name": {
+            "first_name": "Lan",
+            "last_name": "Nguyen",
+            "title": "MD"
+        },
+        "specialty": "Pediatrics",
+        "license_number": "MD778899",
+        "credentials": [
+            "MD",
+            "Board Certified Pediatrics"
+        ],
+        "contact": {
+            "phone": "(555) 210-4455",
+            "email": "dr.nguyen@healthcenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "10:30"
+            ],
+            "tuesday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "10:30"
+            ],
+            "wednesday": [
+                "08:00",
+                "09:00",
+                "10:00"
+            ],
+            "thursday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "10:30"
+            ],
+            "friday": [
+                "08:00",
+                "09:00",
+                "10:00"
+            ],
+            "saturday": [
+                "08:30",
+                "09:30"
+            ]
+        },
+        "consultation_fee": 185.0,
+        "languages": [
+            "English",
+            "Spanish"
+        ],
+        "years_experience": 14
+    },
+    "dr_singh_endocrinology": {
+        "provider_id": "dr_singh_endocrinology",
+        "name": {
+            "title": "Dr.",
+            "first_name": "Priya",
+            "last_name": "Singh"
+        },
+        "specialty": "Endocrinology",
+        "license_number": "ENDO45127",
+        "credentials": [
+            "MD",
+            "FACE"
+        ],
+        "contact": {
+            "phone": "(555) 640-8821",
+            "email": "dr.singh@endocrinecenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "09:00",
+                "10:30",
+                "15:30"
+            ],
+            "tuesday": [
+                "08:30",
+                "10:00",
+                "13:30",
+                "15:30"
+            ],
+            "wednesday": [
+                "09:30",
+                "11:00",
+                "14:30"
+            ],
+            "thursday": [
+                "08:30",
+                "10:30",
+                "13:00"
+            ],
+            "friday": [
+                "09:00",
+                "10:30",
+                "12:30"
+            ]
+        },
+        "consultation_fee": 210.0,
+        "languages": [
+            "English",
+            "Twi"
+        ],
+        "years_experience": 18
+    },
+    "dr_fernandez_endocrinology": {
+        "provider_id": "dr_fernandez_endocrinology",
+        "name": {
+            "title": "Dr.",
+            "first_name": "Lucia",
+            "last_name": "Fernandez"
+        },
+        "specialty": "Endocrinology",
+        "license_number": "ENDO77219",
+        "credentials": [
+            "MD",
+            "ECNU"
+        ],
+        "contact": {
+            "phone": "(555) 218-6400",
+            "email": "dr.fernandez@endocrinecenter.com"
+        },
+        "schedule": {
+            "monday": [
+                "11:00",
+                "14:00"
+            ],
+            "tuesday": [
+                "11:30",
+                "16:00"
+            ],
+            "wednesday": [
+                "09:00",
+                "11:30"
+            ],
+            "thursday": [
+                "09:30",
+                "12:00",
+                "15:30"
+            ],
+            "friday": [
+                "10:00",
+                "13:30"
+            ]
+        },
+        "consultation_fee": 225.0,
+        "languages": [
+            "English",
+            "Spanish"
+        ],
+        "years_experience": 22
+    },
+    "dr_saito_cardiology": {
+        "provider_id": "dr_saito_cardiology",
+        "name": {
+            "first_name": "Hiroko",
+            "last_name": "Saito",
+            "title": "MD"
+        },
+        "specialty": "Cardiology",
+        "license_number": "MD998877",
+        "credentials": [
+            "MD",
+            "FACC",
+            "FSCAI"
+        ],
+        "contact": {
+            "phone": "(555) 741-6600",
+            "email": "dr.saito@pacificcardio.com"
+        },
+        "schedule": {
+            "monday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "10:30",
+                "14:00"
+            ],
+            "tuesday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "15:00"
+            ],
+            "wednesday": [
+                "07:30",
+                "08:30",
+                "09:30",
+                "10:30"
+            ],
+            "thursday": [
+                "08:00",
+                "08:30",
+                "09:00",
+                "10:00",
+                "15:30"
+            ],
+            "friday": [
+                "08:00",
+                "09:00",
+                "10:00"
+            ]
+        },
+        "consultation_fee": 285.0,
+        "languages": [
+            "English",
+            "Japanese"
+        ],
+        "years_experience": 28
+    },
+    "care_coordinator_ito": {
+        "provider_id": "care_coordinator_ito",
+        "name": {
+            "first_name": "Naomi",
+            "last_name": "Ito",
+            "title": "RN"
+        },
+        "specialty": "Care Coordination",
+        "license_number": "RN662210",
+        "credentials": [
+            "RN",
+            "CCM"
+        ],
+        "contact": {
+            "phone": "(555) 741-7790",
+            "email": "naomi.ito@pacificcare.org"
+        },
+        "schedule": {
+            "monday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "13:00",
+                "14:00"
+            ],
+            "tuesday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "13:00"
+            ],
+            "wednesday": [
+                "08:30",
+                "09:30",
+                "10:30",
+                "14:30"
+            ],
+            "thursday": [
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00"
+            ],
+            "friday": [
+                "08:30",
+                "09:30",
+                "10:30"
+            ]
+        },
+        "consultation_fee": 95.0,
+        "languages": [
+            "English",
+            "Japanese"
+        ],
+        "years_experience": 16
+    },
+    "dr_ivankovic_neurology": {
+        "provider_id": "dr_ivankovic_neurology",
+        "name": {
+            "first_name": "Marin",
+            "last_name": "Ivankovic",
+            "title": "MD"
+        },
+        "specialty": "Neurology",
+        "license_number": "NEU559921",
+        "credentials": [
+            "MD",
+            "FAAN"
+        ],
+        "contact": {
+            "phone": "(555) 880-4412",
+            "email": "dr.ivankovic@neurocenter.com"
+        },
+        "schedule": {
+            "monday": ["09:00", "10:00", "11:00", "14:00"],
+            "tuesday": ["09:30", "10:30", "13:30", "15:30"],
+            "wednesday": ["09:00", "10:00", "11:00"],
+            "thursday": ["09:30", "10:30", "14:00", "15:00"],
+            "friday": ["09:00", "10:00", "13:00"]
+        },
+        "consultation_fee": 260.0,
+        "languages": ["English", "Croatian"],
+        "years_experience": 21
+    },
+    "dr_hartwell_psychology": {
+        "provider_id": "dr_hartwell_psychology",
+        "name": {
+            "first_name": "Kendra",
+            "last_name": "Hartwell",
+            "title": "PhD"
+        },
+        "specialty": "Clinical Psychology",
+        "license_number": "PSY441188",
+        "credentials": [
+            "PhD",
+            "ABPP"
+        ],
+        "contact": {
+            "phone": "(555) 880-2270",
+            "email": "dr.hartwell@mindcenter.com"
+        },
+        "schedule": {
+            "monday": ["08:30", "09:30", "11:30", "14:30"],
+            "tuesday": ["08:00", "09:00", "10:00"],
+            "thursday": ["08:30", "09:30", "10:30", "13:30"],
+            "friday": ["09:00", "10:00", "11:00", "13:00"]
+        },
+        "consultation_fee": 195.0,
+        "languages": ["English", "Spanish"],
+        "years_experience": 18
+    },
+    "dr_patel_neurology": {
+        "provider_id": "dr_patel_neurology",
+        "name": {
+            "first_name": "Rohan",
+            "last_name": "Patel",
+            "title": "MD"
+        },
+        "specialty": "Neurology",
+        "license_number": "NEU771204",
+        "credentials": [
+            "MD",
+            "FAAN"
+        ],
+        "contact": {
+            "phone": "(555) 330-7712",
+            "email": "dr.patel@northstarhealth.org"
+        },
+        "schedule": {
+            "monday": ["07:30", "08:30", "09:30", "10:30"],
+            "tuesday": ["07:30", "08:30", "09:30", "13:30", "14:30"],
+            "wednesday": ["08:00", "09:00", "10:00"],
+            "thursday": ["07:30", "08:30", "09:30", "10:30", "15:00"],
+            "friday": ["08:00", "09:00", "13:00", "14:00"]
+        },
+        "consultation_fee": 255.0,
+        "languages": ["English", "Gujarati"],
+        "years_experience": 19
+    },
+    "coach_riley_telemetry": {
+        "provider_id": "coach_riley_telemetry",
+        "name": {
+            "first_name": "Morgan",
+            "last_name": "Riley",
+            "title": "RN"
+        },
+        "specialty": "Device Coaching",
+        "license_number": "RN883276",
+        "credentials": [
+            "RN",
+            "CCT"
+        ],
+        "contact": {
+            "phone": "(555) 330-8822",
+            "email": "morgan.riley@telemetrycoach.com"
+        },
+        "schedule": {
+            "monday": ["09:00", "10:00", "11:00", "15:00"],
+            "tuesday": ["09:30", "10:30", "11:30", "16:00"],
+            "wednesday": ["09:00", "10:00", "11:00"],
+            "thursday": ["09:30", "10:30", "11:30"],
+            "friday": ["09:00", "10:00", "11:00"]
+        },
+        "consultation_fee": 95.0,
+        "languages": ["English", "Spanish"],
+        "years_experience": 14
+    },
+    "dr_kumar_respiratory": {
+        "provider_id": "dr_kumar_respiratory",
+        "name": {
+            "first_name": "Anjali",
+            "last_name": "Kumar",
+            "title": "MD"
+        },
+        "specialty": "Pulmonology",
+        "license_number": "MD992244",
+        "credentials": [
+            "MD",
+            "FAASM"
+        ],
+        "contact": {
+            "phone": "(555) 882-4410",
+            "email": "anjali.kumar@northsoundsleep.org"
+        },
+        "schedule": {
+            "tuesday": ["08:00", "09:00", "10:00", "11:00"],
+            "wednesday": ["08:30", "09:30", "10:30"],
+            "thursday": ["08:00", "09:00", "10:00", "11:00"],
+            "friday": ["08:30", "09:30", "10:30", "14:00"]
+        },
+        "consultation_fee": 220.0,
+        "languages": ["English", "Korean"],
+        "years_experience": 18
+    },
+    "dr_okafor_developmental_pediatrics": {
+        "provider_id": "dr_okafor_developmental_pediatrics",
+        "name": {
+            "first_name": "Chioma",
+            "last_name": "Okafor",
+            "title": "MD"
+        },
+        "specialty": "Developmental Pediatrics",
+        "license_number": "DEVPED-OR-8845",
+        "credentials": [
+            "MD",
+            "FAAP",
+            "Board Certified Developmental-Behavioral Pediatrics"
+        ],
+        "contact": {
+            "phone": "(555) 447-3318",
+            "email": "dr.okafor@portlandpeds.org"
+        },
+        "schedule": {
+            "monday": ["09:00", "10:00", "13:00", "14:00"],
+            "tuesday": ["09:00", "10:00", "11:00"],
+            "wednesday": ["09:00", "10:00", "13:00", "14:00", "15:00"],
+            "thursday": ["09:00", "10:00", "11:00", "13:00"],
+            "friday": ["09:00", "10:00"]
+        },
+        "consultation_fee": 285.0,
+        "languages": ["English", "Igbo"],
+        "years_experience": 14
+    },
+    "ot_sullivan": {
+        "provider_id": "ot_sullivan",
+        "name": {
+            "first_name": "Rebecca",
+            "last_name": "Sullivan",
+            "title": "OTR/L"
+        },
+        "specialty": "Occupational Therapy",
+        "license_number": "OT-OR-5521",
+        "credentials": [
+            "OTR/L",
+            "Sensory Integration Certified"
+        ],
+        "contact": {
+            "phone": "(555) 447-5521",
+            "email": "r.sullivan@portlandpeds.org"
+        },
+        "schedule": {
+            "monday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "tuesday": ["08:00", "09:00", "10:00", "13:00", "14:00"],
+            "wednesday": ["08:00", "09:00", "10:00", "11:00"],
+            "thursday": ["08:00", "09:00", "10:00", "11:00", "13:00"],
+            "friday": ["08:00", "09:00", "10:00"]
+        },
+        "consultation_fee": 140.0,
+        "languages": ["English"],
+        "years_experience": 9
+    },
+    "slp_martinez": {
+        "provider_id": "slp_martinez",
+        "name": {
+            "first_name": "Diego",
+            "last_name": "Martinez",
+            "title": "MS CCC-SLP"
+        },
+        "specialty": "Speech-Language Pathology",
+        "license_number": "SLP-OR-7738",
+        "credentials": [
+            "MS",
+            "CCC-SLP",
+            "PROMPT Certified"
+        ],
+        "contact": {
+            "phone": "(555) 447-7738",
+            "email": "d.martinez@portlandpeds.org"
+        },
+        "schedule": {
+            "monday": ["08:30", "09:30", "10:30", "13:30", "14:30"],
+            "tuesday": ["08:30", "09:30", "10:30", "11:30"],
+            "wednesday": ["08:30", "09:30", "10:30", "13:30", "14:30"],
+            "thursday": ["08:30", "09:30", "10:30", "11:30", "13:30"],
+            "friday": ["08:30", "09:30", "10:30"]
+        },
+        "consultation_fee": 155.0,
+        "languages": ["English", "Spanish"],
+        "years_experience": 7
+    },
+    "bcba_washington": {
+        "provider_id": "bcba_washington",
+        "name": {
+            "first_name": "Jamal",
+            "last_name": "Washington",
+            "title": "MS BCBA"
+        },
+        "specialty": "Behavioral Analysis",
+        "license_number": "BCBA-OR-9944",
+        "credentials": [
+            "MS",
+            "BCBA",
+            "LBA"
+        ],
+        "contact": {
+            "phone": "(555) 447-9944",
+            "email": "j.washington@portlandpeds.org"
+        },
+        "schedule": {
+            "monday": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
+            "tuesday": ["09:00", "10:00", "11:00", "13:00", "14:00"],
+            "wednesday": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
+            "thursday": ["09:00", "10:00", "11:00", "13:00", "14:00"],
+            "friday": ["09:00", "10:00", "11:00"]
+        },
+        "consultation_fee": 175.0,
+        "languages": ["English"],
+        "years_experience": 12
+    },
+    "dr_rodriguez_orthopedics": {
+        "provider_id": "dr_rodriguez_orthopedics",
+        "name": {
+            "first_name": "Maria",
+            "last_name": "Rodriguez",
+            "title": "MD"
+        },
+        "specialty": "Orthopedic Surgery",
+        "credentials": [
+            "MD",
+            "Board Certified in Orthopedic Surgery"
+        ],
+        "contact": {
+            "phone": "(555) 678-9012",
+            "email": "m.rodriguez@orthocenter.org"
+        },
+        "schedule": {
+            "monday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "tuesday": ["08:00", "09:00", "10:00", "11:00"],
+            "wednesday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "thursday": ["08:00", "09:00", "10:00", "11:00"],
+            "friday": ["08:00", "09:00", "10:00", "11:00", "13:00"]
+        },
+        "consultation_fee": 200.0,
+        "languages": ["English", "Spanish"],
+        "years_experience": 18
+    },
+    "pt_james_chen": {
+        "provider_id": "pt_james_chen",
+        "name": {
+            "first_name": "James",
+            "last_name": "Chen",
+            "title": "PT, DPT"
+        },
+        "specialty": "Physical Therapy",
+        "credentials": [
+            "Doctor of Physical Therapy",
+            "Board Certified Orthopedic Specialist"
+        ],
+        "contact": {
+            "phone": "(555) 789-0123",
+            "email": "j.chen@rehabpt.org"
+        },
+        "schedule": {
+            "monday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+            "tuesday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+            "wednesday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+            "thursday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+            "friday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00"]
+        },
+        "consultation_fee": 120.0,
+        "languages": ["English", "Mandarin"],
+        "years_experience": 12
+    },
+    "dr_chen_primary_care": {
+        "provider_id": "dr_chen_primary_care",
+        "name": {
+            "first_name": "Lisa",
+            "last_name": "Chen"
+        },
+        "specialty": "Primary Care",
+        "credentials": [
+            "MD",
+            "Board Certified in Family Medicine"
+        ],
+        "contact": {
+            "phone": "(555) 234-5678",
+            "email": "l.chen@primarycare.org"
+        },
+        "schedule": {
+            "monday": ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
+            "tuesday": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+            "wednesday": ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00"],
+            "thursday": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
+            "friday": ["09:00", "10:00", "11:00", "13:00", "14:00"]
+        },
+        "consultation_fee": 150.0,
+        "languages": ["English", "Spanish"],
+        "years_experience": 18
+    },
+    "dr_patel_anesthesiology": {
+        "provider_id": "dr_patel_anesthesiology",
+        "name": {
+            "first_name": "Anjali",
+            "last_name": "Patel",
+            "title": "MD"
+        },
+        "specialty": "Anesthesiology",
+        "credentials": [
+            "MD",
+            "Board Certified in Anesthesiology",
+            "Fellowship in Cardiac Anesthesia"
+        ],
+        "contact": {
+            "phone": "(555) 333-8877",
+            "email": "a.patel@anesthesia.org"
+        },
+        "schedule": {
+            "monday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "tuesday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "wednesday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "thursday": ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00"],
+            "friday": ["08:00", "09:00", "10:00", "11:00"]
+        },
+        "consultation_fee": 250.0,
+        "languages": ["English", "Hindi", "Gujarati"],
+        "years_experience": 15
+    },
+    "dr_kim_cardiac_surgery": {
+        "provider_id": "dr_kim_cardiac_surgery",
+        "name": {
+            "first_name": "Robert",
+            "last_name": "Kim",
+            "title": "MD, FACS"
+        },
+        "specialty": "Cardiac Surgery",
+        "credentials": [
+            "MD",
+            "Board Certified in Cardiothoracic Surgery",
+            "Fellow of the American College of Surgeons"
+        ],
+        "contact": {
+            "phone": "(555) 222-9988",
+            "email": "r.kim@cardiacsurgery.org"
+        },
+        "schedule": {
+            "monday": ["07:00", "08:00", "09:00", "13:00", "14:00"],
+            "tuesday": ["07:00", "08:00", "09:00", "13:00", "14:00"],
+            "wednesday": ["07:00", "08:00", "09:00", "13:00", "14:00"],
+            "thursday": ["07:00", "08:00", "09:00", "13:00", "14:00"],
+            "friday": ["07:00", "08:00", "09:00"]
+        },
+        "consultation_fee": 350.0,
+        "languages": ["English", "Korean"],
+        "years_experience": 22
+    }
+}

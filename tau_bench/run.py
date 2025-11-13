@@ -1,24 +1,24 @@
 # Copyright Sierra
 
-import os
 import json
+import multiprocessing
+import os
 import random
 import traceback
-from math import comb
-import multiprocessing
-from typing import List, Dict, Any
-from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
+from math import comb
+from typing import Any, Dict, List
 
-from tau_bench.envs import get_env
-from tau_bench.agents.base import Agent
-from tau_bench.types import EnvRunResult, RunConfig
 from litellm import provider_list
+from tau_bench.agents.base import Agent
+from tau_bench.envs import get_env
 from tau_bench.envs.user import UserStrategy
+from tau_bench.types import EnvRunResult, RunConfig
 
 
 def run(config: RunConfig) -> List[EnvRunResult]:
-    assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
+    assert config.env in ["retail", "airline", "telecom", "telehealth"], "Only retail and airline envs are supported"
     assert config.model_provider in provider_list, "Invalid model provider"
     assert config.user_model_provider in provider_list, "Invalid user model provider"
     assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"

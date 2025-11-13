@@ -1,0 +1,97 @@
+{
+    "iPhone 15 Pro": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone 15 Pro"
+    },
+    "iPhone 14": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone 14"
+    },
+    "iPhone 13": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone 13"
+    },
+    "Samsung Galaxy S23": {
+        "category": "mobile_phone",
+        "manufacturer": "Samsung",
+        "model": "Galaxy S23"
+    },
+    "iPhone 12": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone 12"
+    },
+    "iPhone 15": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone 15"
+    },
+    "Google Pixel 8": {
+        "category": "mobile_phone",
+        "manufacturer": "Google",
+        "model": "Pixel 8"
+    },
+    "Samsung Galaxy A54": {
+        "category": "mobile_phone",
+        "manufacturer": "Samsung",
+        "model": "Galaxy A54"
+    },
+    "iPhone SE (3rd gen)": {
+        "category": "mobile_phone",
+        "manufacturer": "Apple",
+        "model": "iPhone SE"
+    },
+    "WiFi 6 Router": {
+        "category": "networking",
+        "manufacturer": "TechCorp",
+        "model": "WiFi6-Pro"
+    },
+    "Standard WiFi Router": {
+        "category": "networking",
+        "manufacturer": "TechCorp",
+        "model": "WiFi-Standard"
+    },
+    "Enterprise Router": {
+        "category": "networking",
+        "manufacturer": "TechCorp",
+        "model": "Enterprise-Pro"
+    },
+    "Basic WiFi Router": {
+        "category": "networking",
+        "manufacturer": "TechCorp",
+        "model": "WiFi-Basic"
+    },
+    "Samsung 65\" Smart TV": {
+        "category": "tv",
+        "manufacturer": "Samsung",
+        "model": "QN65Q80C"
+    },
+    "HD Cable Box": {
+        "category": "tv",
+        "manufacturer": "TechCorp",
+        "model": "HD-Box-Pro"
+    },
+    "55\" Smart TV": {
+        "category": "tv",
+        "manufacturer": "LG",
+        "model": "OLED55C3"
+    },
+    "Conference Room TV": {
+        "category": "tv",
+        "manufacturer": "Samsung",
+        "model": "QB75R"
+    },
+    "Conference Phone System": {
+        "category": "phone",
+        "manufacturer": "Polycom",
+        "model": "Trio-8800"
+    },
+    "Home Security System": {
+        "category": "security",
+        "manufacturer": "SecureTech",
+        "model": "HomeSafe-Pro"
+    }
+}

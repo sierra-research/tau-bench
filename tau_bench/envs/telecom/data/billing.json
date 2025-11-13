@@ -1,0 +1,133 @@
+{
+    "john_smith_1234": {
+        "customer_id": "john_smith_1234",
+        "account_number": "ACC001234567",
+        "current_balance": 0.00,
+        "last_payment": {
+            "amount": 245.50,
+            "date": "2025-09-15",
+            "method": "auto_pay_credit_card",
+            "status": "completed"
+        },
+        "next_bill_date": "2025-10-15",
+        "monthly_charges": {
+            "mobile_unlimited": 85.00,
+            "internet_fiber_1gb": 80.00,
+            "tv_premium": 95.00,
+            "taxes_fees": 18.50
+        },
+        "payment_history": [
+            {"date": "2025-09-15", "amount": 245.50, "status": "completed"},
+            {"date": "2025-08-15", "amount": 245.50, "status": "completed"},
+            {"date": "2025-07-15", "amount": 245.50, "status": "completed"}
+        ],
+        "auto_pay": true,
+        "paperless": true
+    },
+    "sarah_johnson_5678": {
+        "customer_id": "sarah_johnson_5678",
+        "account_number": "ACC002345678",
+        "current_balance": 89.75,
+        "last_payment": {
+            "amount": 200.00,
+            "date": "2025-09-10",
+            "method": "bank_transfer",
+            "status": "completed"
+        },
+        "next_bill_date": "2025-10-10",
+        "monthly_charges": {
+            "mobile_family_4lines": 160.00,
+            "internet_cable_500mb": 55.00,
+            "tv_basic": 45.00,
+            "cable_box_hd": 10.00,
+            "taxes_fees": 19.75
+        },
+        "payment_history": [
+            {"date": "2025-09-10", "amount": 200.00, "status": "completed"},
+            {"date": "2025-08-10", "amount": 289.75, "status": "completed"},
+            {"date": "2025-07-10", "amount": 289.75, "status": "completed"}
+        ],
+        "auto_pay": false,
+        "paperless": false
+    },
+    "mike_davis_9012": {
+        "customer_id": "mike_davis_9012",
+        "account_number": "ACC003456789",
+        "current_balance": 0.00,
+        "last_payment": {
+            "amount": 890.00,
+            "date": "2025-09-05",
+            "method": "invoice",
+            "status": "completed"
+        },
+        "next_bill_date": "2025-10-05",
+        "monthly_charges": {
+            "mobile_business_10lines": 450.00,
+            "internet_fiber_2gb": 120.00,
+            "tv_sports_package": 75.00,
+            "business_phone_system": 150.00,
+            "router_enterprise": 15.00,
+            "taxes_fees": 58.00
+        },
+        "payment_history": [
+            {"date": "2025-09-05", "amount": 890.00, "status": "completed"},
+            {"date": "2025-08-05", "amount": 868.00, "status": "completed"},
+            {"date": "2025-07-05", "amount": 868.00, "status": "completed"}
+        ],
+        "auto_pay": false,
+        "paperless": true
+    },
+    "lisa_chen_3456": {
+        "customer_id": "lisa_chen_3456",
+        "account_number": "ACC004567890",
+        "current_balance": 185.50,
+        "last_payment": {
+            "amount": 50.00,
+            "date": "2025-08-20",
+            "method": "credit_card",
+            "status": "completed"
+        },
+        "next_bill_date": "2025-09-18",
+        "monthly_charges": {
+            "mobile_basic": 35.00,
+            "internet_cable_100mb": 35.00,
+            "router_basic": 5.00,
+            "taxes_fees": 5.50,
+            "late_fee": 25.00
+        },
+        "payment_history": [
+            {"date": "2025-08-20", "amount": 50.00, "status": "completed"},
+            {"date": "2025-07-18", "amount": 80.50, "status": "completed"},
+            {"date": "2025-06-18", "amount": 80.50, "status": "late"}
+        ],
+        "auto_pay": true,
+        "paperless": true
+    },
+    "robert_wilson_7890": {
+        "customer_id": "robert_wilson_7890",
+        "account_number": "ACC005678901",
+        "current_balance": 0.00,
+        "last_payment": {
+            "amount": 245.00,
+            "date": "2025-09-05",
+            "method": "auto_pay_bank",
+            "status": "completed"
+        },
+        "next_bill_date": "2025-10-05",
+        "monthly_charges": {
+            "mobile_senior": 45.00,
+            "internet_fiber_500mb": 60.00,
+            "tv_premium": 95.00,
+            "home_security": 40.00,
+            "taxes_fees": 17.50,
+            "senior_discount": -12.50
+        },
+        "payment_history": [
+            {"date": "2025-09-05", "amount": 245.00, "status": "completed"},
+            {"date": "2025-08-05", "amount": 245.00, "status": "completed"},
+            {"date": "2025-07-05", "amount": 245.00, "status": "completed"}
+        ],
+        "auto_pay": true,
+        "paperless": false
+    }
+}

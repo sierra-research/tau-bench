@@ -1,0 +1,14 @@
+{
+    "TICKET001": {
+        "ticket_id": "TICKET001",
+        "customer_id": "john_smith_1234",
+        "status": "closed",
+        "priority": "medium"
+    },
+    "TICKET002": {
+        "ticket_id": "TICKET002",
+        "customer_id": "sarah_johnson_5678",
+        "status": "open",
+        "priority": "high"
+    }
+}

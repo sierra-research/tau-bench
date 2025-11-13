@@ -1,0 +1,182 @@
+{
+    "john_smith_1234": {
+        "customer_id": "john_smith_1234",
+        "name": { "first_name": "John", "last_name": "Smith" },
+        "demographics": {
+            "date_of_birth": "1985-06-15",
+            "phone": "(555) 123-4567",
+            "email": "john.smith@email.com"
+        },
+        "address": {
+            "address1": "123 Oak Street",
+            "address2": "Unit 5A",
+            "city": "Denver",
+            "state": "CO",
+            "zip": "80202",
+            "country": "USA"
+        },
+        "account": {
+            "account_number": "ACC001234567",
+            "account_type": "residential",
+            "created_date": "2020-03-15",
+            "credit_score": 750,
+            "payment_method": "auto_pay_credit_card"
+        },
+        "services": ["mobile_unlimited", "internet_fiber_1gb", "tv_premium"],
+        "devices": [
+            { "device_id": "1", "name": "iPhone 15 Pro" , "service": "mobile_unlimited"},
+            { "device_id": "2", "name": "Samsung 65\" Smart TV" , "service": "tv_premium"},
+            { "device_id": "3", "name": "WiFi 6 Router" , "service": "internet_fiber_1gb"}
+        ],
+        "billing_preferences": {
+            "paperless": true,
+            "auto_pay": true,
+            "billing_cycle": "monthly"
+        }
+    },
+    "sarah_johnson_5678": {
+        "customer_id": "sarah_johnson_5678",
+        "name": { "first_name": "Sarah", "last_name": "Johnson" },
+        "demographics": {
+            "date_of_birth": "1990-12-03",
+            "phone": "(555) 987-6543",
+            "email": "sarah.johnson@email.com"
+        },
+        "address": {
+            "address1": "456 Pine Avenue",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "zip": "73301",
+            "country": "USA"
+        },
+        "account": {
+            "account_number": "ACC002345678",
+            "account_type": "residential",
+            "created_date": "2019-08-22",
+            "credit_score": 680,
+            "payment_method": "bank_transfer"
+        },
+        "services": ["mobile_family_4lines", "internet_cable_500mb", "tv_basic"],
+        "devices": [
+            { "device_id": "1", "name": "iPhone 14" , "service": "mobile_family_4lines"},
+            { "device_id": "2", "name": "iPhone 13" , "service": "mobile_family_4lines"},
+            { "device_id": "3", "name": "Samsung Galaxy S23" , "service": "mobile_family_4lines"},
+            { "device_id": "4", "name": "iPhone 12" , "service": "mobile_family_4lines"},
+            { "device_id": "5", "name": "HD Cable Box" , "service": "tv_basic"},
+            { "device_id": "6", "name": "Standard WiFi Router" , "service": "internet_cable_500mb"}
+        ],
+        "billing_preferences": {
+            "paperless": false,
+            "auto_pay": false,
+            "billing_cycle": "monthly"
+        }
+    },
+    "mike_davis_9012": {
+        "customer_id": "mike_davis_9012",
+        "name": { "first_name": "Mike", "last_name": "Davis" },
+        "demographics": {
+            "date_of_birth": "1978-04-20",
+            "phone": "(555) 456-7890",
+            "email": "mike.davis@email.com"
+        },
+        "address": {
+            "address1": "789 Elm Street",
+            "address2": "Apt 12B",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98101",
+            "country": "USA"
+        },
+        "account": {
+            "account_number": "ACC003456789",
+            "account_type": "business",
+            "created_date": "2018-01-10",
+            "credit_score": 720,
+            "payment_method": "invoice"
+        },
+        "services": ["mobile_business_10lines", "internet_fiber_2gb", "tv_sports_package", "business_phone_system"],
+        "devices": [
+            { "device_id": "1", "name": "iPhone 15" , "service": "mobile_business_10lines"},
+            { "device_id": "2", "name": "Google Pixel 8" , "service": "mobile_business_10lines"},
+            { "device_id": "3", "name": "Conference Phone System" , "service": "business_phone_system"},
+            { "device_id": "4", "name": "Enterprise Router" , "service": "internet_fiber_2gb"},
+            { "device_id": "5", "name": "Conference Room TV" , "service": "tv_sports_package"}
+        ],
+        "billing_preferences": {
+            "paperless": true,
+            "auto_pay": false,
+            "billing_cycle": "monthly"
+        }
+    },
+    "lisa_chen_3456": {
+        "customer_id": "lisa_chen_3456",
+        "name": { "first_name": "Lisa", "last_name": "Chen" },
+        "demographics": {
+            "date_of_birth": "1995-09-12",
+            "phone": "(555) 234-5678",
+            "email": "lisa.chen@email.com"
+        },
+        "address": {
+            "address1": "321 Maple Drive",
+            "address2": "",
+            "city": "San Francisco",
+            "state": "CA",
+            "zip": "94102",
+            "country": "USA"
+        },
+        "account": {
+            "account_number": "ACC004567890",
+            "account_type": "residential",
+            "created_date": "2022-05-18",
+            "credit_score": 620,
+            "payment_method": "credit_card"
+        },
+        "services": ["mobile_basic", "internet_cable_100mb"],
+        "devices": [
+            { "device_id": "1", "name": "Samsung Galaxy A54" , "service": "mobile_basic"},
+            { "device_id": "2", "name": "Basic WiFi Router" , "service": "internet_cable_100mb"}
+        ],
+        "billing_preferences": {
+            "paperless": true,
+            "auto_pay": true,
+            "billing_cycle": "monthly"
+        }
+    },
+    "robert_wilson_7890": {
+        "customer_id": "robert_wilson_7890",
+        "name": { "first_name": "Robert", "last_name": "Wilson" },
+        "demographics": {
+            "date_of_birth": "1955-12-12",
+            "phone": "(555) 555-0123",
+            "email": "robertw@email.com"
+        },
+        "address": {
+            "address1": "81 Baker St",
+            "address2": "",
+            "city": "Mountain View",
+            "state": "CA",
+            "zip": "94043",
+            "country": "USA"
+        },
+        "account": {
+            "account_number": "ACC004567860",
+            "account_type": "residential",
+            "created_date": "2022-05-27",
+            "credit_score": 690,
+            "payment_method": "credit_card"
+        },
+        "services": ["mobile_senior", "internet_fiber_1gb", "tv_premium", "home_security"],
+        "devices": [
+            { "device_id": "1", "name": "Samsung Galaxy S23" , "service": "mobile_senior"},
+            { "device_id": "2", "name": "Basic WiFi Router" , "service": "internet_fiber_1gb"},
+            {"device_id":"3", "name":"HD Cable Box", "service": "tv_premium"},
+            {"device_id":"4", "name": "Smart TV", "service": "tv_premium"}
+        ],
+        "billing_preferences": {
+            "paperless": true,
+            "auto_pay": true,
+            "billing_cycle": "monthly"
+        }
+    }
+}

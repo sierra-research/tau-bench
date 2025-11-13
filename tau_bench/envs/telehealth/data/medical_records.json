@@ -1,0 +1,644 @@
+{
+    "REC001": {
+        "record_id": "REC001",
+        "appointment_id": "APPT002",
+        "patient_id": "david_martinez_5678",
+        "provider_id": "dr_williams_psychiatry",
+        "date": "2024-01-16",
+        "type": "consultation_note",
+        "subjective": "Patient reports significant improvement in anxiety symptoms since starting sertraline 6 weeks ago. Sleep has improved, less worry about work situations. Minimal side effects noted - some initial nausea that resolved after first week.",
+        "objective": "Patient appears calm and engaged. Good eye contact. Speech normal rate and volume. Mood appears euthymic. No signs of acute distress.",
+        "assessment": "Generalized anxiety disorder, responding well to sertraline 50mg daily. Patient tolerating medication well with good therapeutic response.",
+        "plan": "Increase sertraline to 75mg daily for continued optimization. Continue current dose for 6 weeks then reassess. Patient to monitor for any side effects. Follow-up in 6 weeks. Discussed stress management techniques.",
+        "prescriptions": [
+            {
+                "medication": "Sertraline",
+                "dosage": "75mg",
+                "frequency": "once daily",
+                "quantity": "30 tablets",
+                "refills": 2,
+                "pharmacy": "CVS Pharmacy Main St"
+            }
+        ],
+        "next_appointment": "2024-03-01"
+    },
+    "REC002": {
+        "record_id": "REC002",
+        "appointment_id": "APPT001",
+        "patient_id": "sarah_johnson_1234",
+        "provider_id": "dr_garcia_primary",
+        "date": "2024-01-15",
+        "type": "annual_physical",
+        "vital_signs": {
+            "blood_pressure": "142/88",
+            "heart_rate": "76",
+            "temperature": "98.6",
+            "weight": "165 lbs",
+            "height": "5'6\""
+        },
+        "subjective": "Patient here for annual physical. Reports feeling generally well. Some fatigue noted over past few months. Taking medications as prescribed. Diet could be improved. Exercise 2-3 times per week.",
+        "objective": "Well-appearing female in no acute distress. Cardiovascular: Regular rate and rhythm, no murmurs. Lungs: Clear to auscultation bilaterally. No acute findings on examination.",
+        "assessment": "1. Hypertension - not optimally controlled, BP elevated today\n2. Type 2 diabetes - well controlled based on last A1C\n3. Health maintenance up to date",
+        "plan": "1. Increase lisinopril to 15mg daily\n2. Recheck BP in 2 weeks\n3. Continue metformin\n4. Order lipid panel and A1C\n5. Mammogram due - will order\n6. Discussed diet and exercise",
+        "lab_orders": [
+            "Comprehensive metabolic panel",
+            "Lipid panel",
+            "HbA1c",
+            "Thyroid function tests"
+        ],
+        "next_appointment": "2024-01-29"
+    },
+    "REC003": {
+        "record_id": "REC003",
+        "appointment_id": "APPT003",
+        "patient_id": "emily_chen_9012",
+        "provider_id": "dr_patel_dermatology",
+        "date": "2024-01-17",
+        "type": "consultation_note",
+        "subjective": "Patient reports persistent erythematous rash on forearms for the past two weeks with mild itching. Over-the-counter moisturizers provided minimal relief.",
+        "objective": "Multiple erythematous plaques with well-demarcated borders noted on bilateral forearms. No signs of secondary infection.",
+        "assessment": "Contact dermatitis with mild inflammation.",
+        "plan": "Recommend hydrocortisone 1% cream applied twice daily for 7 days and avoid potential irritants. Discussed return precautions if symptoms worsen or fail to improve.",
+        "recommendations": [
+            "Hydrocortisone 1% cream twice daily",
+            "Use hypoallergenic moisturizer",
+            "Avoid suspected irritants"
+        ]
+    },
+    "REC004": {
+        "record_id": "REC004",
+        "appointment_id": "APPT018",
+        "patient_id": "olivia_martin_4433",
+        "provider_id": "dr_garcia_primary",
+        "date": "2025-03-30",
+        "type": "virtual_follow_up",
+        "subjective": "Patient reports increased nasal congestion despite daily fluticasone. Requests refills for both inhaler and nasal spray, and inquires about trying a prophylactic antibiotic for spring allergies.",
+        "objective": "No acute distress noted. Patient performing coordinated breathing techniques correctly. Reviewed allergy list: documented sulfa drug allergy with prior hives reaction.",
+        "assessment": "Seasonal allergic rhinitis with asthma overlap. Avoid sulfonamide-based antibiotics due to documented allergy.",
+        "plan": "Continue albuterol inhaler PRN, renew fluticasone nasal spray. Do NOT prescribe sulfonamide antibiotics; discuss non-sulfa alternatives if symptoms worsen.",
+        "recommendations": [
+            "Continue fluticasone nasal spray 1 spray daily",
+            "Renew albuterol inhaler for rescue use",
+            "Avoid sulfonamide antibiotics due to allergy"
+        ]
+    },
+    "REC005": {
+        "record_id": "REC005",
+        "appointment_id": "APPT020",
+        "patient_id": "heather_collins_48201",
+        "provider_id": "dr_garcia_primary",
+        "date": "2024-11-12",
+        "type": "telehealth_follow_up",
+        "subjective": "Patient reports improved adherence to dietary changes, mild muscle aches with evening statin dose.",
+        "objective": "No acute issues noted via video. Reviewed home blood pressure readings.",
+        "assessment": "Hyperlipidemia with good response to statin therapy.",
+        "plan": "Continue atorvastatin 20mg nightly; encourage hydration to reduce myalgias.",
+        "prescriptions": [
+            {
+                "medication": "Atorvastatin",
+                "dosage": "20mg",
+                "frequency": "nightly",
+                "quantity": "30 tablets",
+                "refills": 3,
+                "pharmacy": "Grand Rapids Wellness Pharmacy"
+            }
+        ]
+    },
+    "REC006": {
+        "record_id": "REC006",
+        "appointment_id": "APPT021",
+        "patient_id": "heather_collins_48201",
+        "provider_id": "dr_thompson_cardiology",
+        "date": "2025-01-06",
+        "type": "lipid_specialist_follow_up",
+        "subjective": "Patient reports LDL plateau despite high adherence to statin therapy; denies myalgias.",
+        "objective": "Recent lipid panel reviewed via portal upload; LDL remains above goal though triglycerides improved.",
+        "assessment": "Hyperlipidemia needing additional cholesterol absorption blockade.",
+        "plan": "Add ezetimibe 10mg daily alongside current statin; reinforce adherence and schedule repeat labs in 6 weeks.",
+        "prescriptions": [
+            {
+                "medication": "Ezetimibe",
+                "dosage": "10mg",
+                "frequency": "once daily",
+                "quantity": "30 tablets",
+                "refills": 2,
+                "pharmacy": "CardioCare Mail Pharmacy"
+            }
+        ]
+    },
+    "REC007": {
+        "record_id": "REC007",
+        "appointment_id": "APPT022",
+        "patient_id": "heather_collins_48201",
+        "provider_id": "dr_garcia_primary",
+        "date": "2025-02-10",
+        "type": "asthma_control_follow_up",
+        "subjective": "Reports increased pollen-triggered wheeze and wants streamlined controller plan for spring.",
+        "objective": "Peak flow log shows mild variability. No rescue inhaler use beyond twice per week.",
+        "assessment": "Seasonal asthma with leukotriene modifier benefit expected.",
+        "plan": "Begin montelukast 10mg nightly and reinforce trigger avoidance plan.",
+        "prescriptions": [
+            {
+                "medication": "Montelukast",
+                "dosage": "10mg",
+                "frequency": "nightly",
+                "quantity": "30 tablets",
+                "refills": 2,
+                "pharmacy": "Lakeshore Specialty Pharmacy"
+            }
+        ]
+    },
+    "REC008": {
+        "record_id": "REC008",
+        "appointment_id": "APPT023",
+        "patient_id": "heather_collins_48201",
+        "provider_id": "dr_garcia_primary",
+        "date": "2025-03-18",
+        "type": "asthma_maintenance_check",
+        "subjective": "Follow-up for seasonal asthma; patient prefers once-daily maintenance inhaler to fit schedule.",
+        "objective": "Breath sounds clear over video assessment. Reviewed spacer technique and adherence.",
+        "assessment": "Seasonal asthma requiring inhaled corticosteroid controller.",
+        "plan": "Prescribe fluticasone inhaler 110mcg two puffs twice daily with spacer coaching.",
+        "prescriptions": [
+            {
+                "medication": "Fluticasone Inhaler",
+                "dosage": "110mcg",
+                "frequency": "2 puffs twice daily",
+                "quantity": "1 inhaler",
+                "refills": 3,
+                "pharmacy": "Lakeshore Specialty Pharmacy"
+            }
+        ]
+    },
+    "REC009": {
+        "record_id": "REC009",
+        "appointment_id": "APPT026",
+        "patient_id": "amara_osei_8834",
+        "provider_id": "dr_fernandez_endocrinology",
+        "date": "2025-03-02",
+        "type": "consultation_note",
+        "subjective": "Patient reported erratic glucose alerts after CGM transmitter failure and requested backup insulin delivery plan.",
+        "objective": "CGM data gap noted for 48 hours. Finger-stick log shows stable fasting values averaging 105 mg/dL.",
+        "assessment": "Type 1 Diabetes with recent CGM transmitter failure; basal insulin coverage adequate, bolus timing needs closer review.",
+        "plan": "Order replacement transmitter, reinforce bolus timing checklist, maintain current basal dosing until next review.",
+        "prescriptions": [
+            {
+                "medication": "Insulin Glargine",
+                "dosage": "20 units",
+                "frequency": "at bedtime",
+                "quantity": "1 pen",
+                "refills": 1,
+                "pharmacy": "Lakeshore Specialty Pharmacy"
+            }
+        ]
+    },
+    "REC010": {
+        "record_id": "REC010",
+        "appointment_id": "APPT025",
+        "patient_id": "amara_osei_8834",
+        "provider_id": "dr_singh_endocrinology",
+        "date": "2025-04-15",
+        "type": "follow_up_note",
+        "subjective": "Patient reports stable overnight glucose but lunchtime spikes when pre-meal insulin is delayed.",
+        "objective": "CGM download shows average glucose 138 mg/dL, time-in-range 74%. No hypoglycemia episodes <70 mg/dL.",
+        "assessment": "Type 1 Diabetes with adequate basal coverage. Need faster bolus access during pharmacy backorder contingencies.",
+        "plan": "Issue refills for basal and bolus insulin pens, note need for emergency sourcing if national shortage occurs.",
+        "prescriptions": [
+            {
+                "medication": "Insulin Glargine",
+                "dosage": "20 units",
+                "frequency": "at bedtime",
+                "quantity": "2 pens",
+                "refills": 1,
+                "pharmacy": "Lakeshore Specialty Pharmacy"
+            },
+            {
+                "medication": "Insulin Lispro",
+                "dosage": "6 units",
+                "frequency": "before meals",
+                "quantity": "3 pens",
+                "refills": 1,
+                "pharmacy": "Lakeshore Specialty Pharmacy"
+            }
+        ]
+    },
+    "REC011": {
+        "record_id": "REC011",
+        "appointment_id": "APPT028",
+        "patient_id": "nina_park_8020",
+        "provider_id": "dr_garcia_primary",
+        "date": "2025-04-02",
+        "type": "ergonomic_coaching_note",
+        "subjective": "Patient reports neck stiffness after video calls and wants firmer resistance exercises plus softer myofascial release tools.",
+        "objective": "Telehealth kit currently includes a medium-strength resistance band set and a firm foam roller.",
+        "assessment": "Remote physical therapy support requiring higher resistance and cushioned roller for daily use.",
+        "plan": "Provide upgraded resistance band set and cushioned foam roller; reassess in two weeks via telehealth.",
+        "prescriptions": [
+            {
+                "medication": "Resistance Band Set",
+                "dosage": "Medium strength",
+                "frequency": "15 minutes twice daily",
+                "quantity": "1 set",
+                "refills": 0,
+                "pharmacy": "FlexiFit Rehab (Medium Set)",
+                "supplier": {
+                    "company": "FlexiFit Rehab",
+                    "brand_name": "FlexiFit Medium",
+                    "price_usd": 24.5,
+                    "currency": "USD"
+                }
+            },
+            {
+                "medication": "Foam Massage Roller",
+                "dosage": "Firm 60cm",
+                "frequency": "10 minutes daily",
+                "quantity": "1 roller",
+                "refills": 0,
+                "pharmacy": "RollEase Therapy (Firm)",
+                "supplier": {
+                    "company": "RollEase Therapy",
+                    "brand_name": "RollEase Firm",
+                    "price_usd": 21.0,
+                    "currency": "USD"
+                }
+            }
+        ]
+    },
+    "REC012": {
+        "record_id": "REC012",
+        "appointment_id": "APPT029",
+        "patient_id": "yumi_tanaka_7410",
+        "provider_id": "dr_saito_cardiology",
+        "date": "2025-05-12",
+        "type": "pre_procedure_assessment",
+        "subjective": "Patient reports intermittent palpitations and is preparing for ablation; anxious about medication overlap.",
+        "objective": "Review of anticoagulation logs shows consistent INR between 2.3-2.8. Anxiety questionnaire score elevated.",
+        "assessment": "Atrial fibrillation management needing synchronized medication reconciliation and language-aligned counseling.",
+        "plan": "Hold warfarin morning of ablation; coordinate with care coordinator for anxiety support and remote vitals kit.",
+        "prescriptions": [
+            {
+                "medication": "Warfarin",
+                "dosage": "5mg",
+                "frequency": "once daily",
+                "quantity": "30 tablets",
+                "refills": 1,
+                "pharmacy": "Pacifica Heart Pharmacy",
+                "supplier": {
+                    "company": "Sunrise Biotech",
+                    "brand_name": "Lipistal",
+                    "price_usd": 4.15,
+                    "currency": "USD"
+                }
+            },
+            {
+                "medication": "Sertraline",
+                "dosage": "50mg",
+                "frequency": "once daily",
+                "quantity": "30 tablets",
+                "refills": 1,
+                "pharmacy": "Pacifica Heart Pharmacy",
+                "supplier": {
+                    "company": "Harmony Labs",
+                    "brand_name": "Sertrawin",
+                    "price_usd": 4.75,
+                    "currency": "USD"
+                }
+            }
+        ]
+    },
+    "REC013": {
+        "record_id": "REC013",
+        "appointment_id": "APPT030",
+        "patient_id": "yumi_tanaka_7410",
+        "provider_id": "dr_thompson_cardiology",
+        "date": "2025-05-19",
+        "type": "consultation_note",
+        "subjective": "Follow-up on lipid control and palpitations; patient curious about rosuvastatin/ezetimibe combo option.",
+        "objective": "Recent lipid panel shows LDL 118, HDL 52. Resting HR 68, BP 128/78.",
+        "assessment": "Mixed hyperlipidemia with possible benefit from combination therapy; requires interaction screening against warfarin/sertraline.",
+        "plan": "Review combo therapy interactions, coordinate for Japanese-language educational materials, and confirm availability of alternative cardiologist if conflicts arise.",
+        "prescriptions": [
+            {
+                "medication": "Rosuvastatin",
+                "dosage": "10mg",
+                "frequency": "nightly",
+                "quantity": "30 tablets",
+                "refills": 2,
+                "pharmacy": "Pacifica Heart Pharmacy"
+            }
+        ]
+    },
+    "REC014": {
+        "record_id": "REC014",
+        "appointment_id": "APPT031",
+        "patient_id": "yumi_tanaka_7410",
+        "provider_id": "care_coordinator_ito",
+        "date": "2025-05-06",
+        "type": "care_coordination_note",
+        "subjective": "Patient wants synchronized reminders in Japanese and confirmation of all telehealth logistics before ablation week.",
+        "objective": "Care coordinator reviewed medication list and remote device inventory; noted missing spare INR strips.",
+        "assessment": "Requires equipment refresh, translation-ready instructions, and confirmation of coverage for coaching sessions.",
+        "plan": "Ship additional INR strips, send Japanese-language care plan, verify voucher eligibility for coordination session, and gather supplier quotes for combination therapy.",
+        "prescriptions": []
+    },
+    "REC015": {
+        "record_id": "REC015",
+        "appointment_id": "APPT033",
+        "patient_id": "elena_morales_9921",
+        "provider_id": "dr_ivankovic_neurology",
+        "date": "2025-07-15",
+        "type": "neurology_intake",
+        "subjective": "Patient reports increased nocturnal auras and is preparing for wearable EEG telemetry.",
+        "objective": "Medication regimen reviewed: lamotrigine 100mg BID, buspirone 10mg TID, aspirin 81mg daily.",
+        "assessment": "Focal epilepsy tuning required; coordinate telemetry device training and seizure trigger logging.",
+        "plan": "Finalize telemetry equipment order, flag lamotrigine supplier for cost comparison, consolidate anxiety meds before the monitoring period.",
+        "prescriptions": [
+            {
+                "medication": "Lamotrigine",
+                "dosage": "100mg",
+                "frequency": "twice daily",
+                "quantity": "60 tablets",
+                "refills": 2,
+                "pharmacy": "Cascade Neuro Pharmacy"
+            },
+            {
+                "medication": "Buspirone",
+                "dosage": "10mg",
+                "frequency": "three times daily",
+                "quantity": "90 tablets",
+                "refills": 2,
+                "pharmacy": "Cascade Neuro Pharmacy"
+            }
+        ]
+    },
+    "REC016": {
+        "record_id": "REC016",
+        "appointment_id": "APPT034",
+        "patient_id": "elena_morales_9921",
+        "provider_id": "dr_hartwell_psychology",
+        "date": "2025-07-17",
+        "type": "behavioral_follow_up",
+        "subjective": "Discussed anxiety spikes surrounding seizure clusters and upcoming telemetry.",
+        "objective": "Patient using guided breathing app; reports buspirone adherence at 90%.",
+        "assessment": "GAD exacerbation around monitoring schedule; requires structured coping plan.",
+        "plan": "Set mindfulness reminders, coordinate with neurology team, evaluate caffeine intake.",
+        "prescriptions": []
+    },
+    "REC017": {
+        "record_id": "REC017",
+        "appointment_id": "APPT036",
+        "patient_id": "natalia_cole_8832",
+        "provider_id": "dr_patel_neurology",
+        "date": "2025-08-04",
+        "type": "telemetry_intake",
+        "subjective": "Telemetry wearable flagged missing overnight; patient requests urgent replacement before monitoring block.",
+        "objective": "Telemetry inventory shows kit NS-EEG-220 flagged 'missing/overdue'. Current medications: lamotrigine 150mg BID, clonazepam 0.5mg nightly, melatonin 5mg bedtime.",
+        "assessment": "Telemetry equipment recall + seizure monitoring prep.",
+        "plan": "Check inventory status, log replacement order, schedule device coaching session with telemetry nurse.",
+        "prescriptions": [
+            {
+                "medication": "Lamotrigine",
+                "dosage": "150mg",
+                "frequency": "twice daily",
+                "quantity": "60 tablets",
+                "refills": 2,
+                "pharmacy": "NorthStar Pharmacy"
+            },
+            {
+                "medication": "Clonazepam",
+                "dosage": "0.5mg",
+                "frequency": "nightly",
+                "quantity": "30 tablets",
+                "refills": 1,
+                "pharmacy": "NorthStar Pharmacy"
+            }
+        ]
+    },
+    "REC018": {
+        "record_id": "REC018",
+        "appointment_id": "APPT038",
+        "patient_id": "natalia_cole_8832",
+        "provider_id": "dr_hartwell_psychology",
+        "date": "2025-08-06",
+        "type": "behavioral_follow_up",
+        "subjective": "Patient anxious about telemetry wearable recall and rescheduled coaching.",
+        "objective": "Discussed progress with sleep hygiene. Reviewed clonazepam usage.",
+        "assessment": "Anxiety secondary to equipment logistics; monitor for insomnia relapse.",
+        "plan": "Coordinate with neurology team, confirm telemetry device delivery window, queue group session if monitoring stretches beyond two weeks.",
+        "prescriptions": []
+    },
+    "REC021": {
+        "record_id": "REC021",
+        "appointment_id": "APPT041",
+        "patient_id": "jin_park_7284",
+        "provider_id": "coach_riley_telemetry",
+        "date": "2025-06-10",
+        "type": "sleep_compliance_note",
+        "subjective": "Patient reports ventilator felt snug; noticed strap marks but denies leaks.",
+        "objective": "Usage 2025-06-01 to 2025-06-07: one missing upload (2025-06-04). Average nightly usage 6.7 hrs. Device VC-449.",
+        "assessment": "Compliance trending positive except unsynced night on 2025-06-04. Requires artifact embed for audit.",
+        "plan": "Verify backup ventilator availability. Ensure upload artifact archived. Schedule follow-up with respiratory specialist.",
+        "prescriptions": [],
+        "notes": []
+    },
+    "REC022": {
+        "record_id": "REC022",
+        "appointment_id": "APPT044",
+        "patient_id": "maya_chen_3318",
+        "provider_id": "dr_okafor_developmental_pediatrics",
+        "date": "2025-04-15",
+        "type": "developmental_assessment",
+        "subjective": "Parent reports progress with communication skills using AAC device. Some regression in social engagement at school.",
+        "objective": "Maya demonstrates improved expressive communication via device (20-30 word combinations). Social reciprocity remains delayed. Sensory sensitivities present.",
+        "assessment": "ASD Level 2, stable. Continued multi-disciplinary therapy recommended. Medication management adequate.",
+        "plan": "Continue tri-weekly OT/SLP/ABA therapy. Schedule 6-month evaluation October 2025. Coordinate team meeting with all providers to align goals.",
+        "prescriptions": [
+            {
+                "medication": "Risperidone",
+                "dosage": "0.5mg",
+                "frequency": "twice daily",
+                "quantity": "60 tablets",
+                "refills": 3,
+                "pharmacy": "Portland Children's Pharmacy"
+            },
+            {
+                "medication": "Melatonin",
+                "dosage": "3mg",
+                "frequency": "at bedtime",
+                "quantity": "90 tablets",
+                "refills": 5,
+                "pharmacy": "Portland Children's Pharmacy"
+            }
+        ]
+    },
+    "REC023": {
+        "record_id": "REC023",
+        "appointment_id": "APPT045",
+        "patient_id": "maya_chen_3318",
+        "provider_id": "ot_sullivan",
+        "date": "2025-09-18",
+        "type": "therapy_progress_note",
+        "subjective": "Maya tolerating textured materials better. Parent notes improved dressing skills at home.",
+        "objective": "Completed sensory integration activities. Demonstrated improved tolerance to tactile input. Fine motor coordination progressing.",
+        "assessment": "Positive response to sensory integration therapy. Continue current protocol.",
+        "plan": "Maintain bi-weekly OT sessions. Coordinate with SLP for integrated sensory-communication activities.",
+        "prescriptions": []
+    },
+    "REC024": {
+        "record_id": "REC024",
+        "appointment_id": "APPT046",
+        "patient_id": "maya_chen_3318",
+        "provider_id": "slp_martinez",
+        "date": "2025-09-19",
+        "type": "therapy_progress_note",
+        "subjective": "Parent reports Maya using AAC device spontaneously to request preferred activities.",
+        "objective": "Maya using 3-4 word combinations on AAC. Demonstrated improved joint attention during structured play.",
+        "assessment": "Expressive language improving via AAC. Pragmatic language skills emerging.",
+        "plan": "Continue bi-weekly speech therapy. Train parents on AAC modeling strategies. Coordinate with BCBA on communication goals.",
+        "prescriptions": []
+    },
+    "REC025": {
+        "record_id": "REC025",
+        "appointment_id": "APPT047",
+        "patient_id": "maya_chen_3318",
+        "provider_id": "bcba_washington",
+        "date": "2025-09-20",
+        "type": "behavioral_analysis_note",
+        "subjective": "Parent reports reduced tantrum frequency at home. Maya participating more in family activities.",
+        "objective": "Social skills targets: turn-taking (60% accuracy), sharing (45% accuracy), emotion recognition (70% accuracy).",
+        "assessment": "Progress on targeted social behaviors. Challenging behaviors decreasing with consistent reinforcement.",
+        "plan": "Continue ABA protocol 3x/week. Update behavior intervention plan for school setting. Schedule parent training session.",
+        "prescriptions": []
+    },
+    "REC026": {
+        "record_id": "REC026",
+        "appointment_id": null,
+        "patient_id": "omar_hassan_2156",
+        "provider_id": "dr_rodriguez_orthopedics",
+        "date": "2025-09-10",
+        "type": "operative_note",
+        "subjective": "Patient presented with chronic right knee pain and mechanical symptoms (locking, catching) consistent with meniscal pathology.",
+        "objective": "Right knee arthroscopy performed. Findings: Grade 2 medial meniscus tear (posterior horn), mild chondromalacia patella. Procedures performed: partial medial meniscectomy, debridement of unstable meniscal tissue, lavage.",
+        "assessment": "Successful arthroscopic partial meniscectomy for medial meniscus tear. No complications during procedure. Expected recovery 6-8 weeks with physical therapy.",
+        "plan": "Post-operative protocol: ice/elevation 48-72 hours, weight-bearing as tolerated with crutches for 1 week, pain management with Ibuprofen 600mg q6h PRN. Follow-up in 2 weeks to assess healing. Refer to PT for rehabilitation starting week 3 post-op. RTC PRN for any concerns (increased pain, swelling, signs of infection).",
+        "prescriptions": []
+    },
+    "REC027": {
+        "record_id": "REC027",
+        "appointment_id": "APPT056",
+        "patient_id": "carlos_mendez_4521",
+        "provider_id": "dr_chen_primary_care",
+        "date": "2025-09-25",
+        "type": "primary_care_visit",
+        "subjective": "Patient reports chronic lower back pain (6/10) that worsens with prolonged standing. Also reports manageable anxiety levels with current Sertraline dose, though occasional breakthrough anxiety with work stress.",
+        "objective": "VS: BP 128/82, HR 76, Temp 98.4°F. General: alert, cooperative. Musculoskeletal: mild lumbar paraspinal tenderness, normal ROM. Mental status: appropriate affect, no acute distress.",
+        "assessment": "1. Chronic mechanical lower back pain - likely muscular. 2. Anxiety disorder - stable on current regimen.",
+        "plan": "Continue current medications. Advised on proper body mechanics and core strengthening exercises. Recommended heat therapy and OTC pain relief as needed. Follow-up in 3 weeks to reassess pain management. Consider PT referral if no improvement.",
+        "prescriptions": [
+            {
+                "medication": "Sertraline",
+                "dosage": "100mg daily",
+                "frequency": "once daily in the morning",
+                "duration": "ongoing",
+                "refills": 3
+            },
+            {
+                "medication": "Ibuprofen",
+                "dosage": "600mg",
+                "frequency": "every 6-8 hours as needed for pain",
+                "duration": "ongoing",
+                "refills": 2
+            },
+            {
+                "medication": "Acetaminophen",
+                "dosage": "500mg",
+                "frequency": "every 4-6 hours as needed",
+                "duration": "ongoing",
+                "refills": 2
+            }
+        ]
+    },
+    "REC028": {
+        "record_id": "REC028",
+        "appointment_id": null,
+        "patient_id": "robert_martinez_5589",
+        "provider_id": "dr_kim_cardiac_surgery",
+        "date": "2025-10-20",
+        "type": "pre_surgical_evaluation",
+        "subjective": "Patient reports stable angina with exertion. Medications adherence good. No recent chest pain at rest. Preparing for upcoming CABG surgery on 2025-11-15.",
+        "objective": "VS: BP 138/85, HR 68, O2 sat 97% on room air. Cardiovascular: Regular rate and rhythm, no murmurs. Lungs clear. ECG shows ST depression in lateral leads. Recent cardiac cath confirmed triple vessel disease.",
+        "assessment": "1. Coronary artery disease - triple vessel, stable angina. 2. Hypertension - controlled. 3. Type 2 Diabetes - controlled. 4. Hyperlipidemia - on statin therapy. Surgical candidate for CABG.",
+        "plan": "Proceed with CABG on 2025-11-15. Continue current cardiac medications up until surgery except hold Aspirin 5 days before. Pre-op anesthesia consultation required. Post-op cardiac rehab referral. Continue Metoprolol, Atorvastatin, Metformin through surgery date.",
+        "prescriptions": [
+            {
+                "medication": "Atorvastatin",
+                "dosage": "40mg daily",
+                "frequency": "once daily at bedtime",
+                "duration": "ongoing",
+                "refills": 3
+            },
+            {
+                "medication": "Metoprolol",
+                "dosage": "50mg",
+                "frequency": "twice daily",
+                "duration": "ongoing",
+                "refills": 3
+            },
+            {
+                "medication": "Aspirin",
+                "dosage": "81mg",
+                "frequency": "once daily (hold 5 days before surgery)",
+                "duration": "ongoing",
+                "refills": 3
+            },
+            {
+                "medication": "Metformin",
+                "dosage": "1000mg",
+                "frequency": "twice daily with meals",
+                "duration": "ongoing",
+                "refills": 3
+            }
+        ]
+    },
+    "REC029": {
+        "record_id": "REC029",
+        "appointment_id": null,
+        "patient_id": "patricia_wong_6634",
+        "provider_id": "dr_garcia_primary",
+        "date": "2025-10-15",
+        "type": "chronic_disease_management",
+        "subjective": "Patient reports good medication adherence. Blood pressure controlled at home (average 128/78). Blood glucose readings 110-140 fasting. No side effects from current medications.",
+        "objective": "VS: BP 130/80, HR 72, BMI 28.5. Labs: HbA1c 7.1%, LDL 95 mg/dL, creatinine 0.9. General: well-appearing, no acute distress.",
+        "assessment": "1. Type 2 Diabetes - controlled on Metformin. 2. Hypertension - controlled on Lisinopril. 3. Hyperlipidemia - controlled on Rosuvastatin. Continue current regimen.",
+        "plan": "Continue current medications. Patient interested in cost optimization - review medication suppliers for potential savings. Schedule 3-month follow-up to monitor labs and BP. Reinforce lifestyle modifications.",
+        "prescriptions": [
+            {
+                "medication": "Lisinopril",
+                "dosage": "20mg daily",
+                "frequency": "once daily in the morning",
+                "duration": "ongoing",
+                "refills": 3,
+                "supplier": "US Generic Plus",
+                "brand": "Lisinopril-G",
+                "unit_cost_usd": 8.50
+            },
+            {
+                "medication": "Rosuvastatin",
+                "dosage": "10mg daily",
+                "frequency": "once daily at bedtime",
+                "duration": "ongoing",
+                "refills": 3,
+                "supplier": "Silver Maple Pharma",
+                "brand": "MapleStat",
+                "unit_cost_usd": 6.20
+            },
+            {
+                "medication": "Metformin",
+                "dosage": "1000mg",
+                "frequency": "twice daily with meals",
+                "duration": "ongoing",
+                "refills": 3
+            }
+        ]
+    }
+}

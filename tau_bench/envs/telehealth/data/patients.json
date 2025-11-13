@@ -1,0 +1,1533 @@
+{
+    "sarah_johnson_1234": {
+        "patient_id": "sarah_johnson_1234",
+        "name": {
+            "first_name": "Sarah",
+            "last_name": "Johnson"
+        },
+        "demographics": {
+            "date_of_birth": "1985-03-15",
+            "gender": "Female",
+            "phone": "(555) 123-4567",
+            "email": "sarah.johnson@email.com"
+        },
+        "address": {
+            "address1": "123 Maple Street",
+            "address2": "Apt 2B",
+            "city": "Boston",
+            "state": "MA",
+            "zip": "02101",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Blue Cross Blue Shield",
+                "policy_number": "BCBS123456789",
+                "group_number": "GRP001",
+                "copay_primary": 25.0,
+                "copay_specialist": 50.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Hypertension",
+                "Type 2 Diabetes"
+            ],
+            "allergies": [
+                "Penicillin",
+                "Shellfish"
+            ],
+            "medications": [
+                {
+                    "name": "Metformin",
+                    "dosage": "500mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Lisinopril",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Michael Johnson",
+            "relationship": "Spouse",
+            "phone": "(555) 123-4568"
+        }
+    },
+    "david_martinez_5678": {
+        "patient_id": "david_martinez_5678",
+        "name": {
+            "first_name": "David",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "1978-11-22",
+            "gender": "Male",
+            "phone": "(555) 234-5678",
+            "email": "david.martinez@email.com"
+        },
+        "address": {
+            "address1": "456 Oak Avenue",
+            "address2": "",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90210",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Aetna",
+                "policy_number": "AET987654321",
+                "group_number": "GRP002",
+                "copay_primary": 30.0,
+                "copay_specialist": 60.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Anxiety",
+                "Seasonal Allergies"
+            ],
+            "allergies": [
+                "Latex"
+            ],
+            "medications": [
+                {
+                    "name": "Sertraline",
+                    "dosage": "50mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Claritin",
+                    "dosage": "10mg",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Maria Martinez",
+            "relationship": "Sister",
+            "phone": "(555) 234-5679"
+        }
+    },
+    "emily_chen_9012": {
+        "patient_id": "emily_chen_9012",
+        "name": {
+            "first_name": "Emily",
+            "last_name": "Chen"
+        },
+        "demographics": {
+            "date_of_birth": "1992-07-08",
+            "gender": "Female",
+            "phone": "(555) 345-6789",
+            "email": "emily.chen@email.com"
+        },
+        "address": {
+            "address1": "789 Pine Road",
+            "address2": "Unit 15",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98101",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Kaiser Permanente",
+                "policy_number": "KP456789123",
+                "group_number": "GRP003",
+                "copay_primary": 20.0,
+                "copay_specialist": 40.0
+            }
+        },
+        "medical_history": {
+            "conditions": [],
+            "allergies": [
+                "Dust mites"
+            ],
+            "medications": [
+                {
+                    "name": "Birth Control Pills",
+                    "dosage": "1 tablet",
+                    "frequency": "daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "James Chen",
+            "relationship": "Father",
+            "phone": "(555) 345-6790"
+        }
+    },
+    "maria_rodriguez_4567": {
+        "patient_id": "maria_rodriguez_4567",
+        "name": {
+            "first_name": "Maria",
+            "last_name": "Rodriguez"
+        },
+        "demographics": {
+            "date_of_birth": "1990-12-03",
+            "gender": "Female",
+            "phone": "(555) 456-7890",
+            "email": "maria.rodriguez@email.com"
+        },
+        "address": {
+            "address1": "456 Oak Street",
+            "address2": "",
+            "city": "Miami",
+            "state": "FL",
+            "zip": "33101",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC789123456",
+                "group_number": "GRP004",
+                "copay_primary": 20.0,
+                "copay_specialist": 45.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Migraine",
+                "Asthma"
+            ],
+            "allergies": [
+                "Sulfa drugs",
+                "Peanuts"
+            ],
+            "medications": [
+                {
+                    "name": "Sumatriptan",
+                    "dosage": "50mg",
+                    "frequency": "as needed for migraines"
+                },
+                {
+                    "name": "Albuterol Inhaler",
+                    "dosage": "2 puffs",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Carlos Rodriguez",
+            "relationship": "Brother",
+            "phone": "(555) 456-7891"
+        }
+    },
+    "linda_parker_8899": {
+        "patient_id": "linda_parker_8899",
+        "name": {
+            "first_name": "Linda",
+            "last_name": "Parker"
+        },
+        "demographics": {
+            "date_of_birth": "1988-04-22",
+            "gender": "Female",
+            "phone": "(555) 678-9012",
+            "email": "linda.parker@email.com"
+        },
+        "address": {
+            "address1": "987 Willow Lane",
+            "address2": "",
+            "city": "Denver",
+            "state": "CO",
+            "zip": "80205",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Cigna",
+                "policy_number": "CIG445566778",
+                "group_number": "GRP009",
+                "copay_primary": 30.0,
+                "copay_specialist": 55.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Seasonal Allergies"
+            ],
+            "allergies": [
+                "Latex"
+            ],
+            "medications": [
+                {
+                    "name": "Loratadine",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Eric Parker",
+            "relationship": "Spouse",
+            "phone": "(555) 678-9013"
+        }
+    },
+    "noah_ito_98187": {
+        "patient_id": "noah_ito_98187",
+        "name": {
+            "first_name": "Noah",
+            "last_name": "Ito"
+        },
+        "demographics": {
+            "date_of_birth": "1989-08-19",
+            "gender": "Male",
+            "phone": "(555) 789-0123",
+            "email": "noah.ito@email.com"
+        },
+        "address": {
+            "address1": "742 West 34th Street",
+            "address2": "Floor 12",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Aetna",
+                "policy_number": "AET334455667",
+                "group_number": "GRP010",
+                "copay_primary": 25.0,
+                "copay_specialist": 60.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Hypertension"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Amlodipine",
+                    "dosage": "5mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Hana Ito",
+            "relationship": "Sister",
+            "phone": "(555) 789-0456"
+        }
+    },
+    "olivia_martin_4433": {
+        "patient_id": "olivia_martin_4433",
+        "name": {
+            "first_name": "Olivia",
+            "last_name": "Martin"
+        },
+        "demographics": {
+            "date_of_birth": "1994-02-11",
+            "gender": "Female",
+            "phone": "(555) 890-1234",
+            "email": "olivia.martin@email.com"
+        },
+        "address": {
+            "address1": "221 Pinecrest Drive",
+            "address2": "Apt 5C",
+            "city": "Portland",
+            "state": "OR",
+            "zip": "97209",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Blue Shield",
+                "policy_number": "BSH556677889",
+                "group_number": "GRP011",
+                "copay_primary": 20.0,
+                "copay_specialist": 50.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Seasonal Allergies",
+                "Exercise-induced Asthma"
+            ],
+            "allergies": [
+                "Sulfa drugs"
+            ],
+            "medications": [
+                {
+                    "name": "Albuterol Inhaler",
+                    "dosage": "2 puffs",
+                    "frequency": "as needed"
+                },
+                {
+                    "name": "Fluticasone Nasal Spray",
+                    "dosage": "1 spray",
+                    "frequency": "daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Derek Martin",
+            "relationship": "Brother",
+            "phone": "(555) 890-1235"
+        }
+    },
+    "daiki_sanchez_46236": {
+        "patient_id": "daiki_sanchez_46236",
+        "name": {
+            "first_name": "Daiki",
+            "last_name": "Sanchez"
+        },
+        "demographics": {
+            "date_of_birth": "1991-05-27",
+            "gender": "Male",
+            "phone": "(555) 210-3344",
+            "email": "daikisanchez1479@example.com"
+        },
+        "address": {
+            "address1": "1479 Maple Hollow Road",
+            "address2": "Unit 2A",
+            "city": "Indianapolis",
+            "state": "IN",
+            "zip": "46236",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Anthem",
+                "policy_number": "ANT998877665",
+                "group_number": "GRP012",
+                "copay_primary": 35.0,
+                "copay_specialist": 50.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Hypertension",
+                "Seasonal Allergies"
+            ],
+            "allergies": [
+                "Shellfish"
+            ],
+            "medications": [
+                {
+                    "name": "Lisinopril",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Cetirizine",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Mika Sanchez",
+            "relationship": "Spouse",
+            "phone": "(555) 210-7788"
+        }
+    },
+    "heather_collins_48201": {
+        "patient_id": "heather_collins_48201",
+        "name": {
+            "first_name": "Heather",
+            "last_name": "Collins"
+        },
+        "demographics": {
+            "date_of_birth": "1982-04-19",
+            "gender": "Female",
+            "phone": "(555) 482-1024",
+            "email": "heather.collins82@gmail.com"
+        },
+        "address": {
+            "address1": "48201 Westbridge Lane",
+            "address2": "",
+            "city": "Grand Rapids",
+            "state": "MI",
+            "zip": "49503",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Blue Cross Blue Shield",
+                "policy_number": "BCBS4820119",
+                "group_number": "GRP215",
+                "copay_primary": 25.0,
+                "copay_specialist": 55.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Hyperlipidemia",
+                "Seasonal Asthma"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Atorvastatin",
+                    "dosage": "20mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Montelukast",
+                    "dosage": "10mg",
+                    "frequency": "nightly"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Samuel Collins",
+            "relationship": "Brother",
+            "phone": "(555) 482-7780"
+        }
+    },
+    "cece_wang_7890": {
+        "patient_id": "cece_wang_7890",
+        "name": {
+            "first_name": "Cece",
+            "last_name": "Wang"
+        },
+        "demographics": {
+            "date_of_birth": "1945-08-11",
+            "gender": "Female",
+            "phone": "(555) 789-2244",
+            "email": "cece.wang@example.com"
+        },
+        "address": {
+            "address1": "7890 Willow Bend Court",
+            "address2": "",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98101",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Medicare Advantage",
+                "policy_number": "MED789045612",
+                "group_number": "GRP350",
+                "copay_primary": 15.0,
+                "copay_specialist": 35.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Atrial Fibrillation",
+                "Hypertension",
+                "Hyperlipidemia"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Warfarin",
+                    "dosage": "5mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Metoprolol",
+                    "dosage": "50mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Simvastatin",
+                    "dosage": "20mg",
+                    "frequency": "nightly"
+                },
+                {
+                    "name": "Aspirin",
+                    "dosage": "81mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Mark Wang",
+            "relationship": "Son",
+            "phone": "(555) 312-7788"
+        }
+    },
+    "carlos_martinez_5512": {
+        "patient_id": "carlos_martinez_5512",
+        "name": {
+            "first_name": "Carlos",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "1986-09-08",
+            "gender": "Male",
+            "phone": "(555) 432-7788",
+            "email": "carlos.martinez5512@gmail.com"
+        },
+        "address": {
+            "address1": "5512 Cedar Ridge Court",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "zip": "73301",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC44551233",
+                "group_number": "GRP020",
+                "copay_primary": 25.0,
+                "copay_specialist": 45.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Seasonal Allergies"
+            ],
+            "allergies": [
+                "None"
+            ],
+            "medications": [
+                {
+                    "name": "Cetirizine",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Elena Martinez",
+            "relationship": "Partner",
+            "phone": "(555) 432-7790"
+        }
+    },
+    "sofia_martinez_2019": {
+        "patient_id": "sofia_martinez_2019",
+        "name": {
+            "first_name": "Sofia",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "2019-03-12",
+            "gender": "Female",
+            "phone": "",
+            "email": ""
+        },
+        "address": {
+            "address1": "5512 Cedar Ridge Court",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "zip": "73301",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC44551233",
+                "group_number": "GRP020",
+                "copay_primary": 0.0,
+                "copay_specialist": 0.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "None"
+            ],
+            "allergies": [
+                "None"
+            ],
+            "medications": []
+        },
+        "emergency_contact": {
+            "name": "Carlos Martinez",
+            "relationship": "Parent",
+            "phone": "(555) 432-7788"
+        }
+    },
+    "mateo_martinez_2016": {
+        "patient_id": "mateo_martinez_2016",
+        "name": {
+            "first_name": "Mateo",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "2016-08-04",
+            "gender": "Male",
+            "phone": "",
+            "email": ""
+        },
+        "address": {
+            "address1": "5512 Cedar Ridge Court",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "zip": "73301",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC44551233",
+                "group_number": "GRP020",
+                "copay_primary": 0.0,
+                "copay_specialist": 0.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Mild seasonal allergies"
+            ],
+            "allergies": [
+                "Strawberries"
+            ],
+            "medications": [
+                {
+                    "name": "Cetirizine",
+                    "dosage": "5mg",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Carlos Martinez",
+            "relationship": "Parent",
+            "phone": "(555) 432-7788"
+        }
+    },
+    "isabella_martinez_2011": {
+        "patient_id": "isabella_martinez_2011",
+        "name": {
+            "first_name": "Isabella",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "2011-12-01",
+            "gender": "Female",
+            "phone": "",
+            "email": ""
+        },
+        "address": {
+            "address1": "5512 Cedar Ridge Court",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "zip": "73301",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC44551233",
+                "group_number": "GRP020",
+                "copay_primary": 0.0,
+                "copay_specialist": 0.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Lactose intolerance"
+            ],
+            "allergies": [
+                "Lactose"
+            ],
+            "medications": []
+        },
+        "emergency_contact": {
+            "name": "Carlos Martinez",
+            "relationship": "Parent",
+            "phone": "(555) 432-7788"
+        }
+    },
+    "amara_osei_8834": {
+        "patient_id": "amara_osei_8834",
+        "name": {
+            "first_name": "Amara",
+            "last_name": "Osei"
+        },
+        "demographics": {
+            "date_of_birth": "1988-03-11",
+            "gender": "Female",
+            "phone": "(555) 902-1188",
+            "email": "amara.osei8834@yahoo.com"
+        },
+        "address": {
+            "address1": "908 Riverstone Drive",
+            "address2": "Apt 4C",
+            "city": "Grand Rapids",
+            "state": "MI",
+            "zip": "49503",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Great Lakes Mutual",
+                "policy_number": "GLM55883321",
+                "group_number": "ENDO8842",
+                "copay_primary": 30.0,
+                "copay_specialist": 65.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Type 1 Diabetes Mellitus",
+                "Mild Nonproliferative Diabetic Retinopathy"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Insulin Glargine",
+                    "dosage": "20 units",
+                    "frequency": "at bedtime"
+                },
+                {
+                    "name": "Insulin Lispro",
+                    "dosage": "6 units",
+                    "frequency": "before meals"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Kwame Osei",
+            "relationship": "Brother",
+            "phone": "(555) 215-7733"
+        }
+    },
+    "mira_desai_3471": {
+        "patient_id": "mira_desai_3471",
+        "name": {
+            "first_name": "Mira",
+            "last_name": "Desai"
+        },
+        "demographics": {
+            "date_of_birth": "1991-05-05",
+            "email": "mira.desai3471@gmail.com",
+            "gender": "Female",
+            "phone": "(555) 402-1188"
+        },
+        "address": {
+            "address1": "78 Cedar Grove",
+            "address2": "",
+            "city": "Chicago",
+            "state": "IL",
+            "zip": "60605",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "MidWest Mutual",
+                "policy_number": "MWM442210",
+                "group_number": "MWG441",
+                "copay_primary": 20.0,
+                "copay_specialist": 45.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Mild asthma"
+            ],
+            "allergies": [
+                "Latex"
+            ],
+            "medications": [
+                {
+                    "name": "Albuterol",
+                    "dosage": "90mcg",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Rohit Desai",
+            "relationship": "Brother",
+            "phone": "(555) 402-7781"
+        }
+    },
+    "nina_park_8020": {
+        "patient_id": "nina_park_8020",
+        "name": {
+            "first_name": "Nina",
+            "last_name": "Park"
+        },
+        "demographics": {
+            "date_of_birth": "1987-10-12",
+            "gender": "Female",
+            "phone": "(555) 610-8240",
+            "email": "nina.park8020@gmail.com"
+        },
+        "address": {
+            "address1": "2248 Brookline Avenue",
+            "address2": "Unit 5",
+            "city": "Charlotte",
+            "state": "NC",
+            "zip": "28236",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Carolina Health Mutual",
+                "policy_number": "CHM8020451",
+                "group_number": "CHM8020",
+                "copay_primary": 25.0,
+                "copay_specialist": 55.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Chronic tension headaches"
+            ],
+            "allergies": [
+                "Ibuprofen"
+            ],
+            "medications": [
+                {
+                    "name": "Acetaminophen",
+                    "dosage": "500mg",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Eun Park",
+            "relationship": "Sister",
+            "phone": "(555) 610-1124"
+        }
+    },
+    "yumi_tanaka_7410": {
+        "patient_id": "yumi_tanaka_7410",
+        "name": {
+            "first_name": "Yumi",
+            "last_name": "Tanaka"
+        },
+        "demographics": {
+            "date_of_birth": "1970-04-14",
+            "gender": "Female",
+            "phone": "(555) 741-0084",
+            "email": "yumi.tanaka7410@pacificcare.org"
+        },
+        "address": {
+            "address1": "7410 Harbor Vista",
+            "address2": "Unit 28",
+            "city": "San Francisco",
+            "state": "CA",
+            "zip": "94109",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "PacificCare Advantage",
+                "policy_number": "PCA-7410-2025",
+                "group_number": "PCADV-74",
+                "copay_primary": 35.0,
+                "copay_specialist": 70.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Atrial fibrillation",
+                "Hypertension",
+                "Generalized anxiety disorder"
+            ],
+            "allergies": [
+                "Latex",
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Warfarin",
+                    "dosage": "5mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Sertraline",
+                    "dosage": "50mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Aspirin EC",
+                    "dosage": "81mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Metoprolol Succinate",
+                    "dosage": "50mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Kenji Tanaka",
+            "relationship": "Spouse",
+            "phone": "(555) 741-5511"
+        }
+    },
+    "elena_morales_9921": {
+        "patient_id": "elena_morales_9921",
+        "name": {
+            "first_name": "Elena",
+            "last_name": "Morales"
+        },
+        "demographics": {
+            "date_of_birth": "1984-09-22",
+            "gender": "Female",
+            "phone": "(555) 992-1430",
+            "email": "elena.morales9921@westcare.org"
+        },
+        "address": {
+            "address1": "9921 Westview Terrace",
+            "address2": "Unit 7C",
+            "city": "Portland",
+            "state": "OR",
+            "zip": "97205",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Northwest Advantage",
+                "policy_number": "NWA-9921-2025",
+                "group_number": "NWA-PREM-44",
+                "copay_primary": 30.0,
+                "copay_specialist": 65.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Focal epilepsy",
+                "Generalized anxiety disorder"
+            ],
+            "allergies": [
+                "Sulfa drugs"
+            ],
+            "medications": [
+                {
+                    "name": "Lamotrigine",
+                    "dosage": "100mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Buspirone",
+                    "dosage": "10mg",
+                    "frequency": "three times daily"
+                },
+                {
+                    "name": "Aspirin EC",
+                    "dosage": "81mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Lucia Morales",
+            "relationship": "Sister",
+            "phone": "(555) 992-7784"
+        }
+    },
+    "natalia_cole_8832": {
+        "patient_id": "natalia_cole_8832",
+        "name": {
+            "first_name": "Natalia",
+            "last_name": "Cole"
+        },
+        "demographics": {
+            "date_of_birth": "1989-03-18",
+            "gender": "Female",
+            "phone": "(555) 883-2210",
+            "email": "natalia.cole8832@northstarhealth.org"
+        },
+        "address": {
+            "address1": "8832 Cedar Ridge Loop",
+            "address2": "",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98104",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "NorthStar Health",
+                "policy_number": "NSH-8832-204",
+                "group_number": "NSH-TEL-77",
+                "copay_primary": 35.0,
+                "copay_specialist": 70.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Refractory focal epilepsy",
+                "Chronic insomnia"
+            ],
+            "allergies": [
+                "Latex"
+            ],
+            "medications": [
+                {
+                    "name": "Lamotrigine",
+                    "dosage": "150mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Clonazepam",
+                    "dosage": "0.5mg",
+                    "frequency": "nightly"
+                },
+                {
+                    "name": "Melatonin",
+                    "dosage": "5mg",
+                    "frequency": "at bedtime"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Jared Cole",
+            "relationship": "Brother",
+            "phone": "(555) 883-7721"
+        }
+    },
+    "jin_park_7284": {
+        "patient_id": "jin_park_7284",
+        "name": {
+            "first_name": "Jin",
+            "last_name": "Park"
+        },
+        "demographics": {
+            "date_of_birth": "1978-11-02",
+            "gender": "Male",
+            "phone": "(555) 728-4401",
+            "email": "jin.park7284@northsoundsleep.org"
+        },
+        "address": {
+            "address1": "7284 Beacon Ridge",
+            "address2": "Unit 5B",
+            "city": "Everett",
+            "state": "WA",
+            "zip": "98201",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "NorthSound Sleep Alliance",
+                "policy_number": "NSSA-7284-2025",
+                "group_number": "NSSA-COMPLIANCE",
+                "copay_primary": 40.0,
+                "copay_specialist": 75.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Complex sleep apnea",
+                "Major depressive disorder"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "medications": [
+                {
+                    "name": "Xywav",
+                    "dosage": "4.5g",
+                    "frequency": "twice nightly"
+                },
+                {
+                    "name": "Bupropion",
+                    "dosage": "150mg",
+                    "frequency": "morning"
+                },
+                {
+                    "name": "Zolpidem",
+                    "dosage": "5mg",
+                    "frequency": "bedtime as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Mina Park",
+            "relationship": "Spouse",
+            "phone": "(555) 728-8803"
+        }
+    },
+    "maya_chen_3318": {
+        "patient_id": "maya_chen_3318",
+        "name": {
+            "first_name": "Maya",
+            "last_name": "Chen"
+        },
+        "demographics": {
+            "date_of_birth": "2018-07-22",
+            "gender": "Female",
+            "phone": "(555) 331-8822",
+            "email": "lila.chen3318@parentportal.org"
+        },
+        "address": {
+            "address1": "3318 Willow Creek Lane",
+            "address2": "",
+            "city": "Portland",
+            "state": "OR",
+            "zip": "97205",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Pacific Northwest Family Health",
+                "policy_number": "PNFH-3318-PED",
+                "group_number": "AUTISM-CARE-PLUS",
+                "copay_primary": 20.0,
+                "copay_specialist": 45.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Autism Spectrum Disorder Level 2",
+                "Sensory Processing Disorder",
+                "Anxiety"
+            ],
+            "allergies": [
+                "Latex",
+                "Tree nuts"
+            ],
+            "medications": [
+                {
+                    "name": "Risperidone",
+                    "dosage": "0.5mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Melatonin",
+                    "dosage": "3mg",
+                    "frequency": "at bedtime"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Lila Chen",
+            "relationship": "Mother",
+            "phone": "(555) 331-8899"
+        }
+    },
+    "omar_hassan_2156": {
+        "patient_id": "omar_hassan_2156",
+        "name": {
+            "first_name": "Omar",
+            "last_name": "Hassan"
+        },
+        "demographics": {
+            "date_of_birth": "1980-07-22",
+            "gender": "Male",
+            "phone": "(555) 215-6677",
+            "email": "omar.hassan2156@email.com"
+        },
+        "address": {
+            "address1": "892 Cedar Lane",
+            "address2": "",
+            "city": "Portland",
+            "state": "OR",
+            "zip": "97201",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Aetna",
+                "policy_number": "AETNA987654321",
+                "group_number": "GRP789",
+                "copay_primary": 20.0,
+                "copay_specialist": 45.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Osteoarthritis",
+                "Hypertension"
+            ],
+            "allergies": [
+                "Codeine"
+            ],
+            "surgeries": [
+                {
+                    "procedure": "Right knee arthroscopy with meniscus repair",
+                    "date": "2025-09-10",
+                    "surgeon": "Dr. Maria Rodriguez"
+                }
+            ],
+            "medications": [
+                {
+                    "name": "Ibuprofen",
+                    "dosage": "600mg",
+                    "frequency": "every 6 hours as needed"
+                },
+                {
+                    "name": "Lisinopril",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Layla Hassan",
+            "relationship": "Spouse",
+            "phone": "(555) 215-6688"
+        }
+    },
+    "carlos_mendez_4521": {
+        "patient_id": "carlos_mendez_4521",
+        "name": {
+            "first_name": "Carlos",
+            "last_name": "Mendez"
+        },
+        "demographics": {
+            "date_of_birth": "1978-06-20",
+            "gender": "Male",
+            "phone": "(555) 987-3421",
+            "email": "carlos.mendez4521@email.com"
+        },
+        "address": {
+            "address1": "845 Oak Avenue",
+            "address2": "",
+            "city": "Phoenix",
+            "state": "AZ",
+            "zip": "85001",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "United Healthcare",
+                "policy_number": "UHC789456123",
+                "group_number": "GRP205",
+                "copay_primary": 30.0,
+                "copay_specialist": 60.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Chronic pain",
+                "Anxiety disorder"
+            ],
+            "allergies": [
+                "Codeine"
+            ],
+            "medications": [
+                {
+                    "name": "Sertraline",
+                    "dosage": "100mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Ibuprofen",
+                    "dosage": "600mg",
+                    "frequency": "as needed for pain"
+                },
+                {
+                    "name": "Acetaminophen",
+                    "dosage": "500mg",
+                    "frequency": "as needed"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Maria Mendez",
+            "relationship": "Spouse",
+            "phone": "(555) 987-3422"
+        }
+    },
+    "david_kim_7892": {
+        "patient_id": "david_kim_7892",
+        "name": {
+            "first_name": "David",
+            "last_name": "Kim"
+        },
+        "demographics": {
+            "date_of_birth": "1965-11-08",
+            "gender": "Male",
+            "phone": "(555) 456-7892",
+            "email": "david.kim7892@email.com"
+        },
+        "address": {
+            "address1": "1523 Cedar Lane",
+            "address2": "Unit 4",
+            "city": "Seattle",
+            "state": "WA",
+            "zip": "98101",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Aetna",
+                "policy_number": "AET987654321",
+                "group_number": "GRP310",
+                "copay_primary": 35.0,
+                "copay_specialist": 70.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Osteoarthritis",
+                "Hypertension",
+                "Sleep apnea"
+            ],
+            "allergies": [
+                "Sulfa drugs"
+            ],
+            "medications": [
+                {
+                    "name": "Amlodipine",
+                    "dosage": "5mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Celecoxib",
+                    "dosage": "200mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Aspirin",
+                    "dosage": "81mg",
+                    "frequency": "once daily"
+                }
+            ],
+            "surgeries": []
+        },
+        "emergency_contact": {
+            "name": "Jennifer Kim",
+            "relationship": "Spouse",
+            "phone": "(555) 456-7893"
+        }
+    },
+    "robert_martinez_5589": {
+        "patient_id": "robert_martinez_5589",
+        "name": {
+            "first_name": "Robert",
+            "last_name": "Martinez"
+        },
+        "demographics": {
+            "date_of_birth": "1962-08-22",
+            "gender": "Male",
+            "phone": "(555) 558-9921",
+            "email": "robert.martinez5589@email.com"
+        },
+        "address": {
+            "address1": "4521 Elm Street",
+            "address2": "",
+            "city": "Denver",
+            "state": "CO",
+            "zip": "80202",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Cigna",
+                "policy_number": "CIG445566778",
+                "group_number": "GRP420",
+                "copay_primary": 40.0,
+                "copay_specialist": 75.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Coronary artery disease",
+                "Hypertension",
+                "Type 2 Diabetes",
+                "Hyperlipidemia"
+            ],
+            "allergies": [
+                "Latex",
+                "Morphine"
+            ],
+            "surgeries": [
+                {
+                    "procedure": "Coronary artery bypass graft (CABG) planned",
+                    "date": "2025-11-15",
+                    "surgeon": "Dr. Robert Kim"
+                }
+            ],
+            "medications": [
+                {
+                    "name": "Atorvastatin",
+                    "dosage": "40mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Metoprolol",
+                    "dosage": "50mg",
+                    "frequency": "twice daily"
+                },
+                {
+                    "name": "Aspirin",
+                    "dosage": "81mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Metformin",
+                    "dosage": "1000mg",
+                    "frequency": "twice daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "Maria Martinez",
+            "relationship": "Spouse",
+            "phone": "(555) 558-9922"
+        }
+    },
+    "patricia_wong_6634": {
+        "patient_id": "patricia_wong_6634",
+        "name": {
+            "first_name": "Patricia",
+            "last_name": "Wong"
+        },
+        "demographics": {
+            "date_of_birth": "1971-04-15",
+            "gender": "Female",
+            "phone": "(555) 663-4412",
+            "email": "patricia.wong6634@email.com"
+        },
+        "address": {
+            "address1": "892 Willow Drive",
+            "address2": "Apt 7C",
+            "city": "Portland",
+            "state": "OR",
+            "zip": "97201",
+            "country": "USA"
+        },
+        "insurance": {
+            "primary": {
+                "provider": "Kaiser Permanente",
+                "policy_number": "KP223344556",
+                "group_number": "GRP515",
+                "copay_primary": 20.0,
+                "copay_specialist": 50.0
+            }
+        },
+        "medical_history": {
+            "conditions": [
+                "Type 2 Diabetes",
+                "Hypertension",
+                "Hyperlipidemia"
+            ],
+            "allergies": [
+                "Sulfa drugs"
+            ],
+            "medications": [
+                {
+                    "name": "Lisinopril",
+                    "dosage": "20mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Rosuvastatin",
+                    "dosage": "10mg",
+                    "frequency": "once daily"
+                },
+                {
+                    "name": "Metformin",
+                    "dosage": "1000mg",
+                    "frequency": "twice daily"
+                }
+            ]
+        },
+        "emergency_contact": {
+            "name": "David Wong",
+            "relationship": "Spouse",
+            "phone": "(555) 663-4413"
+        }
+    }
+}

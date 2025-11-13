@@ -1,0 +1,124 @@
+{
+  "Sertraline": {
+    "Warfarin": {
+      "severity": "high",
+      "risk_score": 9,
+      "time_overlap_hours": 36,
+      "action": "Hold the next warfarin dose, monitor INR, and seek urgent clinical guidance.",
+      "skip": ["Warfarin"],
+      "emergency": true
+    },
+    "Aspirin": {
+      "severity": "moderate",
+      "risk_score": 6,
+      "time_overlap_hours": 24,
+      "action": "Hold aspirin for 24 hours and observe for bleeding.",
+      "skip": ["Aspirin"],
+      "emergency": false
+    },
+    "Metoprolol": {
+      "severity": "low",
+      "risk_score": 3,
+      "time_overlap_hours": 12,
+      "action": "Monitor for bradycardia; no dose adjustment typically needed.",
+      "skip": [],
+      "emergency": false
+    },
+    "Simvastatin": {
+      "severity": "low",
+      "risk_score": 2,
+      "time_overlap_hours": 12,
+      "action": "Advise hydration and routine symptom watch.",
+      "skip": [],
+      "emergency": false
+    },
+    "Rosuvastatin": {
+      "severity": "moderate",
+      "risk_score": 5,
+      "time_overlap_hours": 20,
+      "action": "Consider lower starting dose of rosuvastatin and monitor for increased adverse effects.",
+      "skip": [],
+      "emergency": false
+    }
+  },
+  "Warfarin": {
+    "Aspirin": {
+      "severity": "moderate",
+      "risk_score": 7,
+      "time_overlap_hours": 30,
+      "action": "If combined with serotonergic agents, hold aspirin for one cycle and contact cardiology.",
+      "skip": ["Aspirin"],
+      "emergency": false
+    },
+    "Rosuvastatin": {
+      "severity": "moderate",
+      "risk_score": 6,
+      "time_overlap_hours": 24,
+      "action": "Increase INR monitoring frequency when initiating rosuvastatin; adjust warfarin dose if needed.",
+      "skip": [],
+      "emergency": false
+    }
+  },
+  "Xywav": {
+    "Bupropion": {
+      "severity": "high",
+      "risk_score": 8,
+      "time_overlap_hours": 36,
+      "action": "Potential CNS depression with Xywav plus bupropion; escalate to clinician before proceeding.",
+      "skip": ["Xywav"],
+      "emergency": true
+    },
+    "Zolpidem": {
+      "severity": "moderate",
+      "risk_score": 5,
+      "time_overlap_hours": 24,
+      "action": "Advise spacing doses and monitor for respiratory depression.",
+      "skip": ["Zolpidem"],
+      "emergency": false
+    }
+  },
+  "Bupropion": {
+    "Zolpidem": {
+      "severity": "low",
+      "risk_score": 2,
+      "time_overlap_hours": 8,
+      "action": "No significant interaction expected; observe for insomnia or agitation.",
+      "skip": [],
+      "emergency": false
+    }
+  },
+  "Propofol": {
+    "Atorvastatin": {
+      "severity": "low",
+      "risk_score": 2,
+      "time_overlap_hours": 6,
+      "action": "No clinically significant interaction. Continue statin therapy as prescribed.",
+      "skip": [],
+      "emergency": false
+    },
+    "Metoprolol": {
+      "severity": "moderate",
+      "risk_score": 5,
+      "time_overlap_hours": 12,
+      "action": "Monitor for hypotension and bradycardia during anesthesia. Anesthesiologist will adjust dosing.",
+      "skip": [],
+      "emergency": false
+    },
+    "Aspirin": {
+      "severity": "moderate",
+      "risk_score": 4,
+      "time_overlap_hours": 8,
+      "action": "Hold aspirin 5-7 days before surgery per surgical team recommendation to reduce bleeding risk.",
+      "skip": [],
+      "emergency": false
+    },
+    "Metformin": {
+      "severity": "low",
+      "risk_score": 3,
+      "time_overlap_hours": 8,
+      "action": "Hold metformin on day of surgery. Resume when eating normally post-operatively.",
+      "skip": [],
+      "emergency": false
+    }
+  }
+}

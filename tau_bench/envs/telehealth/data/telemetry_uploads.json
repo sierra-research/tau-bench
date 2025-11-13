@@ -1,0 +1,62 @@
+[
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-01",
+    "usage_hours": 7.4,
+    "synced_at": "2025-06-01T06:15:00Z",
+    "event": "normal",
+    "alerts": []
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-02",
+    "usage_hours": 6.8,
+    "synced_at": "2025-06-02T06:12:00Z",
+    "event": "normal",
+    "alerts": []
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-03",
+    "usage_hours": 5.9,
+    "synced_at": "2025-06-03T06:09:00Z",
+    "event": "normal",
+    "alerts": []
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-04",
+    "usage_hours": 0.0,
+    "synced_at": null,
+    "event": "upload_missing",
+    "alerts": [
+      "No data received",
+      "Usage below compliance threshold"
+    ]
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-05",
+    "usage_hours": 6.3,
+    "synced_at": "2025-06-05T06:20:00Z",
+    "event": "normal",
+    "alerts": []
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-06",
+    "usage_hours": 6.9,
+    "synced_at": "2025-06-06T06:18:00Z",
+    "event": "normal",
+    "alerts": []
+  },
+  {
+    "device_id": "VC-449",
+    "date": "2025-06-07",
+    "usage_hours": 7.1,
+    "synced_at": "2025-06-07T06:16:00Z",
+    "event": "normal",
+    "alerts": []
+  }
+]
+

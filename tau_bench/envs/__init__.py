@@ -1,6 +1,7 @@
 # Copyright Sierra
 
 from typing import Optional, Union
+
 from tau_bench.envs.base import Env
 from tau_bench.envs.user import UserStrategy
 
@@ -27,6 +28,26 @@ def get_env(
         from tau_bench.envs.airline import MockAirlineDomainEnv
 
         return MockAirlineDomainEnv(
+            user_strategy=user_strategy,
+            user_model=user_model,
+            task_split=task_split,
+            user_provider=user_provider,
+            task_index=task_index,
+        )
+    elif env_name == "telecom":
+        from tau_bench.envs.telecom import MockTelecomDomainEnv
+
+        return MockTelecomDomainEnv(
+            user_strategy=user_strategy,
+            user_model=user_model,
+            task_split=task_split,
+            user_provider=user_provider,
+            task_index=task_index,
+        )
+    elif env_name == "telehealth":
+        from tau_bench.envs.telehealth import MockTelehealthDomainEnv
+
+        return MockTelehealthDomainEnv(
             user_strategy=user_strategy,
             user_model=user_model,
             task_split=task_split,

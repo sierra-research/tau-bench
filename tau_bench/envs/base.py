@@ -2,20 +2,20 @@
 
 import random
 from hashlib import sha256
-from tau_bench.envs.tool import Tool
-from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
 
-from tau_bench.envs.user import load_user, UserStrategy
+from tau_bench.envs.tool import Tool
+from tau_bench.envs.user import UserStrategy, load_user
 from tau_bench.types import (
+    RESPOND_ACTION_NAME,
     Action,
-    Task,
     EnvInfo,
     EnvResetResponse,
     EnvResponse,
-    RewardResult,
-    RewardOutputInfo,
     RewardActionInfo,
-    RESPOND_ACTION_NAME,
+    RewardOutputInfo,
+    RewardResult,
+    Task,
 )
 
 ToHashable = Union[
@@ -66,7 +66,7 @@ class Env(object):
         if task_index is not None:
             self.task_index = task_index
         else:
-            self.task_index = random.randint(0, len(tasks))
+            self.task_index = random.randint(0, len(tasks)-1)
         self.task = tasks[self.task_index]
         self.wiki = wiki
         self.rules = rules
