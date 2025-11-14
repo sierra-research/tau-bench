@@ -19,6 +19,7 @@ class MockTelehealthDomainEnv(Env):
         task_index: Optional[int] = None,
         trait_dict: Optional[Dict[str, int]] = None,
         endpoint: Optional[str] = None,
+        user_model_base_url: Optional[str] = None,
     ):
         match task_split:
             case "test":
@@ -41,5 +42,6 @@ class MockTelehealthDomainEnv(Env):
             trait_dict=trait_dict,
             task_index=task_index,
             endpoint=endpoint,
+            user_model_base_url=user_model_base_url,
         )
         self.terminate_tools = ["transfer_to_human_support"]

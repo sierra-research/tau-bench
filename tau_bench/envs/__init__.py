@@ -13,6 +13,7 @@ def get_env(
     task_split: str,
     user_provider: Optional[str] = None,
     task_index: Optional[int] = None,
+    user_model_base_url: str=None,
 ) -> Env:
     if env_name == "retail":
         from tau_bench.envs.retail import MockRetailDomainEnv
@@ -20,6 +21,7 @@ def get_env(
         return MockRetailDomainEnv(
             user_strategy=user_strategy,
             user_model=user_model,
+            user_model_base_url=user_model_base_url,
             task_split=task_split,
             user_provider=user_provider,
             task_index=task_index,
@@ -30,6 +32,7 @@ def get_env(
         return MockAirlineDomainEnv(
             user_strategy=user_strategy,
             user_model=user_model,
+            user_model_base_url=user_model_base_url,
             task_split=task_split,
             user_provider=user_provider,
             task_index=task_index,
@@ -40,6 +43,7 @@ def get_env(
         return MockTelecomDomainEnv(
             user_strategy=user_strategy,
             user_model=user_model,
+            user_model_base_url=user_model_base_url,
             task_split=task_split,
             user_provider=user_provider,
             task_index=task_index,
@@ -50,6 +54,7 @@ def get_env(
         return MockTelehealthDomainEnv(
             user_strategy=user_strategy,
             user_model=user_model,
+            user_model_base_url=user_model_base_url,
             task_split=task_split,
             user_provider=user_provider,
             task_index=task_index,

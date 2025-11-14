@@ -26,6 +26,11 @@ def parse_args() -> RunConfig:
         help="The model provider for the agent",
     )
     parser.add_argument(
+        "--model-base-url",
+        type=str,
+        help="The base URL for the agent model provider",
+    )
+    parser.add_argument(
         "--user-model",
         type=str,
         default="gpt-4o",
@@ -36,6 +41,11 @@ def parse_args() -> RunConfig:
         type=str,
         choices=provider_list,
         help="The model provider for the user simulator",
+    )
+    parser.add_argument(
+        "--user-model-base-url",
+        type=str,
+        help="The base URL for the user model provider",
     )
     parser.add_argument(
         "--agent-strategy",
@@ -76,7 +86,9 @@ def parse_args() -> RunConfig:
         model_provider=args.model_provider,
         user_model_provider=args.user_model_provider,
         model=args.model,
+        model_base_url=args.model_base_url,
         user_model=args.user_model,
+        user_model_base_url=args.user_model_base_url,
         num_trials=args.num_trials,
         env=args.env,
         agent_strategy=args.agent_strategy,

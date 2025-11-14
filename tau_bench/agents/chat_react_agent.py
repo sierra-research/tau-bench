@@ -23,6 +23,8 @@ class ChatReActAgent(Agent):
         provider: str,
         use_reasoning: bool = True,
         temperature: float = 0.0,
+        base_url: str = None,
+
     ) -> None:
         instruction = REACT_INSTRUCTION if use_reasoning else ACT_INSTRUCTION
         self.prompt = (
@@ -30,6 +32,7 @@ class ChatReActAgent(Agent):
         )
         self.model = model
         self.provider = provider
+        self.base_url = base_url
         self.temperature = temperature
         self.use_reasoning = use_reasoning
         self.tools_info = tools_info
@@ -37,12 +40,21 @@ class ChatReActAgent(Agent):
     def generate_next_step(
         self, messages: List[Dict[str, Any]]
     ) -> Tuple[Dict[str, Any], Action, float]:
-        res = completion(
-            model=self.model,
-            custom_llm_provider=self.provider,
-            messages=messages,
-            temperature=self.temperature,
-        )
+        if self.provider == "hosted_vllm":
+            res = completion(
+                model=self.model,
+                custom_llm_provider=self.provider,
+                messages=messages,
+                temperature=self.temperature,
+                base_url=self.base_url,
+            )
+        else:    
+            res = completion(
+                model=self.model,
+                custom_llm_provider=self.provider,
+                messages=messages,
+                temperature=self.temperature,
+            )
         message = res.choices[0].message
         action_str = message.content.split("Action:")[-1].strip()
         try:

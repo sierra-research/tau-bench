@@ -17,11 +17,13 @@ class ToolCallingAgent(Agent):
         model: str,
         provider: str,
         temperature: float = 0.0,
+        base_url: str = None,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
         self.model = model
         self.provider = provider
+        self.base_url = base_url
         self.temperature = temperature
 
     def solve(
@@ -37,13 +39,23 @@ class ToolCallingAgent(Agent):
             {"role": "user", "content": obs},
         ]
         for _ in range(max_num_steps):
-            res = completion(
-                messages=messages,
-                model=self.model,
-                custom_llm_provider=self.provider,
-                tools=self.tools_info,
-                temperature=self.temperature,
-            )
+            if self.provider == "hosted_vllm":
+                res = completion(
+                    messages=messages,
+                    model=self.model,
+                    custom_llm_provider=self.provider,
+                    tools=self.tools_info,
+                    temperature=self.temperature,
+                    base_url=self.base_url,
+                )
+            else:
+                res = completion(
+                    messages=messages,
+                    model=self.model,
+                    custom_llm_provider=self.provider,
+                    tools=self.tools_info,
+                    temperature=self.temperature,
+                )
             next_message = res.choices[0].message.model_dump()
             total_cost += res._hidden_params["response_cost"] or 0
             action = message_to_action(next_message)

@@ -17,6 +17,7 @@ class MockTelecomDomainEnv(Env):
         user_provider: Optional[str] = None,
         task_split: str = "test",
         task_index: Optional[int] = None,
+        user_model_base_url: Optional[str] = None,
         # trait_dict: Optional[Dict[str, int]] = None,
         # endpoint: Optional[str] = None,
     ):
@@ -41,5 +42,6 @@ class MockTelecomDomainEnv(Env):
             # trait_dict=trait_dict,
             task_index=task_index,
             # endpoint=endpoint,
+            user_model_base_url=user_model_base_url,
         )
         self.terminate_tools = ["transfer_to_human_support"]

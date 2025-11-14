@@ -12,27 +12,27 @@ We propose $\tau$-bench, a benchmark emulating dynamic conversations between a u
 
 ### Airline
 
-| Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
-| -------------- | ------ | ------ | ------ | ------ |
-| [TC (claude-3-5-sonnet-20241022)](https://www.anthropic.com/news/3-5-models-and-computer-use)      | **0.460**     | **0.326**     | **0.263**     | **0.225**     |
-| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)     | 0.420     | 0.273     | 0.220     | 0.200     |
-| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)      | 0.360     | 0.224     | 0.169     | 0.139     |
-| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)     | ??     | ??     | ??     | ??     |
-| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)     | 0.225     | 0.140     | 0.110     | 0.100     |
-| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | 0.365 | 0.217 | 0.160 | 0.140     |
-| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | 0.325 | 0.233 | 0.185 | 0.160     |
+| Strategy                                                                                         | Pass^1    | Pass^2    | Pass^3    | Pass^4    |
+| ------------------------------------------------------------------------------------------------ | --------- | --------- | --------- | --------- |
+| [TC (claude-3-5-sonnet-20241022)](https://www.anthropic.com/news/3-5-models-and-computer-use)    | **0.460** | **0.326** | **0.263** | **0.225** |
+| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)                          | 0.420     | 0.273     | 0.220     | 0.200     |
+| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) | 0.360     | 0.224     | 0.169     | 0.139     |
+| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)                | ??        | ??        | ??        | ??        |
+| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)                     | 0.225     | 0.140     | 0.110     | 0.100     |
+| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)                                                 | 0.365     | 0.217     | 0.160     | 0.140     |
+| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)                                               | 0.325     | 0.233     | 0.185     | 0.160     |
 
 ### Retail
 
-| Strategy       | Pass^1 | Pass^2 | Pass^3 | Pass^4 |
-| -------------- | ------ | ------ | ------ | ------ |
-| [TC (claude-3-5-sonnet-20241022)](https://www.anthropic.com/news/3-5-models-and-computer-use)      | **0.692**     | **0.576**     | **0.509**     | **0.462**     |
-| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)     | 0.604     | 0.491     | 0.430     | 0.383     |
-| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use)      | 0.626     | 0.506     | 0.435     | 0.387     |
-| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)     | ??     | ??     | ??     | ??     |
-| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)     | ??     | ??     | ??     | ??     |
-| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
-| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)     | ??     | ??     | ??     | ??     |
+| Strategy                                                                                         | Pass^1    | Pass^2    | Pass^3    | Pass^4    |
+| ------------------------------------------------------------------------------------------------ | --------- | --------- | --------- | --------- |
+| [TC (claude-3-5-sonnet-20241022)](https://www.anthropic.com/news/3-5-models-and-computer-use)    | **0.692** | **0.576** | **0.509** | **0.462** |
+| [TC (gpt-4o)](https://platform.openai.com/docs/guides/function-calling)                          | 0.604     | 0.491     | 0.430     | 0.383     |
+| [TC (claude-3-5-sonnet-20240620)](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) | 0.626     | 0.506     | 0.435     | 0.387     |
+| [TC (mistral-large-2407)](https://docs.mistral.ai/capabilities/function_calling/)                | ??        | ??        | ??        | ??        |
+| [TC (gpt-4o-mini)](https://platform.openai.com/docs/guides/function-calling)                     | ??        | ??        | ??        | ??        |
+| [Act](https://arxiv.org/abs/2210.03629) (gpt-4o)                                                 | ??        | ??        | ??        | ??        |
+| [ReAct](https://arxiv.org/abs/2210.03629) (gpt-4o)                                               | ??        | ??        | ??        | ??        |
 
 *TC = `tool-calling` strategy (the function-calling strategy reported in the paper)
 
@@ -173,4 +173,9 @@ Please submit issues or pull requests if you find problems with the benchmark.
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2506.07982}, 
 }
+```
+
+```bash
+python run.py --agent-strategy tool-calling --env retail --model hosted_vllm/qwen3-4b --model-provider h
+osted_vllm --user-model hosted_vllm/qwen3-4b --user-model-provider hosted_vllm --user-strategy llm --max-concurrency 10 --task-ids 2 --model-base-url http://sg050:8000/v1 --user-mode-base-url http://sg050:8000/v1
 ```
