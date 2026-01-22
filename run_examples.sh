@@ -12,8 +12,8 @@
 #   pip install -e .
 #   pip install litellm python-dotenv
 
-# Set the path to your .env file (update this path as needed)
-ENV_FILE="/Users/hectorhernandez/Desktop/repo/MasterDegree/CSE598AI/QwenTest/.env"
+# Set the path to your .env file
+ENV_FILE=".env"
 
 echo "=== Tau-Bench Example Commands ==="
 echo "Note: Default user model is now OpenRouter's openai/gpt-oss-20b"
