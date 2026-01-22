@@ -179,3 +179,10 @@ DASHSCOPE_API_KEY=...
 ## Quick Start
 
 See **QUICKSTART.md** for step-by-step instructions to get running in 5 minutes.
+
+## Cost Estimates
+
+See **COST_ESTIMATES.md** for detailed pricing:
+- Run all 3 Qwen models on all 685 tasks for only **$3.78**
+- Detailed breakdowns by model, task count, and time estimates
+- Budget planning and optimization tips

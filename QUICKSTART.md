@@ -282,6 +282,7 @@ python run.py \
 ## Full Documentation
 
 For detailed examples and advanced configurations, see:
+- **COST_ESTIMATES.md** - Complete pricing breakdown (all 3 models on all 685 tasks = $3.78!)
 - **CLAUDE.md** - Architecture, design patterns, and extending the system
 - **run.py --help** - All available CLI arguments
 
