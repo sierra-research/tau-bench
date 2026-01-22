@@ -35,17 +35,21 @@ class HumanUserSimulationEnv(BaseUserSimulationEnv):
 
 
 class LLMUserSimulationEnv(BaseUserSimulationEnv):
-    def __init__(self, model: str, provider: str) -> None:
+    def __init__(self, model: str, provider: str, api_base: Optional[str] = None) -> None:
         super().__init__()
         self.messages: List[Dict[str, Any]] = []
         self.model = model
         self.provider = provider
+        self.api_base = api_base
         self.total_cost = 0.0
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         res = completion(
-            model=self.model, custom_llm_provider=self.provider, messages=messages
+            model=self.model,
+            custom_llm_provider=self.provider,
+            messages=messages,
+            api_base=self.api_base,
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())
@@ -86,8 +90,8 @@ Rules:
 
 
 class ReactUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str) -> None:
-        super().__init__(model=model, provider=provider)
+    def __init__(self, model: str, provider: str, api_base: Optional[str] = None) -> None:
+        super().__init__(model=model, provider=provider, api_base=api_base)
         self.reset()
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
@@ -116,7 +120,10 @@ User Response:
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         res = completion(
-            model=self.model, custom_llm_provider=self.provider, messages=messages
+            model=self.model,
+            custom_llm_provider=self.provider,
+            messages=messages,
+            api_base=self.api_base,
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())
@@ -154,10 +161,13 @@ User Response:
 
 
 class VerifyUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str, max_attempts: int = 3) -> None:
+    def __init__(self, model: str, provider: str, max_attempts: int = 3, api_base: Optional[str] = None) -> None:
         self.model = model
         self.provider = provider
+        self.api_base = api_base
         self.max_attempts = max_attempts
+        self.total_cost = 0.0
+        self.messages: List[Dict[str, Any]] = []
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
@@ -165,11 +175,14 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         cur_message = None
         while attempts < self.max_attempts:
             res = completion(
-                model=self.model, custom_llm_provider=self.provider, messages=messages
+                model=self.model,
+                custom_llm_provider=self.provider,
+                messages=messages,
+                api_base=self.api_base,
             )
             cur_message = res.choices[0].message
             self.total_cost = res._hidden_params["response_cost"]
-            if verify(self.model, self.provider, cur_message, messages):
+            if verify(self.model, self.provider, cur_message, messages, self.api_base):
                 self.messages.append(cur_message.model_dump())
                 return cur_message.content
             attempts += 1
@@ -204,7 +217,7 @@ def map_role_label(role: str) -> str:
 
 
 def verify(
-    model: str, provider: str, response: str, messages: List[Dict[str, Any]]
+    model: str, provider: str, response: str, messages: List[Dict[str, Any]], api_base: Optional[str] = None
 ) -> bool:
     transcript = "\n".join(
         [
@@ -228,12 +241,13 @@ Classification:"""
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
+        api_base=api_base,
     )
     return "true" in res.choices[0].message.content.lower()
 
 
 def reflect(
-    model: str, provider: str, response: str, messages: List[Dict[str, Any]]
+    model: str, provider: str, response: str, messages: List[Dict[str, Any]], api_base: Optional[str] = None
 ) -> str:
     transcript = "\n".join(
         [
@@ -262,31 +276,35 @@ Response:
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
+        api_base=api_base,
     )
     _, response = res.choices[0].message.content.split("Response:")
     return response.strip()
 
 
 class ReflectionUserSimulationEnv(LLMUserSimulationEnv):
-    def __init__(self, model: str, provider: str, max_attempts: int = 2) -> None:
+    def __init__(self, model: str, provider: str, max_attempts: int = 2, api_base: Optional[str] = None) -> None:
         self.model = model
         self.provider = provider
+        self.api_base = api_base
         self.max_attempts = max_attempts
+        self.total_cost = 0.0
+        self.messages: List[Dict[str, Any]] = []
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         cur_messages = messages.copy()
         initial_response = super().generate_next_message(cur_messages)
-        if verify(self.model, self.provider, initial_response, cur_messages):
+        if verify(self.model, self.provider, initial_response, cur_messages, self.api_base):
             return initial_response
         attempts = 1
         while attempts < self.max_attempts:
             new_message = reflect(
-                self.model, self.provider, initial_response, cur_messages
+                self.model, self.provider, initial_response, cur_messages, self.api_base
             )
             cur_messages.append({"role": "user", "content": new_message})
             new_response = super().generate_next_message(cur_messages)
-            if verify(self.model, self.provider, new_response, cur_messages):
+            if verify(self.model, self.provider, new_response, cur_messages, self.api_base):
                 return new_response
             attempts += 1
         return initial_response
@@ -321,6 +339,7 @@ def load_user(
     user_strategy: Union[str, UserStrategy],
     model: Optional[str] = "gpt-4o",
     provider: Optional[str] = None,
+    api_base: Optional[str] = None,
 ) -> BaseUserSimulationEnv:
     if isinstance(user_strategy, str):
         user_strategy = UserStrategy(user_strategy)
@@ -331,23 +350,23 @@ def load_user(
             raise ValueError("LLM user strategy requires a model")
         if provider is None:
             raise ValueError("LLM user strategy requires a model provider")
-        return LLMUserSimulationEnv(model=model, provider=provider)
+        return LLMUserSimulationEnv(model=model, provider=provider, api_base=api_base)
     elif user_strategy == UserStrategy.REACT:
         if model is None:
             raise ValueError("React user strategy requires a model")
         if provider is None:
             raise ValueError("React user strategy requires a model provider")
-        return ReactUserSimulationEnv(model=model, provider=provider)
+        return ReactUserSimulationEnv(model=model, provider=provider, api_base=api_base)
     elif user_strategy == UserStrategy.VERIFY:
         if model is None:
             raise ValueError("Verify user strategy requires a model")
         if provider is None:
             raise ValueError("Verify user strategy requires a model provider")
-        return VerifyUserSimulationEnv(model=model, provider=provider)
+        return VerifyUserSimulationEnv(model=model, provider=provider, api_base=api_base)
     elif user_strategy == UserStrategy.REFLECTION:
         if model is None:
             raise ValueError("Reflection user strategy requires a model")
         if provider is None:
             raise ValueError("Reflection user strategy requires a model provider")
-        return ReflectionUserSimulationEnv(model=model, provider=provider)
+        return ReflectionUserSimulationEnv(model=model, provider=provider, api_base=api_base)
     raise ValueError(f"Unknown user strategy {user_strategy}")

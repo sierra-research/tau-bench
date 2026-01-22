@@ -6,7 +6,7 @@ import random
 import traceback
 from math import comb
 import multiprocessing
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
@@ -15,19 +15,42 @@ from tau_bench.agents.base import Agent
 from tau_bench.types import EnvRunResult, RunConfig
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
+from tau_bench.model_utils.provider_setup import load_env_file, setup_provider
+
+# Extended provider list to include custom providers
+EXTENDED_PROVIDERS = list(provider_list) + ["openrouter", "dashscope", "local"]
 
 
 def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
-    assert config.model_provider in provider_list, "Invalid model provider"
-    assert config.user_model_provider in provider_list, "Invalid user model provider"
+    assert config.model_provider in EXTENDED_PROVIDERS, f"Invalid model provider: {config.model_provider}. Valid providers: {EXTENDED_PROVIDERS}"
+    assert config.user_model_provider in EXTENDED_PROVIDERS, f"Invalid user model provider: {config.user_model_provider}"
     assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
     assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
 
+    # Load environment variables from .env file if specified
+    if config.env_file:
+        load_env_file(config.env_file)
+
+    # Setup model provider (handles prefix formatting for openrouter, dashscope, local)
+    model, model_provider, model_api_base = setup_provider(
+        config.model, config.model_provider, config.model_base_url
+    )
+    
+    # Setup user model provider
+    user_model, user_provider, user_api_base = setup_provider(
+        config.user_model, config.user_model_provider, config.user_model_base_url
+    )
+    
+    print(f"Model: {model} (provider: {model_provider}, api_base: {model_api_base})")
+    print(f"User Model: {user_model} (provider: {user_provider}, api_base: {user_api_base})")
+
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
-    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.split('/')[-1]}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
+    # Sanitize model name for checkpoint filename (remove slashes)
+    model_name_safe = model.replace('/', '_')
+    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{model_name_safe}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
     if not os.path.exists(config.log_dir):
         os.makedirs(config.log_dir)
 
@@ -35,14 +58,20 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     env = get_env(
         config.env,
         user_strategy=config.user_strategy,
-        user_model=config.user_model,
-        user_provider=config.user_model_provider,
+        user_model=user_model,
+        user_provider=user_provider,
         task_split=config.task_split,
+        user_api_base=user_api_base,
     )
     agent = agent_factory(
         tools_info=env.tools_info,
         wiki=env.wiki,
-        config=config,
+        model=model,
+        provider=model_provider,
+        temperature=config.temperature,
+        api_base=model_api_base,
+        agent_strategy=config.agent_strategy,
+        few_shot_displays_path=config.few_shot_displays_path,
     )
     end_index = (
         len(env.tasks) if config.end_index == -1 else min(config.end_index, len(env.tasks))
@@ -67,9 +96,10 @@ def run(config: RunConfig) -> List[EnvRunResult]:
             isolated_env = get_env(
                 config.env,
                 user_strategy=config.user_strategy,
-                user_model=config.user_model,
+                user_model=user_model,
                 task_split=config.task_split,
-                user_provider=config.user_model_provider,
+                user_provider=user_provider,
+                user_api_base=user_api_base,
                 task_index=idx,
             )
 
@@ -122,59 +152,70 @@ def run(config: RunConfig) -> List[EnvRunResult]:
 
 
 def agent_factory(
-    tools_info: List[Dict[str, Any]], wiki, config: RunConfig
+    tools_info: List[Dict[str, Any]],
+    wiki: str,
+    model: str,
+    provider: str,
+    temperature: float,
+    api_base: Optional[str] = None,
+    agent_strategy: str = "tool-calling",
+    few_shot_displays_path: Optional[str] = None,
 ) -> Agent:
-    if config.agent_strategy == "tool-calling":
+    if agent_strategy == "tool-calling":
         # native tool calling
         from tau_bench.agents.tool_calling_agent import ToolCallingAgent
 
         return ToolCallingAgent(
             tools_info=tools_info,
             wiki=wiki,
-            model=config.model,
-            provider=config.model_provider,
-            temperature=config.temperature,
+            model=model,
+            provider=provider,
+            temperature=temperature,
+            api_base=api_base,
         )
-    elif config.agent_strategy == "act":
+    elif agent_strategy == "act":
         # `act` from https://arxiv.org/abs/2210.03629
         from tau_bench.agents.chat_react_agent import ChatReActAgent
 
         return ChatReActAgent(
             tools_info=tools_info,
             wiki=wiki,
-            model=config.model,
-            provider=config.model_provider,
+            model=model,
+            provider=provider,
             use_reasoning=False,
-            temperature=config.temperature,
+            temperature=temperature,
+            api_base=api_base,
         )
-    elif config.agent_strategy == "react":
+    elif agent_strategy == "react":
         # `react` from https://arxiv.org/abs/2210.03629
         from tau_bench.agents.chat_react_agent import ChatReActAgent
 
         return ChatReActAgent(
             tools_info=tools_info,
             wiki=wiki,
-            model=config.model,
-            provider=config.model_provider,
+            model=model,
+            provider=provider,
             use_reasoning=True,
-            temperature=config.temperature,
+            temperature=temperature,
+            api_base=api_base,
         )
-    elif config.agent_strategy == "few-shot":
+    elif agent_strategy == "few-shot":
         from tau_bench.agents.few_shot_agent import FewShotToolCallingAgent
-        assert config.few_shot_displays_path is not None, "Few shot displays path is required for few-shot agent strategy"
-        with open(config.few_shot_displays_path, "r") as f:
+        assert few_shot_displays_path is not None, "Few shot displays path is required for few-shot agent strategy"
+        with open(few_shot_displays_path, "r") as f:
             few_shot_displays = [json.loads(line)["messages_display"] for line in f]
 
         return FewShotToolCallingAgent(
             tools_info=tools_info,
             wiki=wiki,
-            model=config.model,
-            provider=config.model_provider,
+            model=model,
+            provider=provider,
             few_shot_displays=few_shot_displays,
-            temperature=config.temperature,
+            temperature=temperature,
+            api_base=api_base,
         )
     else:
-        raise ValueError(f"Unknown agent strategy: {config.agent_strategy}")
+        raise ValueError(f"Unknown agent strategy: {agent_strategy}")
 
 
 def display_metrics(results: List[EnvRunResult]) -> None:

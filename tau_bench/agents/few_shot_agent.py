@@ -20,6 +20,7 @@ class FewShotToolCallingAgent(Agent):
         few_shot_displays: List[str],
         temperature: float = 0.0,
         num_few_shots: int = 5,
+        api_base: Optional[str] = None,
     ):
         self.tools_info = tools_info
         self.wiki = wiki
@@ -32,6 +33,7 @@ class FewShotToolCallingAgent(Agent):
         self.few_shot_displays = few_shot_displays
         self.temperature = temperature
         self.num_few_shots = num_few_shots
+        self.api_base = api_base
     def solve(
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
@@ -53,6 +55,7 @@ class FewShotToolCallingAgent(Agent):
                 custom_llm_provider=self.provider,
                 tools=self.tools_info,
                 temperature=self.temperature,
+                api_base=self.api_base,
             )
             next_message = res.choices[0].message.model_dump()
             total_cost += res._hidden_params["response_cost"]

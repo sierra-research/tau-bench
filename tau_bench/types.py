@@ -74,6 +74,9 @@ class RunConfig(BaseModel):
     user_model_provider: str
     model: str
     user_model: str = "gpt-4o"
+    model_base_url: Optional[str] = None  # For local/custom model endpoints
+    user_model_base_url: Optional[str] = None  # For local/custom user model endpoints
+    env_file: Optional[str] = None  # Path to .env file with API keys
     num_trials: int = 1
     env: str = "retail"
     agent_strategy: str = "tool-calling"

@@ -6,6 +6,9 @@ from tau_bench.run import run
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
 
+# Extended provider list to include custom providers
+EXTENDED_PROVIDERS = list(provider_list) + ["openrouter", "dashscope", "local"]
+
 
 def parse_args() -> RunConfig:
     parser = argparse.ArgumentParser()
@@ -21,20 +24,21 @@ def parse_args() -> RunConfig:
     parser.add_argument(
         "--model-provider",
         type=str,
-        choices=provider_list,
-        help="The model provider for the agent",
+        choices=EXTENDED_PROVIDERS,
+        help="The model provider for the agent (e.g., openai, anthropic, openrouter, dashscope, local)",
     )
     parser.add_argument(
         "--user-model",
         type=str,
-        default="gpt-4o",
-        help="The model to use for the user simulator",
+        default="openrouter/openai/gpt-oss-20b",
+        help="The model to use for the user simulator (default: OpenRouter gpt-oss-20b)",
     )
     parser.add_argument(
         "--user-model-provider",
         type=str,
-        choices=provider_list,
-        help="The model provider for the user simulator",
+        default="openrouter",
+        choices=EXTENDED_PROVIDERS,
+        help="The model provider for the user simulator (default: openrouter)",
     )
     parser.add_argument(
         "--agent-strategy",
@@ -69,6 +73,21 @@ def parse_args() -> RunConfig:
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
+    parser.add_argument(
+        "--model-base-url",
+        type=str,
+        help="Base URL for local/custom model API (e.g., http://localhost:8000/v1)",
+    )
+    parser.add_argument(
+        "--user-model-base-url",
+        type=str,
+        help="Base URL for local/custom user model API",
+    )
+    parser.add_argument(
+        "--env-file",
+        type=str,
+        help="Path to .env file with API keys (e.g., OPENROUTER_API_KEY, DASHSCOPE_API_KEY)",
+    )
     args = parser.parse_args()
     print(args)
     return RunConfig(
@@ -76,6 +95,9 @@ def parse_args() -> RunConfig:
         user_model_provider=args.user_model_provider,
         model=args.model,
         user_model=args.user_model,
+        model_base_url=args.model_base_url,
+        user_model_base_url=args.user_model_base_url,
+        env_file=args.env_file,
         num_trials=args.num_trials,
         env=args.env,
         agent_strategy=args.agent_strategy,
