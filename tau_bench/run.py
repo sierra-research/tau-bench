@@ -48,9 +48,10 @@ def run(config: RunConfig) -> List[EnvRunResult]:
 
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
-    # Sanitize model name for checkpoint filename (remove slashes)
+    # Sanitize model names for checkpoint filename (remove slashes)
     model_name_safe = model.replace('/', '_')
-    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{model_name_safe}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
+    user_model_safe = user_model.replace('/', '_')
+    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{model_name_safe}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{user_model_safe}-{config.user_strategy}_{time_str}.json"
     if not os.path.exists(config.log_dir):
         os.makedirs(config.log_dir)
 
