@@ -1,7 +1,22 @@
 #Run result artifacts
+results/
 results/**
+
+# Logs
+logs/
+habana_logs/
+
+# Scratch / local scripts
+run_*.sh
+cleaned.sh
+commands_ref.txt
+mamba.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+# Slurm
+*.out
+*.err

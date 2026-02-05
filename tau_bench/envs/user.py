@@ -1,5 +1,5 @@
 # Copyright Sierra
-
+import os
 import abc
 import enum
 from litellm import completion
@@ -44,8 +44,13 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
+        api_base = os.getenv('USER_MODEL_API_BASE', None)
         res = completion(
-            model=self.model, custom_llm_provider=self.provider, messages=messages
+            model=self.model, 
+            custom_llm_provider=self.provider, 
+            messages=messages,
+            api_base=api_base,
+            timeout=3600
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())
@@ -115,18 +120,22 @@ User Response:
 <the user response (this will be parsed and sent to the agent)>"""
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
-    api_base = os.getenv('USER_MODEL_API_BASE', None)
-    res = completion(
-        model=self.model, 
-        custom_llm_provider=self.provider, 
-        messages=messages,
-        api_base=api_base
-    )
+        api_base = os.getenv('USER_MODEL_API_BASE', None)
+        res = completion(
+            model=self.model, 
+            custom_llm_provider=self.provider, 
+            messages=messages,
+            api_base=api_base,
+            timeout=3600
+        )
 
         message = res.choices[0].message
         self.messages.append(message.model_dump())
-        self.total_cost = res._hidden_params.get("response_cost", 0.0) 
-        if hasattr(res, "_hidden_params") else 0.0
+         
+        if hasattr(res, "_hidden_params"):
+            self.total_cost = res._hidden_params.get("response_cost", 0.0)
+        else:
+            self.total_cost = 0.0
         return self.parse_response(message.content)
 
     def reset(self, instruction: Optional[str] = None) -> str:
@@ -170,9 +179,15 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         attempts = 0
         cur_message = None
         while attempts < self.max_attempts:
+            api_base = os.getenv('USER_MODEL_API_BASE', None)
             res = completion(
-                model=self.model, custom_llm_provider=self.provider, messages=messages
+                model=self.model, 
+                custom_llm_provider=self.provider, 
+                messages=messages,
+                api_base=api_base,
+                timeout=3600
             )
+
             cur_message = res.choices[0].message
             self.total_cost = res._hidden_params["response_cost"]
             if verify(self.model, self.provider, cur_message, messages):
@@ -230,10 +245,13 @@ Your answer will be parsed, so do not include any other text than the classifica
 -----
 
 Classification:"""
+    api_base = os.getenv('USER_MODEL_API_BASE', None)
     res = completion(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
+        api_base=api_base,
+        timeout=3600
     )
     return "true" in res.choices[0].message.content.lower()
 
@@ -264,10 +282,13 @@ Reflection:
 
 Response:
 <the response (this will be parsed and sent to the agent)>"""
+    api_base = os.getenv('USER_MODEL_API_BASE', None)
     res = completion(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
+        api_base=api_base,
+        timeout=3600
     )
     _, response = res.choices[0].message.content.split("Response:")
     return response.strip()
