@@ -33,7 +33,7 @@ class FewShotToolCallingAgent(Agent):
         self.temperature = temperature
         self.num_few_shots = num_few_shots
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30, **kwargs
     ) -> SolveResult:
         sampled_few_shot_displays = random.sample(self.few_shot_displays, self.num_few_shots)
         few_shots = "\n\n".join([f"Example {i+1}:\n{display}" for i, display in enumerate(sampled_few_shot_displays)])

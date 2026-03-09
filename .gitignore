@@ -5,17 +5,43 @@ results/**
 # Logs
 logs/
 habana_logs/
+system_logs/
+jobs/
+graphs/
+graphs/**
 
 # Scratch / local scripts
 run_*.sh
 cleaned.sh
 commands_ref.txt
 mamba.txt
+run_batch_original.sh
+run_tb_gaudi.sh
+run_tb_phase3.sh
+run_native_vllm_taubench_OLD.sbatch
+run_native_vllm_taubench.sbatch
+Tutorials/
+Tutorials/**
+commands_ref.txt
+commands_batch.txt
+SETUP_SOL.md
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+.DS_Store
+__pycache__/
+*.pyc
+.env
+env/
+venv/
+*.log
+*.jsonl
+*.tmp
+.cursor/
 
 # Slurm
 *.out

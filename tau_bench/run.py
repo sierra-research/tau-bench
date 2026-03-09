@@ -13,6 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tau_bench.envs import get_env
 from tau_bench.agents.base import Agent
 from tau_bench.types import EnvRunResult, RunConfig
+from tau_bench.orchestration.logging import create_run_logger, job_id_new, run_id_from
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
 
@@ -21,15 +22,26 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
     assert config.model_provider in provider_list, "Invalid model provider"
     assert config.user_model_provider in provider_list, "Invalid user model provider"
-    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
+    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot", "orchestrated-tool-calling"], "Invalid agent strategy"
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
     assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
 
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
-    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.replace('/', '_')}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.replace('/', '_')}-{config.user_strategy}_{time_str}.json"
-    if not os.path.exists(config.log_dir):
-        os.makedirs(config.log_dir)
+    phase3_job_id = (os.environ.get("SLURM_JOB_ID") or job_id_new()) if config.agent_strategy == "orchestrated-tool-calling" else None
+
+    # Checkpoint path: for Phase 3 use jobs/{job_id}/trajectories/{name}_{job_id}.json; else {log_dir}/{name}_{time_str}.json
+    if phase3_job_id is not None:
+        ckpt_dir = os.path.join(config.log_dir, phase3_job_id, "trajectories")
+        os.makedirs(ckpt_dir, exist_ok=True)
+        ckpt_path = os.path.join(
+            ckpt_dir,
+            f"{config.agent_strategy}-{config.model.replace('/', '_')}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.replace('/', '_')}-{config.user_strategy}_{phase3_job_id}.json",
+        )
+    else:
+        ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.replace('/', '_')}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.replace('/', '_')}-{config.user_strategy}_{time_str}.json"
+        if not os.path.exists(config.log_dir):
+            os.makedirs(config.log_dir)
 
     print(f"Loading user with strategy: {config.user_strategy}")
     env = get_env(
@@ -74,10 +86,31 @@ def run(config: RunConfig) -> List[EnvRunResult]:
             )
 
             print(f"Running task {idx}")
+            run_logger = None
+            if config.agent_strategy == "orchestrated-tool-calling" and phase3_job_id is not None:
+                run_id = run_id_from(config.env, idx, i)
+                metadata = {
+                    "job_id": phase3_job_id,
+                    "run_id": run_id,
+                    "domain": config.env,
+                    "task_id": idx,
+                    "trial": i,
+                    "agent": config.agent_strategy,
+                    "model": config.model,
+                    "seed": config.seed,
+                }
+                run_logger = create_run_logger(
+                    config.log_dir,
+                    phase3_job_id,
+                    run_id,
+                    metadata,
+                    enabled=getattr(config, "enable_logging", True),
+                )
             try:
                 res = agent.solve(
                     env=isolated_env,
                     task_index=idx,
+                    run_logger=run_logger,
                 )
                 result = EnvRunResult(
                     task_id=idx,
@@ -87,6 +120,15 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     trial=i,
                 )
             except Exception as e:
+                if run_logger is not None and hasattr(run_logger, "finish_run"):
+                    run_logger.finish_run(
+                        exit_reason="error",
+                        steps=0,
+                        total_cost=0.0,
+                        reward=0.0,
+                        done=False,
+                        counters={"error": 1},
+                    )
                 result = EnvRunResult(
                     task_id=idx,
                     reward=0.0,
@@ -171,6 +213,15 @@ def agent_factory(
             model=config.model,
             provider=config.model_provider,
             few_shot_displays=few_shot_displays,
+            temperature=config.temperature,
+        )
+    elif config.agent_strategy == "orchestrated-tool-calling":
+        from tau_bench.agents.orchestrated_tool_calling_agent import OrchestratedToolCallingAgent
+        return OrchestratedToolCallingAgent(
+            tools_info=tools_info,
+            wiki=wiki,
+            model=config.model,
+            provider=config.model_provider,
             temperature=config.temperature,
         )
     else:

@@ -59,7 +59,7 @@ class ChatReActAgent(Agent):
         return message.model_dump(), action, res._hidden_params["response_cost"]
 
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30, **kwargs
     ) -> SolveResult:
         response = env.reset(task_index=task_index)
         reward = 0.0
