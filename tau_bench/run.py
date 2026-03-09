@@ -107,11 +107,12 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     enabled=getattr(config, "enable_logging", True),
                 )
             try:
-                res = agent.solve(
-                    env=isolated_env,
-                    task_index=idx,
-                    run_logger=run_logger,
-                )
+                solve_kwargs: Dict[str, Any] = {"env": isolated_env, "task_index": idx}
+                if run_logger is not None:
+                    solve_kwargs["run_logger"] = run_logger
+                if config.agent_strategy == "orchestrated-tool-calling":
+                    solve_kwargs["domain"] = config.env
+                res = agent.solve(**solve_kwargs)
                 result = EnvRunResult(
                     task_id=idx,
                     reward=res.reward,

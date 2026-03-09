@@ -5,7 +5,9 @@
 from typing import Any, Dict, List, Optional
 
 from tau_bench.envs.base import Env
+from tau_bench.orchestration.grounding import apply_grounding, build_grounded_facts_summary
 from tau_bench.orchestration.logging import observation_summary
+from tau_bench.orchestration.task_state import TaskState, create_initial_task_state
 from tau_bench.orchestration.validator import ValidatorResult, validate_action
 from tau_bench.types import Action, SolveResult, RESPOND_ACTION_NAME
 
@@ -19,8 +21,10 @@ def run_orchestrated_loop(
     run_logger: RunLogger,
     task_index: Optional[int],
     max_num_steps: int,
+    domain: Optional[str] = None,
 ) -> SolveResult:
-    """Run one task: reset → start log → loop (propose → validate → execute → state update) → finish_run."""
+    """Run one task: reset → start log → loop (propose → validate → execute → state update) → finish_run.
+    TaskState is created at entry and updated each step for policy guard, planner, recovery, etc."""
     total_cost = 0.0
     steps = 0
     reward = 0.0
@@ -35,6 +39,11 @@ def run_orchestrated_loop(
             {"role": "system", "content": env.wiki},
             {"role": "user", "content": obs},
         ]
+        task_state: TaskState = create_initial_task_state(
+            domain=domain or "airline",
+            task=env.task,
+            initial_observation=obs,
+        )
         run_logger.log_run_start()
         first_event = {
             "step_index": 0,
@@ -59,6 +68,12 @@ def run_orchestrated_loop(
                 "total_cost": total_cost,
                 "done": done,
             })
+            # Inject grounded facts summary so LLM can reason with "what we know" (no tool names in prompt)
+            summary = build_grounded_facts_summary(task_state)
+            for i in range(len(messages) - 1, -1, -1):
+                if "content" in messages[i] and isinstance(messages[i].get("content"), str):
+                    messages[i]["content"] = f"[{summary}]\n\n{messages[i]['content']}"
+                    break
             next_message, action, cost = proposer.generate_next_step(messages)
             total_cost += cost
             # Proposer stage (log + trace)
@@ -130,6 +145,17 @@ def run_orchestrated_loop(
                 "observation_summary": obs_summary,
             }
             run_logger.write_trace_event(trace_evt)
+
+            task_state.update_after_step(action.name, env_response.observation)
+            # Grounding only for env tool steps, not for terminal respond actions.
+            if action.name != RESPOND_ACTION_NAME:
+                apply_grounding(
+                    env,
+                    task_state.domain,
+                    action,
+                    env_response.observation,
+                    task_state,
+                )
 
             last_action = action.name
             last_observation_summary = obs_summary

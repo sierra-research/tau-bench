@@ -14,7 +14,15 @@ from tau_bench.orchestration.logging_schemas import (
     SummaryPayload,
     TraceEvent,
 )
+from tau_bench.orchestration.task_state import (
+    ChecklistState,
+    IdentityState,
+    IntentState,
+    TaskState,
+    create_initial_task_state,
+)
 from tau_bench.orchestration.validator import ValidatorResult, validate_action
+from tau_bench.orchestration.grounding import apply_grounding, build_grounded_facts_summary
 
 __all__ = [
     "create_run_logger",
@@ -26,6 +34,13 @@ __all__ = [
     "StagePayload",
     "SummaryPayload",
     "TraceEvent",
+    "ChecklistState",
+    "IdentityState",
+    "IntentState",
+    "TaskState",
+    "create_initial_task_state",
     "ValidatorResult",
     "validate_action",
+    "apply_grounding",
+    "build_grounded_facts_summary",
 ]

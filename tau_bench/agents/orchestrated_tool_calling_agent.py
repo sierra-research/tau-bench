@@ -41,10 +41,12 @@ class OrchestratedToolCallingAgent(Agent):
         run_logger = kwargs.get("run_logger")
         if run_logger is None:
             run_logger = NoOpRunLogger()
+        domain = kwargs.get("domain")
         return run_orchestrated_loop(
             env=env,
             proposer=self._agent,
             run_logger=run_logger,
             task_index=task_index,
             max_num_steps=max_num_steps,
+            domain=domain,
         )
