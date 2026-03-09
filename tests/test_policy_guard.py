@@ -1,0 +1,215 @@
+# Copyright Sierra
+# Unit tests for Policy Guard v1 (orchestration).
+
+import pytest
+from tau_bench.types import Action, RESPOND_ACTION_NAME, Task
+from tau_bench.orchestration.policy_guard import (
+    check_policy,
+    PolicyGuardResult,
+    CODE_ALLOWED,
+    CODE_MISSING_USER_ID,
+    CODE_NOT_AUTHENTICATED,
+    CODE_MISSING_PROFILE_GROUNDING,
+    CODE_MISSING_CONFIRMATION,
+)
+from tau_bench.orchestration.task_state import create_initial_task_state
+
+
+class _MockEnv:
+    """Minimal env for policy guard tests; guard only uses task_state, env is for API consistency."""
+    def __init__(self):
+        self.tools_map = {"book_reservation": None, "cancel_pending_order": None}
+        self.tools_info = []
+
+
+def _airline_state(**overrides):
+    task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    state = create_initial_task_state(domain="airline", task=task)
+    for k, v in overrides.items():
+        if k == "user_id":
+            state.identity.user_id = v
+        elif k == "profile_grounded":
+            state.identity.profile_grounded = v
+        elif k == "confirmations":
+            state.confirmations = set(v) if isinstance(v, list) else v
+    return state
+
+
+def _retail_state(**overrides):
+    task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    state = create_initial_task_state(domain="retail", task=task)
+    for k, v in overrides.items():
+        if k == "authenticated":
+            state.identity.authenticated = v
+        elif k == "user_id":
+            state.identity.user_id = v
+    return state
+
+
+def test_airline_booking_blocked_when_user_id_missing():
+    """Airline book_reservation is blocked when identity.user_id is not set."""
+    env = _MockEnv()
+    state = _airline_state(user_id=None)
+    action = Action(name="book_reservation", kwargs={"user_id": "sara_doe_496"})  # kwargs valid for validator
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_USER_ID
+    assert "user_id" in r.message.lower() or "established" in r.message.lower()
+    assert "user_id" in r.missing_prerequisites
+
+
+def test_airline_booking_blocked_when_confirmation_missing():
+    """Airline book_reservation is blocked when booking_confirmed is not in confirmations."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496", profile_grounded=True, confirmations=[])
+    action = Action(name="book_reservation", kwargs={"user_id": "sara_doe_496"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_CONFIRMATION
+    assert "confirmation" in r.message.lower()
+    assert "booking_confirmed" in r.missing_prerequisites
+
+
+def test_airline_booking_blocked_when_profile_not_grounded():
+    """Airline book_reservation is blocked when profile_grounded is False."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496", profile_grounded=False)
+    state.add_confirmation("booking_confirmed")
+    action = Action(name="book_reservation", kwargs={"user_id": "sara_doe_496"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_PROFILE_GROUNDING
+
+
+def test_retail_mutating_action_blocked_when_not_authenticated():
+    """Retail cancel_pending_order is blocked when identity.authenticated is False."""
+    env = _MockEnv()
+    state = _retail_state(authenticated=False)
+    action = Action(name="cancel_pending_order", kwargs={"order_id": "#W123", "reason": "no longer needed"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_NOT_AUTHENTICATED
+    assert "authenticated" in r.message.lower() or "authenticate" in r.message.lower()
+    assert "authenticated" in r.missing_prerequisites
+
+
+def test_airline_booking_allowed_when_prerequisites_satisfied():
+    """Airline book_reservation is allowed when user_id, profile_grounded, and booking_confirmed are set."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496", profile_grounded=True, confirmations=["booking_confirmed"])
+    action = Action(name="book_reservation", kwargs={"user_id": "sara_doe_496"})
+    r = check_policy(env, action, state)
+    assert r.allowed is True
+    assert r.code == CODE_ALLOWED
+    assert r.missing_prerequisites == []
+
+
+def test_retail_mutating_action_allowed_when_authenticated():
+    """Retail cancel_pending_order is allowed when identity.authenticated is True."""
+    env = _MockEnv()
+    state = _retail_state(authenticated=True, user_id="mei_kovacs_8020")
+    action = Action(name="cancel_pending_order", kwargs={"order_id": "#W123", "reason": "no longer needed"})
+    r = check_policy(env, action, state)
+    assert r.allowed is True
+    assert r.code == CODE_ALLOWED
+
+
+def test_respond_always_allowed():
+    """Respond action is always allowed by policy guard."""
+    env = _MockEnv()
+    state = _airline_state()
+    action = Action(name=RESPOND_ACTION_NAME, kwargs={"content": "Here is the answer."})
+    r = check_policy(env, action, state)
+    assert r.allowed is True
+    assert r.code == CODE_ALLOWED
+
+
+def test_airline_readonly_tool_allowed_without_user_id():
+    """Airline read-only tools (e.g. get_user_details) are allowed without user_id in state."""
+    env = _MockEnv()
+    env.tools_map["get_user_details"] = None
+    state = _airline_state(user_id=None)
+    action = Action(name="get_user_details", kwargs={"user_id": "sara_doe_496"})
+    r = check_policy(env, action, state)
+    assert r.allowed is True
+
+
+def test_policy_guard_result_to_dict():
+    """PolicyGuardResult.to_dict returns expected keys."""
+    r = PolicyGuardResult(
+        allowed=False,
+        code=CODE_MISSING_USER_ID,
+        message="user_id required",
+        missing_prerequisites=["user_id"],
+    )
+    d = r.to_dict()
+    assert d["allowed"] is False
+    assert d["code"] == CODE_MISSING_USER_ID
+    assert "user_id" in d["message"]
+    assert d["missing_prerequisites"] == ["user_id"]
+
+
+def test_run_loop_policy_guard_blocks_before_executor():
+    """When policy guard blocks, executor (env.step) is not called and task_state.last_error is set."""
+    from unittest.mock import MagicMock, patch
+    from tau_bench.orchestration.run_loop import run_orchestrated_loop
+    from tau_bench.orchestration.task_state import create_initial_task_state
+
+    created_states = []
+
+    def capture_create(domain, task, initial_observation=None):
+        state = create_initial_task_state(domain=domain, task=task, initial_observation=initial_observation)
+        created_states.append(state)
+        return state
+
+    mock_env = MagicMock()
+    mock_env.wiki = "# Policy"
+    mock_env.task = Task(user_id="u1", actions=[], instruction="Book flight", outputs=[])
+    mock_env.tools_map = {"book_reservation": None}
+    mock_env.tools_info = [
+        {
+            "type": "function",
+            "function": {
+                "name": "book_reservation",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"user_id": {"type": "string"}},
+                    "required": ["user_id"],
+                },
+            },
+        },
+    ]
+    mock_env.reset.return_value = MagicMock(observation="I want to book a flight", info=MagicMock(model_dump=lambda: {}))
+
+    class ProposeBookReservationProposer:
+        """Proposes book_reservation (passes validator) but state has no user_id -> policy guard blocks."""
+        def generate_next_step(self, messages):
+            return (
+                {
+                    "role": "assistant",
+                    "tool_calls": [
+                        {"id": "tc_1", "function": {"name": "book_reservation", "arguments": "{\"user_id\":\"sara_doe_496\"}"}},
+                    ],
+                },
+                Action(name="book_reservation", kwargs={"user_id": "sara_doe_496"}),
+                0.0,
+            )
+
+    mock_logger = MagicMock()
+
+    with patch("tau_bench.orchestration.run_loop.create_initial_task_state", side_effect=capture_create):
+        run_orchestrated_loop(
+            env=mock_env,
+            proposer=ProposeBookReservationProposer(),
+            run_logger=mock_logger,
+            task_index=0,
+            max_num_steps=2,
+            domain="airline",
+        )
+
+    assert len(created_states) == 1
+    task_state = created_states[0]
+    assert task_state.last_error is not None
+    assert "Policy blocked" in task_state.last_error
+    assert "missing_user_id" in task_state.last_error
+    mock_env.step.assert_not_called()

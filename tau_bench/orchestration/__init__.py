@@ -22,6 +22,7 @@ from tau_bench.orchestration.task_state import (
     create_initial_task_state,
 )
 from tau_bench.orchestration.validator import ValidatorResult, validate_action
+from tau_bench.orchestration.policy_guard import PolicyGuardResult, check_policy
 from tau_bench.orchestration.grounding import apply_grounding, build_grounded_facts_summary
 
 __all__ = [
@@ -41,6 +42,8 @@ __all__ = [
     "create_initial_task_state",
     "ValidatorResult",
     "validate_action",
+    "PolicyGuardResult",
+    "check_policy",
     "apply_grounding",
     "build_grounded_facts_summary",
 ]

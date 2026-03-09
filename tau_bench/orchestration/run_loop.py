@@ -9,6 +9,7 @@ from tau_bench.orchestration.grounding import apply_grounding, build_grounded_fa
 from tau_bench.orchestration.logging import observation_summary
 from tau_bench.orchestration.task_state import TaskState, create_initial_task_state
 from tau_bench.orchestration.validator import ValidatorResult, validate_action
+from tau_bench.orchestration.policy_guard import PolicyGuardResult, check_policy
 from tau_bench.types import Action, SolveResult, RESPOND_ACTION_NAME
 
 # Logger protocol: has log_run_start, log_step_stage, write_trace_event, finish_run
@@ -108,6 +109,42 @@ def run_orchestrated_loop(
             if not v_result.allowed:
                 num_validation_failures += 1
                 rejection = f"Validation failed: {v_result.message}"
+                if action.name != RESPOND_ACTION_NAME and "tool_calls" in next_message and next_message.get("tool_calls"):
+                    next_message["tool_calls"] = next_message["tool_calls"][:1]
+                    messages.extend([
+                        next_message,
+                        {
+                            "role": "tool",
+                            "tool_call_id": next_message["tool_calls"][0]["id"],
+                            "name": next_message["tool_calls"][0]["function"]["name"],
+                            "content": rejection,
+                        },
+                    ])
+                else:
+                    messages.extend([next_message, {"role": "user", "content": rejection}])
+                last_action = action.name
+                last_observation_summary = observation_summary(rejection)
+                steps = step_index
+                continue
+            # Policy guard stage (after validator, before executor)
+            p_result: PolicyGuardResult = check_policy(env, action, task_state)
+            run_logger.log_step_stage(
+                step_index,
+                "policy_guard",
+                {"allowed": p_result.allowed, "code": p_result.code, "message": p_result.message, "action_name": action.name},
+            )
+            run_logger.write_trace_event({
+                "step_index": step_index,
+                "module": "policy_guard",
+                "event_type": "blocked" if not p_result.allowed else "checked",
+                "allowed": p_result.allowed,
+                "code": p_result.code,
+                "message": p_result.message,
+                "action_name": action.name,
+            })
+            if not p_result.allowed:
+                rejection = f"Policy blocked: {p_result.message}"
+                task_state.set_last_error(f"Policy blocked ({p_result.code}): {p_result.message}")
                 if action.name != RESPOND_ACTION_NAME and "tool_calls" in next_message and next_message.get("tool_calls"):
                     next_message["tool_calls"] = next_message["tool_calls"][:1]
                     messages.extend([
