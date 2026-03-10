@@ -1,9 +1,22 @@
 # Copyright Sierra
 
+import json
+import os
+import sys
 import random
 from hashlib import sha256
 from tau_bench.envs.tool import Tool
 from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
+
+# Temporary debug flag for respond-path investigation. When set, Env.step respond branch logs to stderr.
+_DEBUG_RESPOND_PATH = os.environ.get("TAU_BENCH_DEBUG_RESPOND_PATH", "").lower() in ("1", "true", "yes")
+
+
+def _respond_path_debug_env(extra: Dict[str, Any]) -> None:
+    if not _DEBUG_RESPOND_PATH:
+        return
+    payload = {"respond_path_debug": "env_step_respond", **extra}
+    print(json.dumps(payload, default=str), file=sys.stderr)
 
 from tau_bench.envs.user import load_user, UserStrategy
 from tau_bench.types import (
@@ -94,9 +107,25 @@ class Env(object):
         reward = 0
         done = False
         if action.name == RESPOND_ACTION_NAME:
-            observation = self.user.step(action.kwargs["content"])
+            action_content = action.kwargs.get("content") if isinstance(action.kwargs, dict) else None
+            observation = self.user.step(action_content)
             info.source = "user"
             done = "###STOP###" in observation
+            if _DEBUG_RESPOND_PATH:
+                obs_preview = (observation or "")[:500] if isinstance(observation, str) else str(observation)[:500]
+                _respond_path_debug_env({
+                    "action_content_preview": (action_content or "")[:300] if action_content else None,
+                    "user_observation_raw_preview": obs_preview,
+                    "done": done,
+                    "stop_in_observation": "###STOP###" in (observation or ""),
+                })
+            if _DEBUG_RESPOND_PATH and isinstance(observation, str):
+                simple_confirmations = {"yes", "yes.", "sure", "ok"}
+                if observation.strip().lower() in simple_confirmations and done:
+                    raise AssertionError(
+                        "Simple confirmation reply should not set done=True; "
+                        "user_observation_raw may contain ###STOP### unexpectedly"
+                    )
         elif action.name in self.tools_map:
             try:
                 observation = self.tools_map[action.name].invoke(

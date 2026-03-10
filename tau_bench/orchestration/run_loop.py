@@ -6,7 +6,14 @@
 # - Single effective action per step: only the first tool call from the proposer is used; multi-tool-call is not supported.
 # - Tool errors: tools return observations starting with "Error: " on failure; task_state and grounding use this convention.
 
+import os
 from typing import Any, Dict, List, Optional
+
+# Temporary debug flag for respond-path investigation. When set, run_loop emits a debug trace event on respond steps.
+# After a failing run with TAU_BENCH_DEBUG_RESPOND_PATH=1, inspect:
+#   - <log_dir>/<job_id>/runs/<run_id>.trace.jsonl: events with module="debug", event_type="respond_path" (raw/parsed/appended previews, equality flags, done_reason).
+#   - stderr: respond_path_debug "user_sim" (tau_bench/envs/user.py), "env_step_respond" (tau_bench/envs/base.py).
+_DEBUG_RESPOND_PATH = os.environ.get("TAU_BENCH_DEBUG_RESPOND_PATH", "").lower() in ("1", "true", "yes")
 
 from tau_bench.envs.base import Env
 from tau_bench.orchestration.grounding import apply_grounding, build_grounded_facts_summary
@@ -407,10 +414,52 @@ def run_orchestrated_loop(
                     ]
                 )
             else:
+                raw_obs = env_response.observation
+                parsed_obs = sanitize_user_observation(raw_obs)
+                appended_user_content = parsed_obs
+                # When TAU_BENCH_DEBUG_RESPOND_PATH=1, after a failing run inspect:
+                # - Raw user simulator output: stderr (user_sim events from tau_bench/envs/user.py), or this trace event raw_user_obs_preview.
+                # - Parsed user reply: stderr (user_sim parsed_user_reply_preview for React), or this trace event parsed_user_obs_preview.
+                # - Sanitized / appended user content: this trace event appended_user_content_preview (same as parsed after strip_think_tags).
+                # - STOP detection and done: this trace event stop_in_raw_observation, env_done_flag, done_reason; or stderr (env_step_respond).
+                if _DEBUG_RESPOND_PATH:
+                    next_content = next_message.get("content") or ""
+                    action_content = (action.kwargs.get("content") or "") if isinstance(action.kwargs, dict) else ""
+                    debug_event = {
+                        "step_index": step_index,
+                        "module": "debug",
+                        "event_type": "respond_path",
+                        "action_name": action.name,
+                        "next_message_role": next_message.get("role"),
+                        "next_message_content_preview": next_content[:300],
+                        "action_content_preview": action_content[:300],
+                        "raw_user_obs_preview": (raw_obs or "")[:300] if isinstance(raw_obs, str) else str(raw_obs)[:300],
+                        "parsed_user_obs_preview": (parsed_obs or "")[:300] if isinstance(parsed_obs, str) else str(parsed_obs)[:300],
+                        "env_done_flag": env_response.done,
+                        "stop_in_raw_observation": ("###STOP###" in (raw_obs or "")) if isinstance(raw_obs, str) else False,
+                        "done_reason": "stop_in_raw" if (isinstance(raw_obs, str) and "###STOP###" in raw_obs) else "not_done",
+                        "appended_user_content_preview": (appended_user_content or "")[:300],
+                        "user_eq_next_message_content": appended_user_content == next_content,
+                        "user_eq_action_content": appended_user_content == action_content,
+                        "user_eq_raw_observation": appended_user_content == raw_obs,
+                        "user_eq_parsed_observation": True,
+                    }
+                    run_logger.write_trace_event(debug_event)
+                assert appended_user_content == sanitize_user_observation(env_response.observation), (
+                    "Appended role=user content must originate from env_response.observation (sanitized)"
+                )
+                if _DEBUG_RESPOND_PATH and not env_response.done and appended_user_content == next_message.get("content"):
+                    import warnings
+                    warnings.warn(
+                        "Respond step: appended user content equals assistant next_message content on non-terminal step; "
+                        "possible assistant→user mix-up or user sim echoed assistant.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
                 messages.extend(
                     [
                         next_message,
-                        {"role": "user", "content": sanitize_user_observation(env_response.observation)},
+                        {"role": "user", "content": appended_user_content},
                     ]
                 )
             steps = step_index

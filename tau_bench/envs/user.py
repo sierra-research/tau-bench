@@ -1,10 +1,24 @@
 # Copyright Sierra
+import json
 import os
+import sys
 import abc
 import enum
 from litellm import completion
 
 from typing import Optional, List, Dict, Any, Union
+
+# Temporary debug flag for respond-path investigation. When set, raw/parsed user-sim output is logged to stderr.
+# See: .cursor/plans/respond-path-debug-instrumentation_9fb3f737.plan.md
+_DEBUG_RESPOND_PATH = os.environ.get("TAU_BENCH_DEBUG_RESPOND_PATH", "").lower() in ("1", "true", "yes")
+
+
+def _respond_path_debug_user(extra: Dict[str, Any]) -> None:
+    """Emit one structured debug line to stderr when TAU_BENCH_DEBUG_RESPOND_PATH is set."""
+    if not _DEBUG_RESPOND_PATH:
+        return
+    payload = {"respond_path_debug": "user_sim", **extra}
+    print(json.dumps(payload, default=str), file=sys.stderr)
 
 
 class BaseUserSimulationEnv(abc.ABC):
@@ -55,7 +69,16 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         message = res.choices[0].message
         self.messages.append(message.model_dump())
         self.total_cost = res._hidden_params["response_cost"]
-        return message.content
+        raw_llm_output = message.content or ""
+        if _DEBUG_RESPOND_PATH and messages:
+            last_user = next((m for m in reversed(messages) if m.get("role") == "user"), None)
+            agent_content_preview = (last_user.get("content") or "")[:300] if last_user else None
+            _respond_path_debug_user({
+                "source": "LLMUserSimulationEnv",
+                "agent_content_preview": agent_content_preview,
+                "raw_llm_output_preview": raw_llm_output[:300],
+            })
+        return raw_llm_output
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
         instruction_display = (
@@ -138,7 +161,18 @@ User Response:
             self.total_cost = res._hidden_params.get("response_cost", 0.0)
         else:
             self.total_cost = 0.0
-        return self.parse_response(message.content)
+        raw_llm_output = message.content or ""
+        parsed = self.parse_response(raw_llm_output)
+        if _DEBUG_RESPOND_PATH and messages:
+            last_user = next((m for m in reversed(messages) if m.get("role") == "user"), None)
+            agent_content_preview = (last_user.get("content") or "")[:300] if last_user else None
+            _respond_path_debug_user({
+                "source": "ReactUserSimulationEnv",
+                "agent_content_preview": agent_content_preview,
+                "raw_llm_output_preview": raw_llm_output[:300],
+                "parsed_user_reply_preview": (parsed or "")[:300],
+            })
+        return parsed
 
     def reset(self, instruction: Optional[str] = None) -> str:
         self.messages = [
@@ -156,7 +190,12 @@ User Response:
             return "###STOP###"
         if "User Response:" in response:
             _, user_response = response.split("User Response:", 1)
-            return user_response.strip()
+            out = user_response.strip()
+            if _DEBUG_RESPOND_PATH:
+                assert "Thought:" not in out and "User Response:" not in out, (
+                    "parse_response must return only user reply, not Thought/User Response framing"
+                )
+            return out
         if "Thought:" in response:
             _, user_response = response.split("Thought:", 1)
             return user_response.strip()
