@@ -160,7 +160,7 @@ python run.py \
   --user-strategy react \
   --max-concurrency "$MAX_CONCURRENCY" \
   --num-trials "$NUM_TRIALS" \
-  --temperature 0.3 \
+  --temperature 0.0 \
   --start-index "$START_IDX" \
   --end-index "$END_IDX" \
   --log-dir "$JOBS_DIR" \
