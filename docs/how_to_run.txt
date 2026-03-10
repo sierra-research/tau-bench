@@ -1,3 +1,14 @@
+Please create your branch using this GitHub repo
+https://github.com/nivech/tau-bench-agent007.git
+
+Commands for reference: 
+git clone https://github.com/nivech/tau-bench-agent007.git
+cd tau-bench-agent007
+git fetch
+git checkout -b phase3A-orchestrated-tc origin/phase3A-orchestrated-tc
+git checkout -b phase3B-<name>
+git push -u origin phase3B-<name>
+
 To run a smoke test: 
 The file run_tb_phase3.sh uses conda. Change it to mamba if thats what you used to set up environment in the beginning. 
 Rename python environment to yours.
