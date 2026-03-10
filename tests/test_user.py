@@ -1,0 +1,41 @@
+# Copyright Sierra
+# Tests for user simulation envs, including parse_response for ReactUserSimulationEnv.
+
+import pytest
+from unittest.mock import MagicMock
+
+from tau_bench.envs.user import ReactUserSimulationEnv
+
+
+def _parse_response(env, response: str) -> str:
+    """Call parse_response on the class with a mock instance (no API)."""
+    return ReactUserSimulationEnv.parse_response(env, response)
+
+
+def test_react_parse_response_returns_only_user_response_when_both_thought_and_user_response():
+    """When both Thought: and User Response: exist, extract only the User Response segment."""
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    raw = "Thought:\n<think> I need to confirm ... </think>\n\nUser Response:\nbar"
+    assert _parse_response(env, raw) == "bar"
+
+
+def test_react_parse_response_stop():
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    assert _parse_response(env, "###STOP###") == "###STOP###"
+    assert _parse_response(env, "Something ###STOP### else") == "###STOP###"
+
+
+def test_react_parse_response_only_thought():
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    assert _parse_response(env, "Thought:\nfoo bar") == "foo bar"
+
+
+def test_react_parse_response_only_user_response():
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    assert _parse_response(env, "User Response:\nbar") == "bar"
+
+
+def test_react_parse_response_invalid_raises():
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    with pytest.raises(ValueError, match="Invalid response format"):
+        _parse_response(env, "No markers here")

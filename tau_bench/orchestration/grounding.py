@@ -17,6 +17,12 @@ RESULT_TYPE_USER_ID_LOOKUP = "user_id_lookup"
 RESULT_TYPE_RESERVATION_DETAILS = "reservation_details"
 RESULT_TYPE_ORDER_DETAILS = "order_details"
 
+# Map: tool_name -> auth_method for user_id_lookup extractors (avoids substring in action.name).
+USER_ID_LOOKUP_AUTH_METHOD: Dict[str, str] = {
+    "find_user_id_by_email": "email",
+    "find_user_id_by_name_zip": "name_zip",
+}
+
 # Registry: (domain, tool_name) -> result_type. Extend when new envs/tools are added.
 # Keeps handler selection in code, not prompts; tools can vary by env.
 _TOOL_RESULT_TYPE_REGISTRY: List[Tuple[str, str, str]] = [
@@ -97,12 +103,7 @@ def _extract_user_id_lookup(
     task_state.grounded["user_id"] = user_id
     task_state.identity.user_id = user_id
     task_state.identity.authenticated = True
-    if "find_user_id_by_email" in action.name:
-        task_state.identity.auth_method = "email"
-    elif "find_user_id_by_name_zip" in action.name:
-        task_state.identity.auth_method = "name_zip"
-    else:
-        task_state.identity.auth_method = None
+    task_state.identity.auth_method = USER_ID_LOOKUP_AUTH_METHOD.get(action.name)
     if task_state.domain == "retail":
         task_state.domain_state["user_id_from_lookup"] = user_id
         task_state.domain_state["auth_method_used"] = task_state.identity.auth_method

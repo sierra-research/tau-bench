@@ -7,13 +7,15 @@ from datetime import datetime
 from typing import Any, Dict, Optional
 
 from tau_bench.orchestration.logging_schemas import RunMetadata, StagePayload, SummaryPayload, TraceEvent
+from tau_bench.types import REWARD_SUCCESS_MIN, REWARD_SUCCESS_MAX
 
 TRUNCATE_LEN = 512
 OBS_SUMMARY_LEN = 200
 
-# Benchmark success: reward in [1-ε, 1+ε] (same as display_metrics)
+
 def _task_success(reward: float) -> bool:
-    return (1 - 1e-6) <= reward <= (1 + 1e-6)
+    """Benchmark success: reward within shared threshold (same as display_metrics)."""
+    return REWARD_SUCCESS_MIN <= reward <= REWARD_SUCCESS_MAX
 
 
 def _truncate(s: str, max_len: int = TRUNCATE_LEN) -> str:

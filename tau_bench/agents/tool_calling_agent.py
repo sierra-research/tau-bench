@@ -1,4 +1,5 @@
 # Copyright Sierra
+# Single effective action per step: only the first tool call is used; multi-tool-call is not supported.
 
 import json
 from litellm import completion
@@ -36,6 +37,7 @@ class ToolCallingAgent(Agent):
             temperature=self.temperature,
         )
         next_message = res.choices[0].message.model_dump()
+        next_message["role"] = "assistant"
         cost = res._hidden_params.get("response_cost") or 0.0
         action = message_to_action(next_message)
         return next_message, action, cost

@@ -66,6 +66,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         return f"""You are a user interacting with an agent.{instruction_display}
 Rules:
 - Just generate one line at a time to simulate the user's message.
+- Do not output <think> tags or internal reasoning; output only the user's reply.
 - Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
 - Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.
 - If the instruction goal is satisified, generate '###STOP###' as a standalone message without anything else to end the conversation.
@@ -105,6 +106,7 @@ class ReactUserSimulationEnv(LLMUserSimulationEnv):
 Rules:
 - First, generate a Thought about what to do next (this message will not be sent to the agent).
 - Then, generate a one line User Response to simulate the user's message (this message will be sent to the agent).
+- Do not use <think> tags in your Thought or User Response; output plain text only.
 - Do not give away all the instruction at once. Only provide the information that is necessary for the current step.
 - Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.
 - If the instruction goal is satisified, generate '###STOP###' as the User Response without anything else to end the conversation.
@@ -149,16 +151,16 @@ User Response:
         return self.generate_next_message(self.messages)
 
     def parse_response(self, response: str) -> str:
+        # Prefer User Response: when both Thought: and User Response: exist, so we don't leak thought/reasoning.
         if "###STOP###" in response:
             return "###STOP###"
-        elif "Thought:" in response:
-            _, user_response = response.split("Thought:")
+        if "User Response:" in response:
+            _, user_response = response.split("User Response:", 1)
             return user_response.strip()
-        elif "User Response:" in response:
-            _, user_response = response.split("User Response:")
+        if "Thought:" in response:
+            _, user_response = response.split("Thought:", 1)
             return user_response.strip()
-        else:
-            raise ValueError(f"Invalid response format: {response}")
+        raise ValueError(f"Invalid response format: {response}")
 
     def step(self, content: str) -> str:
         self.messages.append({"role": "user", "content": content})

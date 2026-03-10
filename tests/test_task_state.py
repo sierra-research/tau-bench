@@ -114,7 +114,7 @@ def test_checklist_structure():
 
 
 def test_run_loop_creates_task_state():
-    """run_orchestrated_loop creates TaskState and runs without error; domain is passed through."""
+    """run_orchestrated_loop creates TaskState and runs without error; domain must be passed explicitly."""
     from unittest.mock import MagicMock, patch
     from tau_bench.orchestration.run_loop import run_orchestrated_loop
     from tau_bench.types import SolveResult, Action, RESPOND_ACTION_NAME
@@ -163,3 +163,27 @@ def test_run_loop_creates_task_state():
     assert result.reward == 1.0
     assert len(created_states) == 1
     assert created_states[0].domain == "retail"
+
+
+def test_run_loop_requires_domain_raises():
+    """run_orchestrated_loop raises ValueError when domain is None (no default)."""
+    from unittest.mock import MagicMock
+    from tau_bench.orchestration.run_loop import run_orchestrated_loop
+
+    mock_env = MagicMock()
+    mock_env.wiki = "# Policy"
+    mock_env.task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    mock_env.tools_map = {}
+    mock_env.tools_info = []
+    mock_env.reset.return_value = MagicMock(observation="Hi", info=MagicMock(model_dump=lambda: {}))
+    mock_logger = MagicMock()
+
+    with pytest.raises(ValueError, match="domain is required"):
+        run_orchestrated_loop(
+            env=mock_env,
+            proposer=MagicMock(),
+            run_logger=mock_logger,
+            task_index=0,
+            max_num_steps=1,
+            domain=None,
+        )

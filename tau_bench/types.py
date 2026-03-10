@@ -6,6 +6,10 @@ from typing import List, Dict, Any, Optional, Union
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
 
+# Shared success threshold: reward in [REWARD_SUCCESS_MIN, REWARD_SUCCESS_MAX] means task success.
+REWARD_SUCCESS_MIN = 1.0 - 1e-6
+REWARD_SUCCESS_MAX = 1.0 + 1e-6
+
 
 class Action(BaseModel):
     name: str

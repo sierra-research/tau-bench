@@ -230,8 +230,10 @@ def agent_factory(
 
 
 def display_metrics(results: List[EnvRunResult]) -> None:
+    from tau_bench.types import REWARD_SUCCESS_MIN, REWARD_SUCCESS_MAX
+
     def is_successful(reward: float) -> bool:
-        return (1 - 1e-6) <= reward <= (1 + 1e-6)
+        return REWARD_SUCCESS_MIN <= reward <= REWARD_SUCCESS_MAX
 
     num_trials = len(set([r.trial for r in results]))
     rewards = [r.reward for r in results]

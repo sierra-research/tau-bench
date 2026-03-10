@@ -6,6 +6,8 @@ from tau_bench.types import Action, RESPOND_ACTION_NAME, Task
 from tau_bench.orchestration.policy_guard import (
     check_policy,
     PolicyGuardResult,
+    get_tool_policy_metadata,
+    get_tools_requiring_confirmation,
     CODE_ALLOWED,
     CODE_MISSING_USER_ID,
     CODE_NOT_AUTHENTICATED,
@@ -147,6 +149,67 @@ def test_policy_guard_result_to_dict():
     assert d["code"] == CODE_MISSING_USER_ID
     assert "user_id" in d["message"]
     assert d["missing_prerequisites"] == ["user_id"]
+
+
+def test_get_tool_policy_metadata_returns_metadata_for_guarded_tools():
+    """Policy metadata is looked up by (domain, tool_name); book_reservation has confirmation key."""
+    meta = get_tool_policy_metadata("airline", "book_reservation")
+    assert meta.get("requires_user_id") is True
+    assert meta.get("requires_profile_grounded") is True
+    assert meta.get("requires_confirmation_key") == "booking_confirmed"
+
+    meta_retail = get_tool_policy_metadata("retail", "cancel_pending_order")
+    assert meta_retail.get("requires_authenticated") is True
+    assert "requires_confirmation_key" not in meta_retail or meta_retail.get("requires_confirmation_key") is None
+
+
+def test_get_tool_policy_metadata_empty_for_unknown_or_readonly():
+    """Unknown tool or read-only tool returns empty dict (no guard requirements)."""
+    assert get_tool_policy_metadata("airline", "get_user_details") == {}
+    assert get_tool_policy_metadata("other_domain", "book_reservation") == {}
+
+
+def test_get_tools_requiring_confirmation_derived_from_metadata():
+    """Tools requiring confirmation are derived from POLICY_METADATA, not hard-coded list."""
+    airline = get_tools_requiring_confirmation("airline")
+    assert "book_reservation" in airline
+    assert "cancel_reservation" not in airline
+
+    retail = get_tools_requiring_confirmation("retail")
+    assert "cancel_pending_order" not in retail  # no confirmation key in current metadata for retail
+
+
+def test_check_policy_allow_block_follows_metadata_not_tool_name_branch():
+    """check_policy allow/block is driven by get_tool_policy_metadata; metadata fields control behavior."""
+    env = _MockEnv()
+    task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    state = create_initial_task_state(domain="retail", task=task)
+    state.identity.authenticated = False
+    state.identity.user_id = None
+    action = Action(name="cancel_pending_order", kwargs={"order_id": "#W1", "reason": "no longer needed"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_NOT_AUTHENTICATED
+    meta = get_tool_policy_metadata("retail", "cancel_pending_order")
+    assert meta.get("requires_authenticated") is True
+    state.identity.authenticated = True
+    state.identity.user_id = "u1"
+    r2 = check_policy(env, action, state)
+    assert r2.allowed is True
+    assert r2.code == CODE_ALLOWED
+
+
+def test_check_policy_tool_not_in_metadata_allowed():
+    """Tool not in POLICY_METADATA is allowed regardless of state (check_policy uses metadata lookup)."""
+    env = _MockEnv()
+    env.tools_map["list_all_airports"] = None
+    task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    state = create_initial_task_state(domain="airline", task=task)
+    state.identity.user_id = None
+    action = Action(name="list_all_airports", kwargs={})
+    assert get_tool_policy_metadata("airline", "list_all_airports") == {}
+    r = check_policy(env, action, state)
+    assert r.allowed is True
 
 
 def test_run_loop_policy_guard_blocks_before_executor():

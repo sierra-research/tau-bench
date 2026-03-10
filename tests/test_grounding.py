@@ -10,6 +10,7 @@ from tau_bench.orchestration.task_state import create_initial_task_state
 from tau_bench.orchestration.grounding import (
     apply_grounding,
     build_grounded_facts_summary,
+    USER_ID_LOOKUP_AUTH_METHOD,
 )
 
 
@@ -88,6 +89,12 @@ def test_grounding_retail_get_user_details():
     assert state.domain_state["payment_methods_from_profile"] == ["paypal_5727330", "credit_card_7815826"]
 
 
+def test_user_id_lookup_auth_method_map():
+    """Auth method is driven by USER_ID_LOOKUP_AUTH_METHOD map (not substring in action.name)."""
+    assert USER_ID_LOOKUP_AUTH_METHOD.get("find_user_id_by_email") == "email"
+    assert USER_ID_LOOKUP_AUTH_METHOD.get("find_user_id_by_name_zip") == "name_zip"
+
+
 def test_grounding_retail_find_user_id_by_email():
     """Grounding find_user_id_by_email success sets identity and domain_state."""
     task = Task(user_id="u1", actions=[], instruction="", outputs=[])
@@ -113,7 +120,7 @@ def test_grounding_retail_find_user_id_by_email():
 
 
 def test_grounding_retail_find_user_id_by_name_zip():
-    """Grounding find_user_id_by_name_zip success sets auth_method name_zip."""
+    """Grounding find_user_id_by_name_zip success sets auth_method from USER_ID_LOOKUP_AUTH_METHOD map."""
     task = Task(user_id="u1", actions=[], instruction="", outputs=[])
     state = create_initial_task_state(domain="retail", task=task)
     action = Action(name="find_user_id_by_name_zip", kwargs={"first_name": "Noah", "last_name": "Brown", "zip": "80279"})
@@ -129,7 +136,7 @@ def test_grounding_retail_find_user_id_by_name_zip():
     )
 
     assert state.identity.authenticated is True
-    assert state.identity.auth_method == "name_zip"
+    assert state.identity.auth_method == USER_ID_LOOKUP_AUTH_METHOD["find_user_id_by_name_zip"]
     assert state.domain_state["user_id_from_lookup"] == "noah_brown_6181"
 
 
@@ -225,6 +232,14 @@ def test_grounding_order_details():
     assert state.grounded["order_details"]["#W7678072"]["status"] == "delivered"
     assert state.domain_state["order_id"] == "#W7678072"
     assert "#W7678072" in state.grounded["order_ids"]
+
+
+def test_grounded_facts_summary_starts_with_contract_prefix():
+    """Summary string starts with 'Grounded facts:' (contract for run_loop injection and heuristic skip)."""
+    task = Task(user_id="u1", actions=[], instruction="", outputs=[])
+    state = create_initial_task_state(domain="airline", task=task)
+    summary = build_grounded_facts_summary(state)
+    assert summary.strip().startswith("Grounded facts:")
 
 
 def test_build_grounded_facts_summary_no_tool_names():
