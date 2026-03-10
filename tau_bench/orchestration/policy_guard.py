@@ -24,6 +24,8 @@ CODE_MISSING_ORDER_CONTEXT = "missing_order_context"
 REQUIRES_USER_ID = "requires_user_id"
 REQUIRES_PROFILE_GROUNDED = "requires_profile_grounded"
 REQUIRES_CONFIRMATION_KEY = "requires_confirmation_key"
+REQUIRES_RESERVATION_CONTEXT = "requires_reservation_context"
+REQUIRES_ORDER_CONTEXT = "requires_order_context"
 REQUIRES_AUTHENTICATED = "requires_authenticated"
 
 # Registry: (domain, tool_name) -> policy metadata. Single source of truth; new tools/domains add here.
@@ -34,18 +36,60 @@ POLICY_METADATA: Dict[Tuple[str, str], Dict[str, Any]] = {
         REQUIRES_PROFILE_GROUNDED: True,
         REQUIRES_CONFIRMATION_KEY: "booking_confirmed",
     },
-    ("airline", "cancel_reservation"): {REQUIRES_USER_ID: True},
-    ("airline", "update_reservation_flights"): {REQUIRES_USER_ID: True},
-    ("airline", "update_reservation_baggages"): {REQUIRES_USER_ID: True},
-    ("airline", "update_reservation_passengers"): {REQUIRES_USER_ID: True},
-    # Retail
-    ("retail", "cancel_pending_order"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "modify_pending_order_address"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "modify_pending_order_items"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "modify_pending_order_payment"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "modify_user_address"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "return_delivered_order_items"): {REQUIRES_AUTHENTICATED: True},
-    ("retail", "exchange_delivered_order_items"): {REQUIRES_AUTHENTICATED: True},
+    ("airline", "cancel_reservation"): {
+        REQUIRES_USER_ID: True,
+        REQUIRES_RESERVATION_CONTEXT: True,
+    },
+    ("airline", "update_reservation_flights"): {
+        REQUIRES_USER_ID: True,
+        REQUIRES_RESERVATION_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "flights_update_confirmed",
+    },
+    ("airline", "update_reservation_baggages"): {
+        REQUIRES_USER_ID: True,
+        REQUIRES_RESERVATION_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "baggage_update_confirmed",
+    },
+    ("airline", "update_reservation_passengers"): {
+        REQUIRES_USER_ID: True,
+        REQUIRES_RESERVATION_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "passengers_update_confirmed",
+    },
+    # Retail: auth + order context (where applicable) + explicit confirmation per policy
+    ("retail", "cancel_pending_order"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "cancel_order_confirmed",
+    },
+    ("retail", "modify_pending_order_address"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "address_modify_confirmed",
+    },
+    ("retail", "modify_pending_order_items"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "items_modify_confirmed",
+    },
+    ("retail", "modify_pending_order_payment"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "payment_modify_confirmed",
+    },
+    ("retail", "modify_user_address"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_CONFIRMATION_KEY: "user_address_modify_confirmed",
+    },
+    ("retail", "return_delivered_order_items"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "return_order_confirmed",
+    },
+    ("retail", "exchange_delivered_order_items"): {
+        REQUIRES_AUTHENTICATED: True,
+        REQUIRES_ORDER_CONTEXT: True,
+        REQUIRES_CONFIRMATION_KEY: "exchange_order_confirmed",
+    },
 }
 
 # Legacy sets (kept for recovery module and tests); derived from POLICY_METADATA for consistency
@@ -130,6 +174,24 @@ def check_policy(env: Env, action: Action, task_state: TaskState) -> PolicyGuard
                 CODE_MISSING_CONFIRMATION,
                 "explicit user confirmation required before this action",
                 [key],
+            )
+    if meta.get(REQUIRES_RESERVATION_CONTEXT):
+        rids = task_state.grounded.get("reservation_ids") or []
+        focused_rid = task_state.domain_state.get("reservation_id")
+        if not (rids or focused_rid):
+            return _block(
+                CODE_MISSING_RESERVATION_CONTEXT,
+                "reservation_id must be established (e.g. via get_user_details or get_reservation_details) before this action",
+                ["reservation_context"],
+            )
+    if meta.get(REQUIRES_ORDER_CONTEXT):
+        oids = task_state.grounded.get("order_ids") or []
+        focused_oid = task_state.domain_state.get("order_id")
+        if not (oids or focused_oid):
+            return _block(
+                CODE_MISSING_ORDER_CONTEXT,
+                "order_id must be established (e.g. via get_user_details or get_order_details) before this action",
+                ["order_context"],
             )
     if meta.get(REQUIRES_AUTHENTICATED):
         if not task_state.identity.authenticated:

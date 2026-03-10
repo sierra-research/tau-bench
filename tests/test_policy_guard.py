@@ -13,6 +13,8 @@ from tau_bench.orchestration.policy_guard import (
     CODE_NOT_AUTHENTICATED,
     CODE_MISSING_PROFILE_GROUNDING,
     CODE_MISSING_CONFIRMATION,
+    CODE_MISSING_RESERVATION_CONTEXT,
+    CODE_MISSING_ORDER_CONTEXT,
 )
 from tau_bench.orchestration.task_state import create_initial_task_state
 
@@ -34,6 +36,10 @@ def _airline_state(**overrides):
             state.identity.profile_grounded = v
         elif k == "confirmations":
             state.confirmations = set(v) if isinstance(v, list) else v
+        elif k == "reservation_ids":
+            state.grounded["reservation_ids"] = list(v) if v else []
+        elif k == "reservation_id":
+            state.domain_state["reservation_id"] = v
     return state
 
 
@@ -45,6 +51,12 @@ def _retail_state(**overrides):
             state.identity.authenticated = v
         elif k == "user_id":
             state.identity.user_id = v
+        elif k == "order_ids":
+            state.grounded["order_ids"] = list(v) if v else []
+        elif k == "order_id":
+            state.domain_state["order_id"] = v
+        elif k == "confirmations":
+            state.confirmations = set(v) if isinstance(v, list) else v
     return state
 
 
@@ -106,14 +118,79 @@ def test_airline_booking_allowed_when_prerequisites_satisfied():
     assert r.missing_prerequisites == []
 
 
-def test_retail_mutating_action_allowed_when_authenticated():
-    """Retail cancel_pending_order is allowed when identity.authenticated is True."""
+def test_retail_cancel_order_blocked_when_order_context_missing():
+    """Retail cancel_pending_order is blocked when order_id is not established."""
     env = _MockEnv()
-    state = _retail_state(authenticated=True, user_id="mei_kovacs_8020")
+    state = _retail_state(authenticated=True, user_id="mei_kovacs_8020")  # no order_ids
+    action = Action(name="cancel_pending_order", kwargs={"order_id": "#W123", "reason": "no longer needed"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_ORDER_CONTEXT
+    assert "order" in r.message.lower()
+    assert "order_context" in r.missing_prerequisites
+
+
+def test_retail_cancel_order_blocked_when_confirmation_missing():
+    """Retail cancel_pending_order is blocked when explicit confirmation not given."""
+    env = _MockEnv()
+    state = _retail_state(
+        authenticated=True,
+        user_id="mei_kovacs_8020",
+        order_ids=["#W123"],
+        confirmations=[],
+    )
+    action = Action(name="cancel_pending_order", kwargs={"order_id": "#W123", "reason": "no longer needed"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_CONFIRMATION
+    assert "cancel_order_confirmed" in r.missing_prerequisites
+
+
+def test_retail_mutating_action_allowed_when_authenticated():
+    """Retail cancel_pending_order is allowed when authenticated, order context, and confirmation are present."""
+    env = _MockEnv()
+    state = _retail_state(
+        authenticated=True,
+        user_id="mei_kovacs_8020",
+        order_ids=["#W123"],
+        confirmations=["cancel_order_confirmed"],
+    )
     action = Action(name="cancel_pending_order", kwargs={"order_id": "#W123", "reason": "no longer needed"})
     r = check_policy(env, action, state)
     assert r.allowed is True
     assert r.code == CODE_ALLOWED
+
+
+def test_airline_cancel_reservation_blocked_when_reservation_context_missing():
+    """Airline cancel_reservation is blocked when reservation_id is not established."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496")  # no reservation_ids or reservation_id
+    action = Action(name="cancel_reservation", kwargs={"user_id": "sara_doe_496", "reservation_id": "R1", "reason": "change of plan"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_RESERVATION_CONTEXT
+    assert "reservation" in r.message.lower()
+    assert "reservation_context" in r.missing_prerequisites
+
+
+def test_airline_cancel_reservation_allowed_when_reservation_context_present():
+    """Airline cancel_reservation is allowed when user_id and reservation context are established."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496", reservation_ids=["R1"])
+    action = Action(name="cancel_reservation", kwargs={"user_id": "sara_doe_496", "reservation_id": "R1", "reason": "change of plan"})
+    r = check_policy(env, action, state)
+    assert r.allowed is True
+    assert r.code == CODE_ALLOWED
+
+
+def test_airline_update_reservation_flights_blocked_when_reservation_context_missing():
+    """Airline update_reservation_flights is blocked when reservation context is missing (before confirmation)."""
+    env = _MockEnv()
+    state = _airline_state(user_id="sara_doe_496")  # no reservation context
+    action = Action(name="update_reservation_flights", kwargs={"user_id": "sara_doe_496", "reservation_id": "R1"})
+    r = check_policy(env, action, state)
+    assert r.allowed is False
+    assert r.code == CODE_MISSING_RESERVATION_CONTEXT
 
 
 def test_respond_always_allowed():
@@ -152,15 +229,28 @@ def test_policy_guard_result_to_dict():
 
 
 def test_get_tool_policy_metadata_returns_metadata_for_guarded_tools():
-    """Policy metadata is looked up by (domain, tool_name); book_reservation has confirmation key."""
+    """Policy metadata is looked up by (domain, tool_name); airline mutating tools have distinct confirmation keys."""
     meta = get_tool_policy_metadata("airline", "book_reservation")
     assert meta.get("requires_user_id") is True
     assert meta.get("requires_profile_grounded") is True
     assert meta.get("requires_confirmation_key") == "booking_confirmed"
 
+    assert get_tool_policy_metadata("airline", "update_reservation_flights").get("requires_confirmation_key") == "flights_update_confirmed"
+    assert get_tool_policy_metadata("airline", "update_reservation_baggages").get("requires_confirmation_key") == "baggage_update_confirmed"
+    assert get_tool_policy_metadata("airline", "update_reservation_passengers").get("requires_confirmation_key") == "passengers_update_confirmed"
+
+    assert get_tool_policy_metadata("airline", "cancel_reservation").get("requires_reservation_context") is True
+    assert get_tool_policy_metadata("airline", "update_reservation_flights").get("requires_reservation_context") is True
+
     meta_retail = get_tool_policy_metadata("retail", "cancel_pending_order")
     assert meta_retail.get("requires_authenticated") is True
-    assert "requires_confirmation_key" not in meta_retail or meta_retail.get("requires_confirmation_key") is None
+    assert meta_retail.get("requires_order_context") is True
+    assert meta_retail.get("requires_confirmation_key") == "cancel_order_confirmed"
+
+    meta_user_addr = get_tool_policy_metadata("retail", "modify_user_address")
+    assert meta_user_addr.get("requires_authenticated") is True
+    assert meta_user_addr.get("requires_confirmation_key") == "user_address_modify_confirmed"
+    assert meta_user_addr.get("requires_order_context") is None or meta_user_addr.get("requires_order_context") is False
 
 
 def test_get_tool_policy_metadata_empty_for_unknown_or_readonly():
@@ -173,10 +263,17 @@ def test_get_tools_requiring_confirmation_derived_from_metadata():
     """Tools requiring confirmation are derived from POLICY_METADATA, not hard-coded list."""
     airline = get_tools_requiring_confirmation("airline")
     assert "book_reservation" in airline
+    assert "update_reservation_flights" in airline
+    assert "update_reservation_baggages" in airline
+    assert "update_reservation_passengers" in airline
     assert "cancel_reservation" not in airline
 
     retail = get_tools_requiring_confirmation("retail")
-    assert "cancel_pending_order" not in retail  # no confirmation key in current metadata for retail
+    assert "cancel_pending_order" in retail
+    assert "modify_pending_order_address" in retail
+    assert "return_delivered_order_items" in retail
+    assert "exchange_delivered_order_items" in retail
+    assert "modify_user_address" in retail
 
 
 def test_check_policy_allow_block_follows_metadata_not_tool_name_branch():
@@ -185,7 +282,9 @@ def test_check_policy_allow_block_follows_metadata_not_tool_name_branch():
     task = Task(user_id="u1", actions=[], instruction="", outputs=[])
     state = create_initial_task_state(domain="retail", task=task)
     state.identity.authenticated = False
-    state.identity.user_id = None
+    state.identity.user_id = "u1"
+    state.grounded["order_ids"] = ["#W1"]
+    state.confirmations = {"cancel_order_confirmed"}
     action = Action(name="cancel_pending_order", kwargs={"order_id": "#W1", "reason": "no longer needed"})
     r = check_policy(env, action, state)
     assert r.allowed is False
@@ -193,7 +292,6 @@ def test_check_policy_allow_block_follows_metadata_not_tool_name_branch():
     meta = get_tool_policy_metadata("retail", "cancel_pending_order")
     assert meta.get("requires_authenticated") is True
     state.identity.authenticated = True
-    state.identity.user_id = "u1"
     r2 = check_policy(env, action, state)
     assert r2.allowed is True
     assert r2.code == CODE_ALLOWED
