@@ -21,6 +21,41 @@ def _respond_path_debug_user(extra: Dict[str, Any]) -> None:
     print(json.dumps(payload, default=str), file=sys.stderr)
 
 
+def strip_think_tags(content: str) -> str:
+    """
+    Remove <think>...</think> blocks from text (one or nested).
+    Uses depth counting so inner tags are matched correctly; removes orphan tags.
+    """
+    if not content or not isinstance(content, str):
+        return content
+    out_parts: List[str] = []
+    i = 0
+    n = len(content)
+    while i < n:
+        if content[i : i + 7] == "<think>":
+            depth = 1
+            i += 7
+            while i < n and depth > 0:
+                if content[i : i + 7] == "<think>":
+                    depth += 1
+                    i += 7
+                elif content[i : i + 8] == "</think>":
+                    depth -= 1
+                    i += 8
+                    if depth == 0:
+                        break
+                else:
+                    i += 1
+            continue
+        if content[i : i + 8] == "</think>":
+            # Orphan close tag; skip it
+            i += 8
+            continue
+        out_parts.append(content[i])
+        i += 1
+    return "".join(out_parts)
+
+
 class BaseUserSimulationEnv(abc.ABC):
     metadata = {}
 
@@ -94,6 +129,9 @@ Rules:
 - Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.
 - If the instruction goal is satisified, generate '###STOP###' as a standalone message without anything else to end the conversation.
 - Do not repeat the exact instruction in the conversation. Instead, use your own words to convey the same information.
+- You are the customer, not the agent. Reply in first person as the user (\"I\"), never as the airline agent.
+- Never start your message with templates like \"Your booking is confirmed\" or similar agent-style confirmations; those are produced only by the agent.
+- Answer concisely to the last agent message, and do not paraphrase the agent's responses back to them.
 - Try to make the conversation as natural as possible, and stick to the personalities in the instruction."""
 
     def reset(self, instruction: Optional[str] = None) -> str:
@@ -134,6 +172,9 @@ Rules:
 - Do not hallucinate information that is not provided in the instruction. For example, if the agent asks for the order id but it is not mentioned in the instruction, do not make up an order id, just say you do not remember or have it.
 - If the instruction goal is satisified, generate '###STOP###' as the User Response without anything else to end the conversation.
 - Do not repeat the exact instruction in the conversation. Instead, use your own words to convey the same information.
+- You are the customer, not the agent. In the User Response, reply in first person as the user (\"I\"), never as the airline agent.
+- Never start the User Response with templates like \"Your booking is confirmed\" or similar agent-style confirmations; those are produced only by the agent.
+- Keep the User Response concise and focused on answering the last agent message.
 - Try to make the conversation as natural as possible, and stick to the personalities in the instruction.
 
 Format:
@@ -185,20 +226,53 @@ User Response:
         return self.generate_next_message(self.messages)
 
     def parse_response(self, response: str) -> str:
-        # Prefer User Response: when both Thought: and User Response: exist, so we don't leak thought/reasoning.
-        if "###STOP###" in response:
+        """
+        Parse raw LLM output from the user model into the single-line
+        user reply that will be sent to the agent.
+
+        Supports both:
+          - The preferred React-style framing:
+                Thought:
+                <...>
+
+                User Response:
+                <the user reply>
+          - And more generic reasoning formats that may include <think>...</think>
+            blocks without explicit Thought/User Response headers.
+        """
+        # First, strip any <think>...</think> blocks so we never leak chain-of-thought.
+        cleaned = strip_think_tags(response or "").strip()
+
+        # STOP handling on the cleaned text.
+        if "###STOP###" in cleaned:
             return "###STOP###"
-        if "User Response:" in response:
-            _, user_response = response.split("User Response:", 1)
+
+        # Prefer explicit React-style User Response headers when present.
+        if "User Response:" in cleaned:
+            _, user_response = cleaned.split("User Response:", 1)
             out = user_response.strip()
-            if _DEBUG_RESPOND_PATH:
-                assert "Thought:" not in out and "User Response:" not in out, (
-                    "parse_response must return only user reply, not Thought/User Response framing"
-                )
+            # Best-effort clean-up: if the model accidentally repeated framing
+            # markers inside the User Response block, strip everything up to
+            # the last occurrence so we return only the actual reply.
+            for marker in ("User Response:", "Thought:"):
+                if marker in out:
+                    # Keep the text after the last marker instance.
+                    out = out.split(marker, 1)[-1].strip()
             return out
-        if "Thought:" in response:
-            _, user_response = response.split("Thought:", 1)
+
+        # Fallback: Thought-only framing; return its body.
+        if "Thought:" in cleaned:
+            _, user_response = cleaned.split("Thought:", 1)
             return user_response.strip()
+
+        # Final fallback: no explicit framing, but we may still have a mix of
+        # reasoning and a user-facing line (e.g. after stripping <think>).
+        # In that case, return the last non-empty line as the user reply.
+        lines = [l.strip() for l in cleaned.splitlines() if l.strip()]
+        if lines:
+            return lines[-1]
+
+        # Truly malformed output: nothing usable.
         raise ValueError(f"Invalid response format: {response}")
 
     def step(self, content: str) -> str:

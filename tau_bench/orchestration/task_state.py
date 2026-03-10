@@ -118,14 +118,26 @@ def _default_domain_state(domain: str) -> Dict[str, Any]:
             "booking_flow_stage": None,  # search | select | confirm | none
             "payment_methods_from_profile": [],  # real IDs from get_user_details
             "selected_itinerary": None,
+            "policy_counters": {
+                # Generic counters used by policy guard business rules. Keys are
+                # domain-agnostic (e.g. "tool_success_count").
+                "tool_success_count": {},
+            },
         }
     if domain == "retail":
         return {
             "order_id": None,
             "auth_method_used": None,  # email | name_zip | none
             "user_id_from_lookup": None,  # from find_user_id_by_email / find_user_id_by_name_zip
+            "policy_counters": {
+                "tool_success_count": {},
+            },
         }
-    return {}
+    return {
+        "policy_counters": {
+            "tool_success_count": {},
+        },
+    }
 
 
 def create_initial_task_state(

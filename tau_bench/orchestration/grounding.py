@@ -23,15 +23,31 @@ USER_ID_LOOKUP_AUTH_METHOD: Dict[str, str] = {
     "find_user_id_by_name_zip": "name_zip",
 }
 
-# Registry: (domain, tool_name) -> result_type. Extend when new envs/tools are added.
-# Keeps handler selection in code, not prompts; tools can vary by env.
+# Registry: (domain, tool_name) -> result_type.
+# This is the single source of truth for which tool results are grounded, per env.
 _TOOL_RESULT_TYPE_REGISTRY: List[Tuple[str, str, str]] = [
+    # User profile / identity
     ("airline", "get_user_details", RESULT_TYPE_USER_PROFILE),
     ("retail", "get_user_details", RESULT_TYPE_USER_PROFILE),
+    ("retail", "modify_user_address", RESULT_TYPE_USER_PROFILE),
+    # Retail user id lookup helpers
     ("retail", "find_user_id_by_email", RESULT_TYPE_USER_ID_LOOKUP),
     ("retail", "find_user_id_by_name_zip", RESULT_TYPE_USER_ID_LOOKUP),
+    # Airline reservation details and mutations that return the full reservation JSON
     ("airline", "get_reservation_details", RESULT_TYPE_RESERVATION_DETAILS),
+    ("airline", "book_reservation", RESULT_TYPE_RESERVATION_DETAILS),
+    ("airline", "cancel_reservation", RESULT_TYPE_RESERVATION_DETAILS),
+    ("airline", "update_reservation_passengers", RESULT_TYPE_RESERVATION_DETAILS),
+    ("airline", "update_reservation_baggages", RESULT_TYPE_RESERVATION_DETAILS),
+    ("airline", "update_reservation_flights", RESULT_TYPE_RESERVATION_DETAILS),
+    # Retail order details and mutations that return the full order JSON
     ("retail", "get_order_details", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "cancel_pending_order", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "modify_pending_order_items", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "modify_pending_order_address", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "modify_pending_order_payment", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "return_delivered_order_items", RESULT_TYPE_ORDER_DETAILS),
+    ("retail", "exchange_delivered_order_items", RESULT_TYPE_ORDER_DETAILS),
 ]
 
 
@@ -120,8 +136,13 @@ def _extract_reservation_details(
     if not isinstance(data, dict):
         return
 
+    # Prefer explicit reservation_id argument, but fall back to the body if needed.
     reservation_id = (action.kwargs or {}).get("reservation_id")
-    if not reservation_id or not isinstance(reservation_id, str):
+    if not isinstance(reservation_id, str):
+        body_reservation_id = data.get("reservation_id")
+        if isinstance(body_reservation_id, str):
+            reservation_id = body_reservation_id
+    if not reservation_id:
         return
 
     if "reservation_details" not in task_state.grounded:
@@ -145,8 +166,13 @@ def _extract_order_details(
     if not isinstance(data, dict):
         return
 
+    # Prefer explicit order_id argument, but fall back to the body if needed.
     order_id = (action.kwargs or {}).get("order_id")
-    if not order_id or not isinstance(order_id, str):
+    if not isinstance(order_id, str):
+        body_order_id = data.get("order_id")
+        if isinstance(body_order_id, str):
+            order_id = body_order_id
+    if not order_id:
         return
 
     if "order_details" not in task_state.grounded:

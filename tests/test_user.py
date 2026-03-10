@@ -37,5 +37,15 @@ def test_react_parse_response_only_user_response():
 
 def test_react_parse_response_invalid_raises():
     env = MagicMock(spec=ReactUserSimulationEnv)
+    # Now only truly empty / whitespace-only responses are treated as invalid.
     with pytest.raises(ValueError, match="Invalid response format"):
-        _parse_response(env, "No markers here")
+        _parse_response(env, "")
+    with pytest.raises(ValueError, match="Invalid response format"):
+        _parse_response(env, "   ")
+
+
+def test_react_parse_response_fallback_last_line_used():
+    """When there are no explicit markers, parser falls back to last non-empty line."""
+    env = MagicMock(spec=ReactUserSimulationEnv)
+    assert _parse_response(env, "No markers here") == "No markers here"
+    assert _parse_response(env, "Line one\n\nLine two") == "Line two"

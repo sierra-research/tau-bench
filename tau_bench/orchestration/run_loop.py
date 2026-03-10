@@ -21,7 +21,12 @@ from tau_bench.orchestration.logging import observation_summary
 from tau_bench.orchestration.message_utils import sanitize_user_observation, strip_think_tags
 from tau_bench.orchestration.task_state import TaskState, create_initial_task_state
 from tau_bench.orchestration.validator import ValidatorResult, validate_action
-from tau_bench.orchestration.policy_guard import PolicyGuardResult, check_policy
+from tau_bench.orchestration.policy_guard import (
+    PolicyGuardResult,
+    check_policy,
+    get_tool_policy_metadata,
+    REQUIRES_CONFIRMATION_KEY,
+)
 from tau_bench.orchestration.recovery import (
     RecoveryState,
     RecoveryInput,
@@ -235,7 +240,13 @@ def run_orchestrated_loop(
             run_logger.log_step_stage(
                 step_index,
                 "policy_guard",
-                {"allowed": p_result.allowed, "code": p_result.code, "message": p_result.message, "action_name": action.name},
+                {
+                    "allowed": p_result.allowed,
+                    "code": p_result.code,
+                    "message": p_result.message,
+                    "action_name": action.name,
+                    "warnings": list(p_result.warnings),
+                },
             )
             run_logger.write_trace_event({
                 "step_index": step_index,
@@ -244,6 +255,7 @@ def run_orchestrated_loop(
                 "allowed": p_result.allowed,
                 "code": p_result.code,
                 "message": p_result.message,
+                "warnings": list(p_result.warnings),
                 "action_name": action.name,
             })
             if not p_result.allowed:
@@ -343,6 +355,14 @@ def run_orchestrated_loop(
                     env_response.observation,
                     task_state,
                 )
+                # After a successful tool execution (non-error observation), increment
+                # generic policy counters so business rules (e.g. only-once tools)
+                # can consult them.
+                if not env_response.observation.strip().startswith("Error:"):
+                    policy_counters = task_state.domain_state.setdefault("policy_counters", {})
+                    tool_counts = policy_counters.setdefault("tool_success_count", {})
+                    current_count = int(tool_counts.get(action.name, 0))
+                    tool_counts[action.name] = current_count + 1
                 # Single use of confirmation: after successful execution of the just-confirmed action, clear it
                 if (
                     recovery_state.retry_key_just_confirmed is not None
@@ -356,6 +376,13 @@ def run_orchestrated_loop(
 
                 # Tool execution error: invoke recovery for trace and possible hint
                 if env_response.observation.strip().startswith("Error:"):
+                    # On tool failure, clear any explicit confirmation key associated with this
+                    # tool so that a subsequent retry will require the user to confirm again.
+                    meta = get_tool_policy_metadata(task_state.domain, action.name)
+                    confirm_key = meta.get(REQUIRES_CONFIRMATION_KEY)
+                    if confirm_key and confirm_key in task_state.confirmations:
+                        task_state.confirmations.discard(confirm_key)
+
                     tool_error_input = RecoveryInput(
                         failure_type=FAILURE_TOOL_EXECUTION_ERROR,
                         action=action,

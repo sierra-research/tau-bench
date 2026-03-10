@@ -186,15 +186,15 @@ def test_grounding_unknown_tool_skipped():
     """Tools not in registry do not update grounded state."""
     task = Task(user_id="u1", actions=[], instruction="", outputs=[])
     state = create_initial_task_state(domain="airline", task=task)
-    action = Action(name="book_reservation", kwargs={"flight_id": "F1", "user_id": "u1"})
+    action = Action(name="calculate", kwargs={"expression": "2 + 2"})
     mock_env = MagicMock()
-    mock_env.tools_map = {"book_reservation": MagicMock()}
+    mock_env.tools_map = {"calculate": MagicMock()}
 
     apply_grounding(
         mock_env,
         "airline",
         action,
-        '{"booking_id": "B123"}',
+        "4",
         state,
     )
 
