@@ -4,7 +4,7 @@
 import pytest
 from unittest.mock import MagicMock
 
-from tau_bench.envs.user import ReactUserSimulationEnv
+from tau_bench.envs.user import ReactUserSimulationEnv, strip_think_tags
 
 
 def _parse_response(env, response: str) -> str:
@@ -49,3 +49,9 @@ def test_react_parse_response_fallback_last_line_used():
     env = MagicMock(spec=ReactUserSimulationEnv)
     assert _parse_response(env, "No markers here") == "No markers here"
     assert _parse_response(env, "Line one\n\nLine two") == "Line two"
+
+
+def test_strip_think_tags_unclosed_think_with_user_response():
+    """Unclosed <think> with User Response: should return only the user response portion."""
+    raw = "<think>\nThought about what to say.\n\nUser Response:\nI'd like to book a flight.\n"
+    assert strip_think_tags(raw) == "I'd like to book a flight."

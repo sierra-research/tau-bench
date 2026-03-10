@@ -28,6 +28,17 @@ def strip_think_tags(content: str) -> str:
     """
     if not content or not isinstance(content, str):
         return content
+
+    # Fallback for models that open <think> but never close it.
+    # In this case, treat <think> as a marker and keep its contents,
+    # optionally extracting the portion after "User Response:" if present.
+    if "<think>" in content and "</think>" not in content:
+        after_think = content.split("<think>", 1)[1]
+        if "User Response:" in after_think:
+            _, user_response = after_think.split("User Response:", 1)
+            return user_response.strip()
+        return after_think.strip()
+
     out_parts: List[str] = []
     i = 0
     n = len(content)
