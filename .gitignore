@@ -11,19 +11,23 @@ graphs/
 graphs/**
 
 # Scratch / local scripts
-run_*.sh
 cleaned.sh
-commands_ref.txt
 mamba.txt
 run_batch_original.sh
-run_tb_gaudi.sh
-run_tb_phase3.sh
 run_native_vllm_taubench_OLD.sbatch
 run_native_vllm_taubench.sbatch
+run_native_vllm_taubench.sh
+run_tb_gaudi_1_server.sh
+run_tb_gaudi_1NODE.sh
+run_tb_gaudi_full.sh 
+run_tb_gaudi_OLD_2NODES.sh 
+run_tb_gaudi.sh 
+
 Tutorials/
 Tutorials/**
 commands_ref.txt
 commands_batch.txt
+commands_ref.txt
 SETUP_SOL.md
 
 
