@@ -70,6 +70,18 @@ def parse_args() -> RunConfig:
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
+    parser.add_argument(
+        "--max-task-retries",
+        type=int,
+        default=1,
+        help="Number of task-level retries (get_env + solve) on any exception; default 1 (no retry)",
+    )
+    parser.add_argument(
+        "--task-retry-base-delay",
+        type=float,
+        default=5.0,
+        help="Base delay in seconds for task-level retry backoff",
+    )
     args = parser.parse_args()
     print(args)
     return RunConfig(
@@ -88,6 +100,8 @@ def parse_args() -> RunConfig:
         log_dir=args.log_dir,
         enable_logging=bool(args.enable_logging),
         max_concurrency=args.max_concurrency,
+        max_task_retries=args.max_task_retries,
+        task_retry_base_delay=args.task_retry_base_delay,
         seed=args.seed,
         shuffle=args.shuffle,
         user_strategy=args.user_strategy,

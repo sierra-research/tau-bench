@@ -3,6 +3,7 @@
 import os
 import json
 import random
+import time
 import traceback
 from math import comb
 import multiprocessing
@@ -76,67 +77,82 @@ def run(config: RunConfig) -> List[EnvRunResult]:
             random.shuffle(idxs)
 
         def _run(idx: int) -> EnvRunResult:
-            isolated_env = get_env(
-                config.env,
-                user_strategy=config.user_strategy,
-                user_model=config.user_model,
-                task_split=config.task_split,
-                user_provider=config.user_model_provider,
-                task_index=idx,
-            )
-
-            print(f"Running task {idx}")
             run_logger = None
-            if config.agent_strategy == "orchestrated-tool-calling" and phase3_job_id is not None:
-                run_id = run_id_from(config.env, idx, i)
-                metadata = {
-                    "job_id": phase3_job_id,
-                    "run_id": run_id,
-                    "domain": config.env,
-                    "task_id": idx,
-                    "trial": i,
-                    "agent": config.agent_strategy,
-                    "model": config.model,
-                    "seed": config.seed,
-                }
-                run_logger = create_run_logger(
-                    config.log_dir,
-                    phase3_job_id,
-                    run_id,
-                    metadata,
-                    enabled=getattr(config, "enable_logging", True),
-                )
-            try:
-                solve_kwargs: Dict[str, Any] = {"env": isolated_env, "task_index": idx}
-                if run_logger is not None:
-                    solve_kwargs["run_logger"] = run_logger
-                if config.agent_strategy == "orchestrated-tool-calling":
-                    solve_kwargs["domain"] = config.env
-                res = agent.solve(**solve_kwargs)
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=res.reward,
-                    info=res.info,
-                    traj=res.messages,
-                    trial=i,
-                )
-            except Exception as e:
-                if run_logger is not None and hasattr(run_logger, "finish_run"):
-                    run_logger.finish_run(
-                        exit_reason="error",
-                        steps=0,
-                        total_cost=0.0,
-                        reward=0.0,
-                        done=False,
-                        counters={"error": 1},
+            result = None
+            _task_retry_max_delay = 600.0
+            for task_attempt in range(config.max_task_retries):
+                try:
+                    isolated_env = get_env(
+                        config.env,
+                        user_strategy=config.user_strategy,
+                        user_model=config.user_model,
+                        task_split=config.task_split,
+                        user_provider=config.user_model_provider,
+                        task_index=idx,
                     )
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
-                    traj=[],
-                    trial=i,
-                )
+                    if config.max_task_retries > 1:
+                        print(f"Running task {idx} (attempt {task_attempt + 1}/{config.max_task_retries})")
+                    else:
+                        print(f"Running task {idx}")
+                    if config.agent_strategy == "orchestrated-tool-calling" and phase3_job_id is not None:
+                        run_id = run_id_from(config.env, idx, i)
+                        metadata = {
+                            "job_id": phase3_job_id,
+                            "run_id": run_id,
+                            "domain": config.env,
+                            "task_id": idx,
+                            "trial": i,
+                            "agent": config.agent_strategy,
+                            "model": config.model,
+                            "seed": config.seed,
+                        }
+                        run_logger = create_run_logger(
+                            config.log_dir,
+                            phase3_job_id,
+                            run_id,
+                            metadata,
+                            enabled=getattr(config, "enable_logging", True),
+                        )
+                    solve_kwargs: Dict[str, Any] = {"env": isolated_env, "task_index": idx}
+                    if run_logger is not None:
+                        solve_kwargs["run_logger"] = run_logger
+                    if config.agent_strategy == "orchestrated-tool-calling":
+                        solve_kwargs["domain"] = config.env
+                    res = agent.solve(**solve_kwargs)
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=res.reward,
+                        info=res.info,
+                        traj=res.messages,
+                        trial=i,
+                    )
+                    break
+                except Exception as e:
+                    if run_logger is not None and hasattr(run_logger, "finish_run"):
+                        run_logger.finish_run(
+                            exit_reason="error",
+                            steps=0,
+                            total_cost=0.0,
+                            reward=0.0,
+                            done=False,
+                            counters={"error": 1},
+                        )
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=0.0,
+                        info={"error": str(e), "traceback": traceback.format_exc()},
+                        traj=[],
+                        trial=i,
+                    )
+                    if task_attempt == config.max_task_retries - 1:
+                        break
+                    delay = min(
+                        config.task_retry_base_delay * (2 ** task_attempt),
+                        _task_retry_max_delay,
+                    )
+                    time.sleep(delay)
+                    run_logger = None
+            assert result is not None
             print(
                 "✅" if result.reward == 1 else "❌",
                 f"task_id={idx}",

@@ -159,6 +159,8 @@ python run.py \
   --user-model-provider openai \
   --user-strategy react \
   --max-concurrency "$MAX_CONCURRENCY" \
+  --max-task-retries 3 \
+  --task-retry-base-delay 5.0 \
   --num-trials "$NUM_TRIALS" \
   --temperature 0.0 \
   --start-index "$START_IDX" \

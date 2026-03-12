@@ -4,7 +4,7 @@ import os
 import sys
 import abc
 import enum
-from litellm import completion
+from tau_bench.litellm_retry import completion_with_retry
 
 from typing import Optional, List, Dict, Any, Union
 
@@ -105,7 +105,7 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         api_base = os.getenv('USER_MODEL_API_BASE', None)
-        res = completion(
+        res = completion_with_retry(
             model=self.model, 
             custom_llm_provider=self.provider, 
             messages=messages,
@@ -198,7 +198,7 @@ User Response:
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
         api_base = os.getenv('USER_MODEL_API_BASE', None)
-        res = completion(
+        res = completion_with_retry(
             model=self.model, 
             custom_llm_provider=self.provider, 
             messages=messages,
@@ -306,7 +306,7 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         cur_message = None
         while attempts < self.max_attempts:
             api_base = os.getenv('USER_MODEL_API_BASE', None)
-            res = completion(
+            res = completion_with_retry(
                 model=self.model, 
                 custom_llm_provider=self.provider, 
                 messages=messages,
@@ -372,7 +372,7 @@ Your answer will be parsed, so do not include any other text than the classifica
 
 Classification:"""
     api_base = os.getenv('USER_MODEL_API_BASE', None)
-    res = completion(
+    res = completion_with_retry(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],
@@ -409,7 +409,7 @@ Reflection:
 Response:
 <the response (this will be parsed and sent to the agent)>"""
     api_base = os.getenv('USER_MODEL_API_BASE', None)
-    res = completion(
+    res = completion_with_retry(
         model=model,
         custom_llm_provider=provider,
         messages=[{"role": "user", "content": prompt}],

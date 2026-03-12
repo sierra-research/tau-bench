@@ -89,6 +89,8 @@ class RunConfig(BaseModel):
     log_dir: str = "results"
     enable_logging: bool = True
     max_concurrency: int = 1
+    max_task_retries: int = 1
+    task_retry_base_delay: float = 5.0
     seed: int = 10
     shuffle: int = 0
     user_strategy: str = "llm"

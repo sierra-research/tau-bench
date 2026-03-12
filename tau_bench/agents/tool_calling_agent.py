@@ -2,7 +2,7 @@
 # Single effective action per step: only the first tool call is used; multi-tool-call is not supported.
 
 import json
-from litellm import completion
+from tau_bench.litellm_retry import completion_with_retry
 from typing import List, Optional, Dict, Any, Tuple
 
 from tau_bench.agents.base import Agent
@@ -29,7 +29,7 @@ class ToolCallingAgent(Agent):
         self, messages: List[Dict[str, Any]]
     ) -> Tuple[Dict[str, Any], Action, float]:
         """Propose next message and action without mutating messages or calling env. Returns (next_message, action, cost)."""
-        res = completion(
+        res = completion_with_retry(
             messages=messages,
             model=self.model,
             custom_llm_provider=self.provider,
