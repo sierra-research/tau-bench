@@ -1,10 +1,10 @@
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
-**❗News**: We have released [τ²-bench](https://github.com/sierra-research/tau2-bench) as an extension of $\tau$-bench. $\tau^2$-bench includes code fixes and an additional `telecom` domain focusing on troubleshooting scenarios. Please use the $\tau^2$-bench as the latest version of this benchmark.
+**⚠️ WARNING: The tasks in this repo are not updated.** This repository contains outdated versions of the airline and retail tasks. Please use [τ³-bench](https://github.com/sierra-research/tau2-bench) for the latest fixed tasks and new domains.
 
-**Paper**:
-* [τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains](https://arxiv.org/abs/2406.12045)
-* [τ²-Bench: Evaluating Conversational Agents in a Dual-Control Environment](https://arxiv.org/abs/2506.07982)
+**❗News**: The [τ²-bench](https://github.com/sierra-research/tau2-bench) repository has been updated to [τ³-bench](https://github.com/sierra-research/tau2-bench), which includes a new `banking` domain, a `voice` evaluation modality, as well as fixes to the `airline` and `retail` domain tasks. Please navigate to the [τ³-bench repository](https://github.com/sierra-research/tau2-bench) to use the latest version of this benchmark.
+
+---
 
 We propose $\tau$-bench, a benchmark emulating dynamic conversations between a user (simulated by language models) and a language agent provided with domain-specific API tools and policy guidelines.
 
