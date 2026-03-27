@@ -33,6 +33,7 @@ class RewardResult(BaseModel):
     reward: float
     info: Union[RewardOutputInfo, RewardActionInfo]
     actions: List[Action]
+    taken_actions: Optional[List[Action]] = None
 
 
 class SolveResult(BaseModel):
