@@ -2,7 +2,7 @@
 
 import json
 import random
-from litellm import completion
+from tau_bench.litellm_retry import completion_with_retry
 from typing import List, Optional, Dict, Any
 
 from tau_bench.agents.base import Agent
@@ -33,7 +33,7 @@ class FewShotToolCallingAgent(Agent):
         self.temperature = temperature
         self.num_few_shots = num_few_shots
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30, **kwargs
     ) -> SolveResult:
         sampled_few_shot_displays = random.sample(self.few_shot_displays, self.num_few_shots)
         few_shots = "\n\n".join([f"Example {i+1}:\n{display}" for i, display in enumerate(sampled_few_shot_displays)])
@@ -47,7 +47,7 @@ class FewShotToolCallingAgent(Agent):
             {"role": "user", "content": obs},
         ]
         for _ in range(max_num_steps):
-            res = completion(
+            res = completion_with_retry(
                 messages=messages,
                 model=self.model,
                 custom_llm_provider=self.provider,
@@ -55,6 +55,7 @@ class FewShotToolCallingAgent(Agent):
                 temperature=self.temperature,
             )
             next_message = res.choices[0].message.model_dump()
+            next_message["role"] = "assistant"
             total_cost += res._hidden_params["response_cost"]
             action = message_to_action(next_message)
             env_response = env.step(action)

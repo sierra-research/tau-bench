@@ -1,8 +1,9 @@
 # Copyright Sierra
+# Single effective action per step: only the first tool call is used; multi-tool-call is not supported.
 
 import json
-from litellm import completion
-from typing import List, Optional, Dict, Any
+from tau_bench.litellm_retry import completion_with_retry
+from typing import List, Optional, Dict, Any, Tuple
 
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
@@ -24,8 +25,25 @@ class ToolCallingAgent(Agent):
         self.provider = provider
         self.temperature = temperature
 
+    def generate_next_step(
+        self, messages: List[Dict[str, Any]]
+    ) -> Tuple[Dict[str, Any], Action, float]:
+        """Propose next message and action without mutating messages or calling env. Returns (next_message, action, cost)."""
+        res = completion_with_retry(
+            messages=messages,
+            model=self.model,
+            custom_llm_provider=self.provider,
+            tools=self.tools_info,
+            temperature=self.temperature,
+        )
+        next_message = res.choices[0].message.model_dump()
+        next_message["role"] = "assistant"
+        cost = res._hidden_params.get("response_cost") or 0.0
+        action = message_to_action(next_message)
+        return next_message, action, cost
+
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30, **kwargs
     ) -> SolveResult:
         total_cost = 0.0
         env_reset_res = env.reset(task_index=task_index)
@@ -37,16 +55,8 @@ class ToolCallingAgent(Agent):
             {"role": "user", "content": obs},
         ]
         for _ in range(max_num_steps):
-            res = completion(
-                messages=messages,
-                model=self.model,
-                custom_llm_provider=self.provider,
-                tools=self.tools_info,
-                temperature=self.temperature,
-            )
-            next_message = res.choices[0].message.model_dump()
-            total_cost += res._hidden_params["response_cost"] or 0
-            action = message_to_action(next_message)
+            next_message, action, cost = self.generate_next_step(messages)
+            total_cost += cost
             env_response = env.step(action)
             reward = env_response.reward
             info = {**info, **env_response.info.model_dump()}

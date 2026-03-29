@@ -1,7 +1,7 @@
 # Copyright Sierra
 
 import json
-from litellm import completion
+from tau_bench.litellm_retry import completion_with_retry
 
 from tau_bench.agents.base import Agent
 from tau_bench.envs.base import Env
@@ -37,7 +37,7 @@ class ChatReActAgent(Agent):
     def generate_next_step(
         self, messages: List[Dict[str, Any]]
     ) -> Tuple[Dict[str, Any], Action, float]:
-        res = completion(
+        res = completion_with_retry(
             model=self.model,
             custom_llm_provider=self.provider,
             messages=messages,
@@ -59,7 +59,7 @@ class ChatReActAgent(Agent):
         return message.model_dump(), action, res._hidden_params["response_cost"]
 
     def solve(
-        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
+        self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30, **kwargs
     ) -> SolveResult:
         response = env.reset(task_index=task_index)
         reward = 0.0
@@ -83,7 +83,7 @@ class ChatReActAgent(Agent):
                     {"role": "user", "content": obs},
                 ]
             )
-            total_cost += cost
+            total_cost += (cost if cost is not None else 0.0)
             if response.done:
                 break
         return SolveResult(

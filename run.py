@@ -40,7 +40,7 @@ def parse_args() -> RunConfig:
         "--agent-strategy",
         type=str,
         default="tool-calling",
-        choices=["tool-calling", "act", "react", "few-shot"],
+        choices=["tool-calling", "act", "react", "few-shot", "orchestrated-tool-calling"],
     )
     parser.add_argument(
         "--temperature",
@@ -59,6 +59,7 @@ def parse_args() -> RunConfig:
     parser.add_argument("--end-index", type=int, default=-1, help="Run all tasks if -1")
     parser.add_argument("--task-ids", type=int, nargs="+", help="(Optional) run only the tasks with the given IDs")
     parser.add_argument("--log-dir", type=str, default="results")
+    parser.add_argument("--enable-logging", type=int, default=1, choices=[0, 1], help="Enable Phase 3 run logging (1=yes, 0=no)")
     parser.add_argument(
         "--max-concurrency",
         type=int,
@@ -69,6 +70,18 @@ def parse_args() -> RunConfig:
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
+    parser.add_argument(
+        "--max-task-retries",
+        type=int,
+        default=1,
+        help="Number of task-level retries (get_env + solve) on any exception; default 1 (no retry)",
+    )
+    parser.add_argument(
+        "--task-retry-base-delay",
+        type=float,
+        default=5.0,
+        help="Base delay in seconds for task-level retry backoff",
+    )
     args = parser.parse_args()
     print(args)
     return RunConfig(
@@ -85,7 +98,10 @@ def parse_args() -> RunConfig:
         end_index=args.end_index,
         task_ids=args.task_ids,
         log_dir=args.log_dir,
+        enable_logging=bool(args.enable_logging),
         max_concurrency=args.max_concurrency,
+        max_task_retries=args.max_task_retries,
+        task_retry_base_delay=args.task_retry_base_delay,
         seed=args.seed,
         shuffle=args.shuffle,
         user_strategy=args.user_strategy,

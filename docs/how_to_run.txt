@@ -1,0 +1,51 @@
+Please create your branch using this GitHub repo
+https://github.com/nivech/tau-bench-agent007.git
+
+Commands for reference: 
+git clone https://github.com/nivech/tau-bench-agent007.git
+cd tau-bench-agent007
+git fetch
+git checkout -b phase3A-orchestrated-tc origin/phase3A-orchestrated-tc
+git checkout -b phase3B-<name>
+git push -u origin phase3B-<name>
+
+To run a smoke test: 
+The file run_tb_phase3.sh uses conda. Change it to mamba if thats what you used to set up environment in the beginning. 
+Rename python environment to yours.
+Change model sizes as needed.
+Change concurrency and num_trials as needed.
+
+In project directory, run as 
+sbatch --job-name=phase3_smoketest run_tb_phase3.sh
+
+For full test, change domain, start idx, and end idx. Variables copied at end of this file for reference. 
+
+To run unit tests,  
+1. Go to project directory 
+2. activate python environment 
+3. install pytest 
+4. To run one test file:  
+pytest tests/test_validator.py -v
+
+5. To run all tests at one go: 
+chmod +x run_all_tests.sh
+./run_all_tests.sh
+
+
+
+# --- Models ---
+AGENT_MODEL="Qwen/Qwen3-14B"
+USER_MODEL="Qwen/Qwen3-32B"
+
+# --- Arguments (for smoke use start 0 end 1) ---
+echo "Phase 3 smoke: orchestrated-tool-calling, 1 task, 1 trial"
+DOMAIN="${1:-airline}"
+START_IDX="${2:-0}"
+END_IDX="${3:-1}"
+
+# --- Params (smoke: one task, one trial) ---
+MAX_LEN=16384
+DTYPE="bfloat16"
+GPU_UTIL=0.78
+MAX_CONCURRENCY=1
+NUM_TRIALS=1

@@ -1,7 +1,52 @@
 #Run result artifacts
+results/
 results/**
+
+# Logs
+logs/
+habana_logs/
+system_logs/
+jobs/
+graphs/
+graphs/**
+
+# Scratch / local scripts
+cleaned.sh
+mamba.txt
+run_batch_original.sh
+run_native_vllm_taubench_OLD.sbatch
+run_native_vllm_taubench.sbatch
+run_native_vllm_taubench.sh
+run_tb_gaudi_1_server.sh
+run_tb_gaudi_1NODE.sh
+run_tb_gaudi_full.sh 
+run_tb_gaudi_OLD_2NODES.sh 
+run_tb_gaudi.sh 
+
+Tutorials/
+Tutorials/**
+commands_ref.txt
+commands_batch.txt
+commands_ref.txt
+SETUP_SOL.md
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+.DS_Store
+__pycache__/
+*.pyc
+.env
+env/
+venv/
+*.log
+*.jsonl
+*.tmp
+.cursor/
+
+# Slurm
+*.out
+*.err

@@ -6,6 +6,10 @@ from typing import List, Dict, Any, Optional, Union
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
 
+# Shared success threshold: reward in [REWARD_SUCCESS_MIN, REWARD_SUCCESS_MAX] means task success.
+REWARD_SUCCESS_MIN = 1.0 - 1e-6
+REWARD_SUCCESS_MAX = 1.0 + 1e-6
+
 
 class Action(BaseModel):
     name: str
@@ -83,7 +87,10 @@ class RunConfig(BaseModel):
     end_index: int = -1
     task_ids: Optional[List[int]] = None
     log_dir: str = "results"
+    enable_logging: bool = True
     max_concurrency: int = 1
+    max_task_retries: int = 1
+    task_retry_base_delay: float = 5.0
     seed: int = 10
     shuffle: int = 0
     user_strategy: str = "llm"

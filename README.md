@@ -1,3 +1,6 @@
+⚠️ Forked for ASU CSE598 Agentic AI τ-bench project.
+Original source: https://github.com/sierra-research/tau-bench
+
 # τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains
 
 **⚠️ WARNING: The tasks in this repo are not updated.** This repository contains outdated versions of the airline and retail tasks. Please use [τ³-bench](https://github.com/sierra-research/tau2-bench) for the latest fixed tasks and new domains.

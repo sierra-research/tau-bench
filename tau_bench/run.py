@@ -3,6 +3,7 @@
 import os
 import json
 import random
+import time
 import traceback
 from math import comb
 import multiprocessing
@@ -13,6 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 from tau_bench.envs import get_env
 from tau_bench.agents.base import Agent
 from tau_bench.types import EnvRunResult, RunConfig
+from tau_bench.orchestration.logging import create_run_logger, job_id_new, run_id_from
 from litellm import provider_list
 from tau_bench.envs.user import UserStrategy
 
@@ -21,15 +23,26 @@ def run(config: RunConfig) -> List[EnvRunResult]:
     assert config.env in ["retail", "airline"], "Only retail and airline envs are supported"
     assert config.model_provider in provider_list, "Invalid model provider"
     assert config.user_model_provider in provider_list, "Invalid user model provider"
-    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot"], "Invalid agent strategy"
+    assert config.agent_strategy in ["tool-calling", "act", "react", "few-shot", "orchestrated-tool-calling"], "Invalid agent strategy"
     assert config.task_split in ["train", "test", "dev"], "Invalid task split"
     assert config.user_strategy in [item.value for item in UserStrategy], "Invalid user strategy"
 
     random.seed(config.seed)
     time_str = datetime.now().strftime("%m%d%H%M%S")
-    ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.split('/')[-1]}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model}-{config.user_strategy}_{time_str}.json"
-    if not os.path.exists(config.log_dir):
-        os.makedirs(config.log_dir)
+    phase3_job_id = (os.environ.get("SLURM_JOB_ID") or job_id_new()) if config.agent_strategy == "orchestrated-tool-calling" else None
+
+    # Checkpoint path: for Phase 3 use jobs/{job_id}/trajectories/{name}_{job_id}.json; else {log_dir}/{name}_{time_str}.json
+    if phase3_job_id is not None:
+        ckpt_dir = os.path.join(config.log_dir, phase3_job_id, "trajectories")
+        os.makedirs(ckpt_dir, exist_ok=True)
+        ckpt_path = os.path.join(
+            ckpt_dir,
+            f"{config.agent_strategy}-{config.model.replace('/', '_')}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.replace('/', '_')}-{config.user_strategy}_{phase3_job_id}.json",
+        )
+    else:
+        ckpt_path = f"{config.log_dir}/{config.agent_strategy}-{config.model.replace('/', '_')}-{config.temperature}_range_{config.start_index}-{config.end_index}_user-{config.user_model.replace('/', '_')}-{config.user_strategy}_{time_str}.json"
+        if not os.path.exists(config.log_dir):
+            os.makedirs(config.log_dir)
 
     print(f"Loading user with strategy: {config.user_strategy}")
     env = get_env(
@@ -64,36 +77,82 @@ def run(config: RunConfig) -> List[EnvRunResult]:
             random.shuffle(idxs)
 
         def _run(idx: int) -> EnvRunResult:
-            isolated_env = get_env(
-                config.env,
-                user_strategy=config.user_strategy,
-                user_model=config.user_model,
-                task_split=config.task_split,
-                user_provider=config.user_model_provider,
-                task_index=idx,
-            )
-
-            print(f"Running task {idx}")
-            try:
-                res = agent.solve(
-                    env=isolated_env,
-                    task_index=idx,
-                )
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=res.reward,
-                    info=res.info,
-                    traj=res.messages,
-                    trial=i,
-                )
-            except Exception as e:
-                result = EnvRunResult(
-                    task_id=idx,
-                    reward=0.0,
-                    info={"error": str(e), "traceback": traceback.format_exc()},
-                    traj=[],
-                    trial=i,
-                )
+            run_logger = None
+            result = None
+            _task_retry_max_delay = 600.0
+            for task_attempt in range(config.max_task_retries):
+                try:
+                    isolated_env = get_env(
+                        config.env,
+                        user_strategy=config.user_strategy,
+                        user_model=config.user_model,
+                        task_split=config.task_split,
+                        user_provider=config.user_model_provider,
+                        task_index=idx,
+                    )
+                    if config.max_task_retries > 1:
+                        print(f"Running task {idx} (attempt {task_attempt + 1}/{config.max_task_retries})")
+                    else:
+                        print(f"Running task {idx}")
+                    if config.agent_strategy == "orchestrated-tool-calling" and phase3_job_id is not None:
+                        run_id = run_id_from(config.env, idx, i)
+                        metadata = {
+                            "job_id": phase3_job_id,
+                            "run_id": run_id,
+                            "domain": config.env,
+                            "task_id": idx,
+                            "trial": i,
+                            "agent": config.agent_strategy,
+                            "model": config.model,
+                            "seed": config.seed,
+                        }
+                        run_logger = create_run_logger(
+                            config.log_dir,
+                            phase3_job_id,
+                            run_id,
+                            metadata,
+                            enabled=getattr(config, "enable_logging", True),
+                        )
+                    solve_kwargs: Dict[str, Any] = {"env": isolated_env, "task_index": idx}
+                    if run_logger is not None:
+                        solve_kwargs["run_logger"] = run_logger
+                    if config.agent_strategy == "orchestrated-tool-calling":
+                        solve_kwargs["domain"] = config.env
+                    res = agent.solve(**solve_kwargs)
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=res.reward,
+                        info=res.info,
+                        traj=res.messages,
+                        trial=i,
+                    )
+                    break
+                except Exception as e:
+                    if run_logger is not None and hasattr(run_logger, "finish_run"):
+                        run_logger.finish_run(
+                            exit_reason="error",
+                            steps=0,
+                            total_cost=0.0,
+                            reward=0.0,
+                            done=False,
+                            counters={"error": 1},
+                        )
+                    result = EnvRunResult(
+                        task_id=idx,
+                        reward=0.0,
+                        info={"error": str(e), "traceback": traceback.format_exc()},
+                        traj=[],
+                        trial=i,
+                    )
+                    if task_attempt == config.max_task_retries - 1:
+                        break
+                    delay = min(
+                        config.task_retry_base_delay * (2 ** task_attempt),
+                        _task_retry_max_delay,
+                    )
+                    time.sleep(delay)
+                    run_logger = None
+            assert result is not None
             print(
                 "✅" if result.reward == 1 else "❌",
                 f"task_id={idx}",
@@ -173,13 +232,24 @@ def agent_factory(
             few_shot_displays=few_shot_displays,
             temperature=config.temperature,
         )
+    elif config.agent_strategy == "orchestrated-tool-calling":
+        from tau_bench.agents.orchestrated_tool_calling_agent import OrchestratedToolCallingAgent
+        return OrchestratedToolCallingAgent(
+            tools_info=tools_info,
+            wiki=wiki,
+            model=config.model,
+            provider=config.model_provider,
+            temperature=config.temperature,
+        )
     else:
         raise ValueError(f"Unknown agent strategy: {config.agent_strategy}")
 
 
 def display_metrics(results: List[EnvRunResult]) -> None:
+    from tau_bench.types import REWARD_SUCCESS_MIN, REWARD_SUCCESS_MAX
+
     def is_successful(reward: float) -> bool:
-        return (1 - 1e-6) <= reward <= (1 + 1e-6)
+        return REWARD_SUCCESS_MIN <= reward <= REWARD_SUCCESS_MAX
 
     num_trials = len(set([r.trial for r in results]))
     rewards = [r.reward for r in results]
