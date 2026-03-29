@@ -66,7 +66,7 @@ class Env(object):
         if task_index is not None:
             self.task_index = task_index
         else:
-            self.task_index = random.randint(0, len(tasks))
+            self.task_index = random.randint(0, len(tasks) - 1)
         self.task = tasks[self.task_index]
         self.wiki = wiki
         self.rules = rules
