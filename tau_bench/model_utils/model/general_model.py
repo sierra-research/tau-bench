@@ -157,6 +157,10 @@ def model_factory(
         from tau_bench.model_utils.model.claude import ClaudeModel
 
         return ClaudeModel(model=model_id, api_key=api_key, temperature=temperature)
+    elif platform == Platform.XAI:
+        from tau_bench.model_utils.model.grok import GrokModel
+
+        return GrokModel(model=model_id, api_key=api_key, temperature=temperature)
 
     elif platform == Platform.ANYSCALE:
         from tau_bench.model_utils.model.anyscale import AnyscaleModel
