@@ -95,7 +95,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     trial=i,
                 )
             print(
-                "✅" if result.reward == 1 else "❌",
+                "🟢" if result.reward >= 0.8 else "🟡" if result.reward >= 0.5 else "🟠" if result.reward > 0 else "❌",
                 f"task_id={idx}",
                 result.info,
             )
