@@ -72,6 +72,10 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                 user_provider=config.user_model_provider,
                 task_index=idx,
             )
+            if config.enable_timing:
+                from tau_bench.timing import TimingRecorder
+
+                isolated_env.attach_timing(TimingRecorder(source="live"))
 
             print(f"Running task {idx}")
             try:
@@ -85,6 +89,7 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                     info=res.info,
                     traj=res.messages,
                     trial=i,
+                    timing=res.timing,
                 )
             except Exception as e:
                 result = EnvRunResult(

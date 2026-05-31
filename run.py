@@ -69,6 +69,7 @@ def parse_args() -> RunConfig:
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
+    parser.add_argument("--enable-timing", action="store_true", help="Record per-step / sub-step timing telemetry")
     args = parser.parse_args()
     print(args)
     return RunConfig(
@@ -90,6 +91,7 @@ def parse_args() -> RunConfig:
         shuffle=args.shuffle,
         user_strategy=args.user_strategy,
         few_shot_displays_path=args.few_shot_displays_path,
+        enable_timing=args.enable_timing,
     )
 
 

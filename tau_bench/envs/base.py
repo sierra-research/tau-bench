@@ -74,6 +74,14 @@ class Env(object):
             user_strategy=user_strategy, model=user_model, provider=user_provider
         )
         self.actions: List[Action] = []
+        # Optional timing recorder; when None, all timing is a no-op and
+        # behavior is bit-identical to upstream.
+        self.timing_recorder = None
+
+    def attach_timing(self, recorder) -> None:
+        """Wire a shared TimingRecorder into the env. User-sim calls are timed
+        at the env boundary, so every user strategy is covered uniformly."""
+        self.timing_recorder = recorder
 
     def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
         if task_index is None:
@@ -82,7 +90,13 @@ class Env(object):
         self.data = self.data_load_func()
         self.task = self.tasks[task_index]
         self.actions = []
-        initial_observation = self.user.reset(instruction=self.task.instruction)
+        if self.timing_recorder is not None:
+            from tau_bench.timing import SpanKind
+
+            with self.timing_recorder.span(SpanKind.USER_LLM, "user"):
+                initial_observation = self.user.reset(instruction=self.task.instruction)
+        else:
+            initial_observation = self.user.reset(instruction=self.task.instruction)
         return EnvResetResponse(
             observation=initial_observation, info=EnvInfo(task=self.task, source="user")
         )
@@ -94,14 +108,28 @@ class Env(object):
         reward = 0
         done = False
         if action.name == RESPOND_ACTION_NAME:
-            observation = self.user.step(action.kwargs["content"])
+            if self.timing_recorder is not None:
+                from tau_bench.timing import SpanKind
+
+                with self.timing_recorder.span(SpanKind.USER_LLM, "user"):
+                    observation = self.user.step(action.kwargs["content"])
+            else:
+                observation = self.user.step(action.kwargs["content"])
             info.source = "user"
             done = "###STOP###" in observation
         elif action.name in self.tools_map:
             try:
-                observation = self.tools_map[action.name].invoke(
-                    data=self.data, **action.kwargs
-                )
+                if self.timing_recorder is not None:
+                    from tau_bench.timing import SpanKind
+
+                    with self.timing_recorder.span(SpanKind.TOOL_EXEC, action.name):
+                        observation = self.tools_map[action.name].invoke(
+                            data=self.data, **action.kwargs
+                        )
+                else:
+                    observation = self.tools_map[action.name].invoke(
+                        data=self.data, **action.kwargs
+                    )
             except Exception as e:
                 observation = f"Error: {e}"
             info.source = action.name
@@ -131,9 +159,17 @@ class Env(object):
         # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
         # TODO: cache gt_data_hash in tasks.py (low priority)
         self.data = self.data_load_func()
-        for action in self.task.actions:
-            if action.name not in self.terminate_tools:
-                self.step(action)
+        # Reward replay re-invokes GT actions via self.step(); suspend timing so
+        # those invokes are never counted as trajectory time.
+        if self.timing_recorder is not None:
+            with self.timing_recorder.suspend():
+                for action in self.task.actions:
+                    if action.name not in self.terminate_tools:
+                        self.step(action)
+        else:
+            for action in self.task.actions:
+                if action.name not in self.terminate_tools:
+                    self.step(action)
         gt_data_hash = self.get_data_hash()
         info = RewardActionInfo(
             r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash

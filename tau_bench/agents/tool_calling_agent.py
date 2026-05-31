@@ -28,6 +28,7 @@ class ToolCallingAgent(Agent):
         self, env: Env, task_index: Optional[int] = None, max_num_steps: int = 30
     ) -> SolveResult:
         total_cost = 0.0
+        recorder = getattr(env, "timing_recorder", None)
         env_reset_res = env.reset(task_index=task_index)
         obs = env_reset_res.observation
         info = env_reset_res.info.model_dump()
@@ -36,14 +37,27 @@ class ToolCallingAgent(Agent):
             {"role": "system", "content": self.wiki},
             {"role": "user", "content": obs},
         ]
-        for _ in range(max_num_steps):
-            res = completion(
-                messages=messages,
-                model=self.model,
-                custom_llm_provider=self.provider,
-                tools=self.tools_info,
-                temperature=self.temperature,
-            )
+        for step_index in range(max_num_steps):
+            if recorder is not None:
+                recorder.begin_step(step_index)
+                from tau_bench.timing import SpanKind
+
+                with recorder.span(SpanKind.AGENT_LLM, "agent"):
+                    res = completion(
+                        messages=messages,
+                        model=self.model,
+                        custom_llm_provider=self.provider,
+                        tools=self.tools_info,
+                        temperature=self.temperature,
+                    )
+            else:
+                res = completion(
+                    messages=messages,
+                    model=self.model,
+                    custom_llm_provider=self.provider,
+                    tools=self.tools_info,
+                    temperature=self.temperature,
+                )
             next_message = res.choices[0].message.model_dump()
             total_cost += res._hidden_params["response_cost"] or 0
             action = message_to_action(next_message)
@@ -77,6 +91,7 @@ class ToolCallingAgent(Agent):
             info=info,
             messages=messages,
             total_cost=total_cost,
+            timing=recorder.report() if recorder is not None else None,
         )
 
 
