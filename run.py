@@ -65,7 +65,7 @@ def parse_args() -> RunConfig:
         default=1,
         help="Number of tasks to run in parallel",
     )
-    parser.add_argument("--seed", type=int, default=10)
+    parser.add_argument("--seed", type=int, default=10, help="Seed for task-order shuffling only; it is NOT passed to the LLM completion calls, so it does not make agent/user generations deterministic")
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
