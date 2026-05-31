@@ -49,7 +49,9 @@ class LLMUserSimulationEnv(BaseUserSimulationEnv):
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())
-        self.total_cost = res._hidden_params["response_cost"]
+        # Accumulate across turns; assigning here under-reported the user-sim
+        # cost as only the most recent turn.
+        self.total_cost += res._hidden_params["response_cost"] or 0
         return message.content
 
     def build_system_prompt(self, instruction: Optional[str]) -> str:
@@ -120,7 +122,8 @@ User Response:
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())
-        self.total_cost = res._hidden_params["response_cost"]
+        # Accumulate across turns; see LLMUserSimulationEnv note.
+        self.total_cost += res._hidden_params["response_cost"] or 0
         return self.parse_response(message.content)
 
     def reset(self, instruction: Optional[str] = None) -> str:
@@ -158,6 +161,7 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
         self.model = model
         self.provider = provider
         self.max_attempts = max_attempts
+        self.total_cost = 0.0
         self.reset()
 
     def generate_next_message(self, messages: List[Dict[str, Any]]) -> str:
@@ -168,7 +172,8 @@ class VerifyUserSimulationEnv(LLMUserSimulationEnv):
                 model=self.model, custom_llm_provider=self.provider, messages=messages
             )
             cur_message = res.choices[0].message
-            self.total_cost = res._hidden_params["response_cost"]
+            # Accumulate across verification retries and turns.
+            self.total_cost += res._hidden_params["response_cost"] or 0
             if verify(self.model, self.provider, cur_message, messages):
                 self.messages.append(cur_message.model_dump())
                 return cur_message.content
