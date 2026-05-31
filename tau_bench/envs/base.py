@@ -1,6 +1,8 @@
 # Copyright Sierra
 
+import os
 import random
+import re
 from hashlib import sha256
 from tau_bench.envs.tool import Tool
 from typing import Any, Callable, Dict, List, Type, Optional, Set, Union, Tuple
@@ -41,6 +43,24 @@ def consistent_hash(
     return sha256(str(value).encode("utf-8")).hexdigest()
 
 
+def output_matches(output: str, content: str, strict: bool = False) -> bool:
+    """Whether a required task output is present in an agent reply.
+
+    Default (``strict=False``) preserves upstream behaviour: a case-insensitive,
+    comma-stripped substring test. With ``strict=True`` the match is anchored to
+    token boundaries, so a required output of ``"10"`` is no longer satisfied by
+    ``"100"`` (or any longer number/word) appearing in the reply.
+    """
+    content = content.lower().replace(",", "")
+    needle = output.lower()
+    if strict:
+        return (
+            re.search(r"(?<!\w)" + re.escape(needle) + r"(?!\w)", content)
+            is not None
+        )
+    return needle in content
+
+
 class Env(object):
     def __init__(
         self,
@@ -74,6 +94,18 @@ class Env(object):
             user_strategy=user_strategy, model=user_model, provider=user_provider
         )
         self.actions: List[Action] = []
+        # Opt-in reward-precision flags. Both default OFF so scoring is
+        # byte-identical to upstream unless explicitly enabled.
+        #   TAU_STRICT_OUTPUT_MATCH=1  -> require whole-token output matches
+        #       instead of a bare substring test (avoids e.g. required output
+        #       "10" being satisfied by "100" anywhere in the agent's reply).
+        #   TAU_PRESERVE_DATA_ON_REWARD=1 -> restore self.data after the
+        #       ground-truth action replay in calculate_reward, so the env is
+        #       left holding the agent's final state rather than the GT state.
+        self.strict_output_match = os.getenv("TAU_STRICT_OUTPUT_MATCH") == "1"
+        self.preserve_data_on_reward = (
+            os.getenv("TAU_PRESERVE_DATA_ON_REWARD") == "1"
+        )
 
     def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
         if task_index is None:
@@ -130,11 +162,16 @@ class Env(object):
 
         # Check if the database changes are correct. If they are not correct, then we set the reward to 0.
         # TODO: cache gt_data_hash in tasks.py (low priority)
+        agent_data = self.data
         self.data = self.data_load_func()
         for action in self.task.actions:
             if action.name not in self.terminate_tools:
                 self.step(action)
         gt_data_hash = self.get_data_hash()
+        if self.preserve_data_on_reward:
+            # Leave the env holding the agent's final state, not the GT replay
+            # state, so callers can inspect post-reward without surprise.
+            self.data = agent_data
         info = RewardActionInfo(
             r_actions=data_hash == gt_data_hash, gt_data_hash=gt_data_hash
         )
@@ -148,10 +185,12 @@ class Env(object):
             for output in self.task.outputs:
                 found = False
                 for action in self.actions:
-                    if (
-                        action.name == RESPOND_ACTION_NAME
-                        and output.lower()
-                        in action.kwargs["content"].lower().replace(",", "")
+                    if action.name != RESPOND_ACTION_NAME:
+                        continue
+                    if output_matches(
+                        output,
+                        action.kwargs["content"],
+                        strict=self.strict_output_match,
                     ):
                         found = True
                         break
