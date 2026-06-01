@@ -88,3 +88,6 @@ class RunConfig(BaseModel):
     shuffle: int = 0
     user_strategy: str = "llm"
     few_shot_displays_path: Optional[str] = None
+    # Opt-in reward-precision knobs (default OFF -> upstream scoring unchanged).
+    strict_output_match: bool = False
+    preserve_data_on_reward: bool = False

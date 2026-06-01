@@ -69,6 +69,19 @@ def parse_args() -> RunConfig:
     parser.add_argument("--shuffle", type=int, default=0)
     parser.add_argument("--user-strategy", type=str, default="llm", choices=[item.value for item in UserStrategy])
     parser.add_argument("--few-shot-displays-path", type=str, help="Path to a jsonlines file containing few shot displays")
+    parser.add_argument(
+        "--strict-output-match",
+        action="store_true",
+        help="Require whole-token matches for required task outputs in reward "
+        "checking (a required output of '10' no longer matches '100'). Off by "
+        "default; default scoring is unchanged.",
+    )
+    parser.add_argument(
+        "--preserve-data-on-reward",
+        action="store_true",
+        help="Leave the env holding the agent's final data state after reward "
+        "computation, instead of the ground-truth replay state. Off by default.",
+    )
     args = parser.parse_args()
     print(args)
     return RunConfig(
@@ -90,6 +103,8 @@ def parse_args() -> RunConfig:
         shuffle=args.shuffle,
         user_strategy=args.user_strategy,
         few_shot_displays_path=args.few_shot_displays_path,
+        strict_output_match=args.strict_output_match,
+        preserve_data_on_reward=args.preserve_data_on_reward,
     )
 
 
