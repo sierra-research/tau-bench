@@ -17,6 +17,8 @@ class MockAirlineDomainEnv(Env):
         user_provider: Optional[str] = None,
         task_split: str = "test",
         task_index: Optional[int] = None,
+        strict_output_match: Optional[bool] = None,
+        preserve_data_on_reward: Optional[bool] = None,
     ):
         match task_split:
             case "test":
@@ -33,5 +35,7 @@ class MockAirlineDomainEnv(Env):
             user_model=user_model,
             user_provider=user_provider,
             task_index=task_index,
+            strict_output_match=strict_output_match,
+            preserve_data_on_reward=preserve_data_on_reward,
         )
         self.terminate_tools = ["transfer_to_human_agents"]

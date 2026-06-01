@@ -73,6 +73,8 @@ class Env(object):
         user_model: str,
         user_provider: Optional[str] = None,
         task_index: Optional[int] = None,
+        strict_output_match: Optional[bool] = None,
+        preserve_data_on_reward: Optional[bool] = None,
     ) -> None:
         super().__init__()
         self.data_load_func = data_load_func
@@ -95,17 +97,24 @@ class Env(object):
         )
         self.actions: List[Action] = []
         # Opt-in reward-precision flags. Both default OFF so scoring is
-        # byte-identical to upstream unless explicitly enabled.
-        #   TAU_STRICT_OUTPUT_MATCH=1  -> require whole-token output matches
-        #       instead of a bare substring test (avoids e.g. required output
-        #       "10" being satisfied by "100" anywhere in the agent's reply).
-        #   TAU_PRESERVE_DATA_ON_REWARD=1 -> restore self.data after the
-        #       ground-truth action replay in calculate_reward, so the env is
-        #       left holding the agent's final state rather than the GT state.
-        self.strict_output_match = os.getenv("TAU_STRICT_OUTPUT_MATCH") == "1"
-        self.preserve_data_on_reward = (
-            os.getenv("TAU_PRESERVE_DATA_ON_REWARD") == "1"
-        )
+        # byte-identical to upstream unless explicitly enabled. Prefer the
+        # constructor argument (wired from RunConfig / the CLI); fall back to
+        # the TAU_STRICT_OUTPUT_MATCH / TAU_PRESERVE_DATA_ON_REWARD env vars
+        # only when the argument is left unset.
+        #   strict_output_match: require whole-token output matches instead of
+        #       a bare substring test (avoids e.g. required output "10" being
+        #       satisfied by "100" anywhere in the agent's reply).
+        #   preserve_data_on_reward: restore self.data after the ground-truth
+        #       action replay in calculate_reward, so the env is left holding
+        #       the agent's final state rather than the GT state.
+        if strict_output_match is None:
+            strict_output_match = os.getenv("TAU_STRICT_OUTPUT_MATCH") == "1"
+        if preserve_data_on_reward is None:
+            preserve_data_on_reward = (
+                os.getenv("TAU_PRESERVE_DATA_ON_REWARD") == "1"
+            )
+        self.strict_output_match = strict_output_match
+        self.preserve_data_on_reward = preserve_data_on_reward
 
     def reset(self, task_index: Optional[int] = None) -> EnvResetResponse:
         if task_index is None:

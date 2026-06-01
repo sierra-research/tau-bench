@@ -38,6 +38,8 @@ def run(config: RunConfig) -> List[EnvRunResult]:
         user_model=config.user_model,
         user_provider=config.user_model_provider,
         task_split=config.task_split,
+        strict_output_match=config.strict_output_match,
+        preserve_data_on_reward=config.preserve_data_on_reward,
     )
     agent = agent_factory(
         tools_info=env.tools_info,
@@ -71,6 +73,8 @@ def run(config: RunConfig) -> List[EnvRunResult]:
                 task_split=config.task_split,
                 user_provider=config.user_model_provider,
                 task_index=idx,
+                strict_output_match=config.strict_output_match,
+                preserve_data_on_reward=config.preserve_data_on_reward,
             )
 
             print(f"Running task {idx}")
