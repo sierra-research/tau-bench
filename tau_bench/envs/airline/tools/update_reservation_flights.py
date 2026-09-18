@@ -77,6 +77,7 @@ class UpdateReservationFlights(Tool):
         if payment_method["source"] == "gift_card":
             payment_method["amount"] -= total_price
         reservation["flights"] = flights
+        reservation["cabin"] = cabin
         if total_price != 0:
             reservation["payment_history"].append(
                 {
