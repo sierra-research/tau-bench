@@ -105,8 +105,8 @@ def display_context(user_instruction: str, ground_truth_actions: List[Action], g
 
 ----- start ground truth action sequence -----
 {display_actions(ground_truth_actions)}
------ end ground truth action sequence -----
-
+----- end ground truth action sequence -----"""
+context+=f"""
 ----- start trajectory -----
 {traj_display}
 ----- end trajectory -----\n"""
